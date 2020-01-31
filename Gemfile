@@ -36,6 +36,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.4.1'
 gem 'devise'
+gem 'omniauth-facebook'
 gem 'rubocop'
 gem 'simple_form', '~> 5.0', '>= 5.0.1'
 gem 'bootsnap', '>= 1.1.0', require: false
