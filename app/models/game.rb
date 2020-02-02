@@ -1,6 +1,8 @@
 class Game < ApplicationRecord
   has_many :pieces
-  belongs_to :user
+  has_many :users
+
+  scope :available, -> { where(available: true) }
 
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 
@@ -11,7 +13,7 @@ class Game < ApplicationRecord
 
       direction_y = start_position_y < end_position_y ? 1 : -1
       direction_y = 0 if start_position_y == end_position_y
-      
+
       current_x = start_position_x + direction_x;
       current_y = start_position_y + direction_y;
 
@@ -21,10 +23,10 @@ class Game < ApplicationRecord
         current_y += y_direction;
       end
 
-      return false  
+      return false
     else
       raise 'Invalid input detected. Input is not horizontal, vertical, or diagonal.'
-      # is anything supposed to be returned here? 
+      # is anything supposed to be returned here?
     end
   end
 
