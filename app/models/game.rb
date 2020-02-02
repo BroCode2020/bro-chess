@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
   has_many :pieces
-  belongs_to :user
+  has_many :users
+
+  scope :available, -> { where(available: true) }
 end
