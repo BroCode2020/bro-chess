@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   def index
+    @available_games = Game.available
   end
 
   def new
@@ -16,7 +17,9 @@ class GamesController < ApplicationController
   end
 
   def game_available
-    return render plain: 'true'
+    return render plain: 'true' if !current_game.white_player_id || !current_game.black_player_id
+    render plain: 'false'
+end
 
   private
 
