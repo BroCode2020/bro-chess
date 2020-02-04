@@ -15,6 +15,9 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
   end
 
+  def game_available
+    return render plain: 'true'
+
   private
 
   def game_params
