@@ -14,13 +14,16 @@ class Game < ApplicationRecord
       direction_y = start_position_y < end_position_y ? 1 : -1
       direction_y = 0 if start_position_y == end_position_y
 
-      current_x = start_position_x + direction_x;
-      current_y = start_position_y + direction_y;
+      current_x = start_position_x + direction_x
+      current_y = start_position_y + direction_y
+      
+      loop do
 
-      while (current_x != end_position_x) && (current_y != end_position_y) do
         return true if tile_is_occupied?(current_x, current_y)
-        current_x += x_direction;
-        current_y += y_direction;
+        current_x += direction_x;
+        current_y += direction_y;
+
+        break if ((current_x == end_position_x) && (current_y == end_position_y)) 
       end
 
       return false
@@ -31,16 +34,21 @@ class Game < ApplicationRecord
   end
 
   def tile_is_occupied? (tile_x_position, tile_y_position)
-    return @pieces.where({x_position: tile_x_position, y_position: tile_y_position}) != nil # alternatively... tile_y_position}).first != nil
+
+    pieces.each do |p|
+      return true if(p.x_pos == tile_x_position && p.y_pos == tile_y_position)
+    end
+
+    return false
   end
 
   private
 
   def valid_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
+
     if(start_position_x != end_position_x && start_position_y != end_position_y)
       # if both x and y values change
-
-      if abs(end_position_x - start_position_x) == abs(end_position_y - start_position_y)
+      if (end_position_x - start_position_x).abs == (end_position_y - start_position_y).abs
         # if the x and y value change at the same rate (diagonal movement)
         return true
       else
