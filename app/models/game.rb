@@ -20,8 +20,8 @@ class Game < ApplicationRecord
       loop do
 
         return true if tile_is_occupied?(current_x, current_y)
-        current_x += direction_x;
-        current_y += direction_y;
+        current_x += direction_x
+        current_y += direction_y
 
         break if ((current_x == end_position_x) && (current_y == end_position_y)) 
       end
