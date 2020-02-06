@@ -10,7 +10,7 @@ FactoryBot.define do
 	factory :piece do
 		x_pos { 0 }
 		y_pos { 0 }
-		piece_type { "Pawn" }	# this will need to be changed to match updated code
+		type { "Pawn" }
 		player_id { 1 }
 		game_id { 1 }
 	end
