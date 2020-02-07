@@ -1,8 +1,11 @@
 class Game < ApplicationRecord
   has_many :pieces
   has_many :users
+  belongs_to :white_player, class_name: 'User'
+  belongs_to :black_player, class_name: 'User'
 
   scope :available, -> { where(available: true) }
+
 
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 

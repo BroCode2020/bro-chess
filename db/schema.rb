@@ -21,12 +21,13 @@ ActiveRecord::Schema.define(version: 2020_01_30_060704) do
     t.integer "black_payer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "available"
   end
 
   create_table "pieces", force: :cascade do |t|
     t.integer "x_pos"
     t.integer "y_pos"
-    t.string "type"
+    t.string "piece_type"
     t.integer "player_id"
     t.integer "game_id"
     t.datetime "created_at", null: false
