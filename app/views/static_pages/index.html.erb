@@ -1,10 +1,12 @@
 
 <h1>Find a game to join</h1>
 
-<% @games.available.each do |game| %>
-  <% if game.white_player %>
-    <%= game.white_player.name + "'s game" %>
-  <% elsif game.black_player %>
-    <%= game.black_player.name + "'s game" %>
-  <% end %>
+<% @games.available.to_a.each do |game| %>
+    <% if game.white_player %>
+      <%= game.white_player.name + "'s game" %>
+    <%# elsif game.black_player %>
+      <%#= game.black_player.name + "'s game" %>
+    <% end %>
 <% end %>
+
+<!-- Note: the logic for black player generates syntax error. This might have to do with   -->

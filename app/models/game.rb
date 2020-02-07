@@ -2,7 +2,7 @@ class Game < ApplicationRecord
   has_many :pieces
   has_many :users
   belongs_to :white_player, class_name: 'User'
-  belongs_to :black_player, class_name: 'User'
+  #belongs_to :black_player, class_name: 'User'
 
   scope :available, -> { where(available: true) }
 
