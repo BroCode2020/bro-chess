@@ -27,11 +27,9 @@ $board-length: calc(square-side-vmin-length * 8);
 
 	&.black {
 		background: black;
-		color: white;
 	}
 	&.white {
 		background-color: white;
-		color: black
 	}
 }
 
@@ -41,7 +39,7 @@ $board-length: calc(square-side-vmin-length * 8);
 	flex-direction: column;
 }
 
-.chess-board-render, .board-row {
+.chess-board-render, .squares-row {
 	display: flex;
 	justify-content: center;
 }
@@ -50,12 +48,6 @@ $board-length: calc(square-side-vmin-length * 8);
 	clear: both; 
 }
 
-.board-row {
+.squares-row {
 	flex-direction: row;
-}
-
-/////////////// Temporary background color
-
-body {
-	background-color: darkgray !important;
 }
