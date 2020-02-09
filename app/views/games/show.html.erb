@@ -1,116 +1,8 @@
-<<<<<<< HEAD
-<h1>This will show all of our games!</h1>
-<p><%= @game.name %></p>
-
-<div class="chess-board-render">
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">	
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">	
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-=======
 <!--h1>This will show all of our games!</h1>
 <p><%= @game.name %></p-->
 <h1>_</h1>
 
 <div class="chess-board-render">
->>>>>>> e75c580d8b90a2a16b6775b3bfe96da26ecf652f
 
 	<% tile_color = 1 %>
 
@@ -150,7 +42,7 @@
 						<% x_coord = scale * column_number %>
 						<% y_coord = _ph_color == 1 ? scale : 0 %>			<!-- IMPORTANT: Another temporary implementation for black/white  -->
 						
-						<object type="image/svg+xml" data="https://upload.wikimedia.org/wikipedia/commons/b/b2/Chess_Pieces_Sprite.svg
+						<object type="image/svg+xml" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
 							#svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
 						</object>
 
