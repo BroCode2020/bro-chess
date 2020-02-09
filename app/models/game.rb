@@ -42,24 +42,6 @@ class Game < ApplicationRecord
     return false
   end
 
-  def render_piece(tile_x_position, tile_y_position)
-    if(tile_is_occupied?(tile_x_position, tile_y_position))
-      result = pieces.find_by(x_pos: tile_x_position, y_pos: tile_y_position)
-      if result
-        class_name = result.class.name
-        #player_color = User.find_by(id: result.player_id) == white_player_id ? "White" : "Black"
-        #return player_color + " " + class_name
-        return class_name
-      else
-        return nil
-      end
-    else
-      return nil
-    end
-  end
-
-  # Note that if we change player id to color (int), it will make this much simpler
-
   private
 
   def valid_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
