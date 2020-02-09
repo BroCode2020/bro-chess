@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h1>This will show all of our games!</h1>
 <p><%= @game.name %></p>
 
@@ -103,6 +104,59 @@
 		<div class="board-square black"></div>
 		<div class="board-square white"></div>
 	</div>
+=======
+<!--h1>This will show all of our games!</h1>
+<p><%= @game.name %></p-->
+<h1>_</h1>
 
-	<div class="clear-floaters"><div>
+<div class="chess-board-render">
+>>>>>>> e75c580d8b90a2a16b6775b3bfe96da26ecf652f
+
+	<% tile_color = 1 %>
+
+	<% for y in 0..7 do %>
+
+		<div class="board-row">
+
+			<% for x in 0..7 do %>
+
+				<% tile_color = (tile_color == 0 ? 1 : 0) if x > 0 %>
+
+				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
+					<% if @game.tile_is_occupied?(x,y) %>
+	
+						<% _ph_color = 0 %> <!-- Placeholder for testing color. To be used until color methodology is codified for Piece model -->
+
+						<% scale = 45 %>
+						<% piece_class_name = @game.pieces.find_by(x_pos: x, y_pos: y).class.name.downcase %>
+
+						<% case piece_class_name %>
+						<% when 'king'%>
+							<% column_number = 0 %>
+						<% when 'queen'%>
+							<% column_number = 1 %>
+						<% when 'bishop'%>
+							<% column_number = 2 %>
+						<% when 'knight'%>
+							<% column_number = 3 %>
+						<% when 'rook'%>
+							<% column_number = 4 %>
+						<% when 'pawn'%>
+							<% column_number = 5 %>
+						<% else %> 
+							<%= 'INVALID PIECE' %>
+						<% end %> 
+
+						<% x_coord = scale * column_number %>
+						<% y_coord = _ph_color == 1 ? scale : 0 %>			<!-- IMPORTANT: Another temporary implementation for black/white  -->
+						
+						<object type="image/svg+xml" data="https://upload.wikimedia.org/wikipedia/commons/b/b2/Chess_Pieces_Sprite.svg
+							#svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
+						</object>
+
+					<% end %>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
 </div>
