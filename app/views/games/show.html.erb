@@ -1,6 +1,6 @@
 <!--h1>This will show all of our games!</h1>
 <p><%= @game.name %></p-->
-<h1>_</h1>
+
 
 <div class="chess-board-render">
 
@@ -16,12 +16,13 @@
 
 				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
 					<% if @game.tile_is_occupied?(x,y) %>
-	
-						<% _ph_color = 0 %> <!-- Placeholder for testing color. To be used until color methodology is codified for Piece model -->
 
 						<% scale = 45 %>
-						<% piece_class_name = @game.pieces.find_by(x_pos: x, y_pos: y).class.name.downcase %>
 
+						<% cur_piece = @game.pieces.find_by(x_pos: x, y_pos: y) %>
+						<% color = cur_piece.color %>
+						<% piece_class_name = cur_piece.class.name.downcase %>
+						
 						<% case piece_class_name %>
 						<% when 'king'%>
 							<% column_number = 0 %>
@@ -40,15 +41,17 @@
 						<% end %> 
 
 						<% x_coord = scale * column_number %>
-						<% y_coord = _ph_color == 1 ? scale : 0 %>			<!-- IMPORTANT: Another temporary implementation for black/white  -->
+						<% y_coord = color == 1 ? 0 : scale %>
 						
-						<object type="image/svg+xml" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
+						<object type="image/svg+xml" class="svg-piece-display" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
 							#svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
 						</object>
 
-					<% end %>
-				</div>
+						<% end %>
+					</div>
+
 			<% end %>
+
 		</div>
 	<% end %>
 </div>
