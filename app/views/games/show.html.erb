@@ -108,3 +108,8 @@
 </div>
 
 <!-- moving action insert into nested board loop here somewhere-->
+					<% @pieces.each do |piece| %>
+						<% if piece.x_pos == column && piece.y_pos == row %>
+				    	<%= link_to image_tag(piece.image, :class=>"img-responsive"), select_path( :piece_id => piece, :x_pos => piece.x_pos, :y_pos => piece.y_pos ) %>
+				    <% end%>
+					<% end %>

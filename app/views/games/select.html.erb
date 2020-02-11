@@ -1,1 +1,13 @@
 <!-- select page here -->
+<!-- select is a duplicate of the show page, with the selected square highlighted -->
+<!-- insert into nested board loop here somewhere-->
+            <% if @x_pos.to_i == column && @y_pos.to_i == row %>
+							<%= image_tag(@piece.image, :piece_id => @piece, :x_pos => @piece, :y_pos => @piece, :class => "img-responsive select") %>
+
+						<% else %>
+							<% @pieces.each do |piece| %>
+				    			<% if piece.x_pos == column && piece.y_pos == row %>
+				    				<%= image_tag(piece.image, :class=>"img-responsive") %>
+				    			<% end%>
+							<% end %>
+						<% end %>
