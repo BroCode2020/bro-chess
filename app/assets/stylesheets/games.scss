@@ -7,13 +7,19 @@ $square-border-color-light: #bebebe;
 $square-border-color-dark: #858585;
 
 $square-side-vmin-length: 11vmin;
+$square-side-min-pixel-length: 20px;
 
 $board-length: calc(square-side-vmin-length * 8);
 
-.board-square {
+.board-square, .svg-piece-display {
 	height: $square-side-vmin-length;
 	width: $square-side-vmin-length;
 
+	min-height: $square-side-min-pixel-length;
+	min-width: $square-side-min-pixel-length;
+}
+
+.board-square {
 	float: left;
 
 	border-width: .25vmin;
@@ -26,7 +32,7 @@ $board-length: calc(square-side-vmin-length * 8);
 	border-right-color: $square-border-color-dark;
 
 	&.black {
-		background: black;
+		background: #3e3e3e;
 	}
 	&.white {
 		background-color: white;
@@ -39,7 +45,7 @@ $board-length: calc(square-side-vmin-length * 8);
 	flex-direction: column;
 }
 
-.chess-board-render, .squares-row {
+.chess-board-render, .board-row {
 	display: flex;
 	justify-content: center;
 }
@@ -48,7 +54,7 @@ $board-length: calc(square-side-vmin-length * 8);
 	clear: both;
 }
 
-.squares-row {
+.board-row {
 	flex-direction: row;
 }
 

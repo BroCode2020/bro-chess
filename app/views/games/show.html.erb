@@ -1,115 +1,57 @@
-<h1>This will show all of our games!</h1>
-<p><%= @game.name %></p>
+<!--h1>This will show all of our games!</h1>
+<p><%= @game.name %></p-->
+
 
 <div class="chess-board-render">
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
 
-	<div class="clear-floaters"><div>
+	<% tile_color = 1 %>
 
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
+	<% for y in 0..7 do %>
 
-	<div class="clear-floaters"><div>
+		<div class="board-row">
 
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
+			<% for x in 0..7 do %>
 
-	<div class="clear-floaters"><div>
+				<% tile_color = (tile_color == 0 ? 1 : 0) if x > 0 %>
 
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
+				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
+					<% if @game.tile_is_occupied?(x,y) %>
 
-	<div class="clear-floaters"><div>
+						<% scale = 45 %>
 
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
+						<% cur_piece = @game.pieces.find_by(x_pos: x, y_pos: y) %>
+						<% color = cur_piece.color %>
+						<% piece_class_name = cur_piece.class.name.downcase %>
 
-	<div class="clear-floaters"><div>
+						<% case piece_class_name %>
+						<% when 'king'%>
+							<% column_number = 0 %>
+						<% when 'queen'%>
+							<% column_number = 1 %>
+						<% when 'bishop'%>
+							<% column_number = 2 %>
+						<% when 'knight'%>
+							<% column_number = 3 %>
+						<% when 'rook'%>
+							<% column_number = 4 %>
+						<% when 'pawn'%>
+							<% column_number = 5 %>
+						<% else %>
+							<%= 'INVALID PIECE' %>
+						<% end %>
 
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
+						<% x_coord = scale * column_number %>
+						<% y_coord = color == 1 ? 0 : scale %>
 
-	<div class="clear-floaters"><div>
+						<object type="image/svg+xml" class="svg-piece-display" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
+							#svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
+						</object>
 
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-</div>
-
-<!-- moving action insert into nested board loop here somewhere-->
-					<% @pieces.each do |piece| %>
-						<% if piece.x_pos == column && piece.y_pos == row %>
-				    	<%= link_to image_tag(piece.image, :class=>"img-responsive"), select_path( :piece_id => piece, :x_pos => piece.x_pos, :y_pos => piece.y_pos ) %>
-				    <% end%>
 					<% end %>
+				</div>
+
+			<% end %>
+
+		</div>
+	<% end %>
+</div>
