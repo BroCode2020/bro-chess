@@ -43,30 +43,6 @@ class Game < ApplicationRecord
     return false
   end
 
-  private
-
-  def valid_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
-
-    if(start_position_x != end_position_x && start_position_y != end_position_y)
-      # if both x and y values change
-      if (end_position_x - start_position_x).abs == (end_position_y - start_position_y).abs
-        # if the x and y value change at the same rate (diagonal movement)
-        return true
-      else
-        return false
-      end
-    elsif(start_position_x != end_position_x)
-      # if only x value changes
-      return true
-    elsif(start_position_y != end_position_y)
-      # if only y value changes
-      return true
-    else
-      #if neither x nor y values change
-      return false
-    end
-  end
-
   def initialize_board!
     # White Pieces
     (0..7).each do |i|
@@ -111,6 +87,30 @@ class Game < ApplicationRecord
 
     Queen.create(game_id: id, x_pos: 3, y_pos: 7, color: false)
     King.create(game_id: id, x_pos: 4, y_pos: 7, color: false)
+  end
+
+  private
+
+  def valid_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
+
+    if(start_position_x != end_position_x && start_position_y != end_position_y)
+      # if both x and y values change
+      if (end_position_x - start_position_x).abs == (end_position_y - start_position_y).abs
+        # if the x and y value change at the same rate (diagonal movement)
+        return true
+      else
+        return false
+      end
+    elsif(start_position_x != end_position_x)
+      # if only x value changes
+      return true
+    elsif(start_position_y != end_position_y)
+      # if only y value changes
+      return true
+    else
+      #if neither x nor y values change
+      return false
+    end
   end
 
 end
