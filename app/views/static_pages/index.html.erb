@@ -1,3 +1,11 @@
 <h1 class="col-10 offset-1">
 	Welcome
+
+
+  <% @games.each do |game| %>
+    <div>
+      <%= game.name %>
+    </div>
+
+  <% end %>
 </h1>

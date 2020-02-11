@@ -1,5 +1,10 @@
 <h1>This will show all of our games!</h1>
-<p><%= @game.name %></p>
+  <% @games.each do |game| %>
+    <div>
+      <%= game.name %>
+    </div>
+
+  <% end %>
 
 <div class="chess-board-render">
 	<div class="squares-row">

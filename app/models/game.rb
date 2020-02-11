@@ -1,6 +1,7 @@
 class Game < ApplicationRecord
   has_many :pieces
   has_many :users
+  after_create :initialize_board!
 
   scope :available, -> { where(available: true) }
 
@@ -64,6 +65,52 @@ class Game < ApplicationRecord
       #if neither x nor y values change
       return false
     end
+  end
+
+  def initialize_board!
+    # White Pieces
+    (0..7).each do |i|
+      Pawn.create(
+        game_id: id,
+        x_pos: i,
+        y_pos: 1,
+        color: true
+        )
+    end
+
+    Rook.create(game_id: id, x_pos: 0, y_pos: 0, color: true)
+    Rook.create(game_id: id, x_pos: 7, y_pos: 0, color: true)
+
+    Knight.create(game_id: id, x_pos: 1, y_pos: 0, color: true)
+    Knight.create(game_id: id, x_pos: 6, y_pos: 0, color: true)
+
+    Bishop.create(game_id: id, x_pos: 2, y_pos: 0, color: true)
+    Bishop.create(game_id: id, x_pos: 5, y_pos: 0, color: true)
+
+    Queen.create(game_id: id, x_pos: 3, y_pos: 0, color: true)
+    King.create(game_id: id, x_pos: 4, y_pos: 0, color: true)
+
+    # Black Pieces
+    (0..7).each do |i|
+      Pawn.create(
+        game_id: id,
+        x_pos: i,
+        y_pos: 6,
+        color: false
+        )
+    end
+
+    Rook.create(game_id: id, x_pos: 0, y_pos: 7, color: false)
+    Rook.create(game_id: id, x_pos: 7, y_pos: 7, color: false)
+
+    Knight.create(game_id: id, x_pos: 1, y_pos: 7, color: false)
+    Knight.create(game_id: id, x_pos: 6, y_pos: 7, color: false)
+
+    Bishop.create(game_id: id, x_pos: 2, y_pos: 7, color: false)
+    Bishop.create(game_id: id, x_pos: 5, y_pos: 7, color: false)
+
+    Queen.create(game_id: id, x_pos: 3, y_pos: 7, color: false)
+    King.create(game_id: id, x_pos: 4, y_pos: 7, color: false)
   end
 
 end

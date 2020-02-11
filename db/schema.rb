@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2020_02_08_014224) do
     t.integer "x_pos"
     t.integer "y_pos"
     t.string "type"
+    t.boolean "boolean"
     t.integer "game_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
