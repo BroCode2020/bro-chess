@@ -4,6 +4,6 @@ class StaticPagesController < ApplicationController
     @game = Game.all
   end
 
- 
+
 
 end

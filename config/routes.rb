@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :games, only: %i[new index create show update] do
     member do
       get :game_available
-     patch :join_as_black, :join_as_white
+     #patch :join_as_black, :join_as_white
      put :join_as_black, :join_as_white
     end
    end

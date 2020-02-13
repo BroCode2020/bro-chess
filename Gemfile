@@ -57,7 +57,7 @@ group :development do
 end
 
 gem 'jquery-rails'
-gem 'popper_js', '~> 1.11.1'
+gem 'popper_js', '~> 1.14.5'
 gem 'bootstrap', '4.0.0.alpha6'
 
 source 'https://rails-assets.org' do
