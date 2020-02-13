@@ -6,7 +6,38 @@ class Game < ApplicationRecord
 
 
 
+  def get_svg_data_string(x_position, y_position, scale, svg_url)
+   
+    cur_piece = pieces.find_by(x_pos: x_position, y_pos: y_position)
+    color = cur_piece.color
+    piece_class_name = cur_piece.class.name.downcase
+    
+    case piece_class_name
+    when 'king'
+      column_number = 0
+    when 'queen'
+      column_number = 1
+    when 'bishop'
+      column_number = 2
+    when 'knight'
+      column_number = 3
+    when 'rook'
+      column_number = 4
+    when 'pawn'
+      column_number = 5
+    else
+      'INVALID PIECE'
+    end
 
+    x_coord = scale * column_number
+    y_coord = color == 1 ? 0 : scale
+
+    data_string = svg_url +'#svgView(viewBox('
+    data_string += x_coord.to_s + ', ' + y_coord.to_s + ', '
+    data_string += scale.to_s + ', ' + scale.to_s + '))'
+
+    return data_string
+  end
 
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 
@@ -33,7 +64,6 @@ class Game < ApplicationRecord
       return false
     else
       raise 'Invalid input detected. Input is not horizontal, vertical, or diagonal.'
-      # is anything supposed to be returned here?
     end
   end
 
