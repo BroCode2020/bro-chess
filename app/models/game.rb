@@ -1,8 +1,12 @@
 class Game < ApplicationRecord
   has_many :pieces
   has_many :users
+  belongs_to :black_player, class_name: 'User', optional: true
+  belongs_to :white_player, class_name: 'User', optional: true
 
-  scope :available, -> { where(available: true) }
+
+
+
 
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 
@@ -16,14 +20,14 @@ class Game < ApplicationRecord
 
       current_x = start_position_x + direction_x
       current_y = start_position_y + direction_y
-      
+
       loop do
 
         return true if tile_is_occupied?(current_x, current_y)
         current_x += direction_x
         current_y += direction_y
 
-        break if ((current_x == end_position_x) && (current_y == end_position_y)) 
+        break if ((current_x == end_position_x) && (current_y == end_position_y))
       end
 
       return false
