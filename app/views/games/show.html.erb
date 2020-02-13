@@ -17,36 +17,42 @@
 				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
 					<% if @game.tile_is_occupied?(x,y) %>
 
-						<% scale = 45 %>
 
-						<% cur_piece = @game.pieces.find_by(x_pos: x, y_pos: y) %>
-						<% color = cur_piece.color %>
-						<% piece_class_name = cur_piece.class.name.downcase %>
+								<% scale = 45 %>
 
-						<% case piece_class_name %>
-						<% when 'king'%>
-							<% column_number = 0 %>
-						<% when 'queen'%>
-							<% column_number = 1 %>
-						<% when 'bishop'%>
-							<% column_number = 2 %>
-						<% when 'knight'%>
-							<% column_number = 3 %>
-						<% when 'rook'%>
-							<% column_number = 4 %>
-						<% when 'pawn'%>
-							<% column_number = 5 %>
-						<% else %>
-							<%= 'INVALID PIECE' %>
-						<% end %>
+								<% cur_piece = @game.pieces.find_by(x_pos: x, y_pos: y) %>
+								<% color = cur_piece.color %>
+								<% piece_class_name = cur_piece.class.name.downcase %>
 
-						<% x_coord = scale * column_number %>
-						<% y_coord = color == 1 ? 0 : scale %>
+								<% case piece_class_name %>
+									<% when 'king'%>
+										<% column_number = 0 %>
+									<% when 'queen'%>
+										<% column_number = 1 %>
+									<% when 'bishop'%>
+										<% column_number = 2 %>
+									<% when 'knight'%>
+										<% column_number = 3 %>
+									<% when 'rook'%>
+										<% column_number = 4 %>
+								  <% when 'pawn'%>
+										<% column_number = 5 %>
+									<% else %>
+										<%= 'INVALID PIECE' %>
+							 <% end %>
 
-						<object type="image/svg+xml" class="svg-piece-display" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
-							#svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
-						</object>
+							 <% x_coord = scale * column_number %>
+							 <% y_coord = color == 1 ? 0 : scale %>
 
+							 <%= link_to select_path( :piece_id => @piece.id, :x_pos => @piece.x_pos, :y_pos => @piece.y_pos ) do %>
+
+
+
+							 <object type="image/svg+xml" class="svg-piece-display select" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
+								 #svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
+							 </object>
+
+							 <% end %>
 					<% end %>
 				</div>
 
