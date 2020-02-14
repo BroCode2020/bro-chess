@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Game, type: :model do
 
   # Testing:		tile_is_occupied? (tile_x_position, tile_y_position)
-  
+
   it "should return true for (0,0) when piece is at (x_pos: 0, y_pos: 0)" do
 
 	game = FactoryBot.create(:game)
@@ -76,7 +76,7 @@ RSpec.describe Game, type: :model do
 
 	expect(game.send(:valid_input_target?, p1.x_pos, p1.y_pos, p2.x_pos, p2.y_pos)).to eq(true)
   end
-	  
+
   it "should return true when targets are diagonally adjacent" do
 
 	game = FactoryBot.create(:game)
@@ -98,7 +98,7 @@ RSpec.describe Game, type: :model do
   end
 
   it "should return true when there are one or more pieces between between two validly positioned targets" do
-		
+
 	game = FactoryBot.create(:game)
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 4, y_pos: 0)
@@ -114,9 +114,15 @@ RSpec.describe Game, type: :model do
 	p2 = game.pieces.create(x_pos: 1, y_pos: 3)
 
 	expect {
-		# Must use expect{...} rather than expect(...) for this this Rspec logic to work properly 
+		# Must use expect{...} rather than expect(...) for this this Rspec logic to work properly
 		game.is_obstructed?(p1.x_pos, p1.y_pos, p2.x_pos, p2.y_pos).to raise_error(RuntimeError, 'Invalid input detected. Input is not horizontal, vertical, or diagonal.')
 	}
   end
-  
+
+
+
+
+
+
+
 end

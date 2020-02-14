@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_110002) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "color"
+    t.string "image"
   end
 
   create_table "users", force: :cascade do |t|

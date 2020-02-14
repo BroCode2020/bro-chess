@@ -51,9 +51,13 @@ $board-length: calc(square-side-vmin-length * 8);
 }
 
 .clear-floaters {
-	clear: both; 
+	clear: both;
 }
 
 .board-row {
 	flex-direction: row;
+}
+
+.select {
+	background: #fff969;
 }

@@ -10,38 +10,58 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.create(game_params)
-     redirect_to game_path(@game.id)
+    redirect_to game_path(@game)
   end
 
   def show
     @game = Game.find(params[:id])
   end
 
-def update
-  @game = Game.find(params[:id])
-  return render_not_found if @game.nil?
-  @game.update_attributes(game_params)
-  redirect_to game_path(@game.id)
-end
+  def select
+    @game = Game.find(params[:id])
+    @pieces = @game.pieces
+    @piece = Piece.find(params[:piece_id])
+    @piece_id = params[:piece_id]
+    @x_pos = params[:x_pos]
+    @y_pos = params[:y_pos]
+  end
 
-def join_as_black
-  @game = Game.find(params[:id])
-  return render_not_found if @game.nil?
-  @game.update_attribute(:black_player_id, current_user.id)
-  redirect_to game_path(@game.id)
-end
+  def move
+    @game = Game.find(params[:id])
+    @pieces = @game.pieces
+    @piece = Piece.find(params[:piece_id])
+    @piece_id = params[:piece_id]
+    @x_pos = params[:x_pos]
+    @y_pos = params[:y_pos]
+    @piece.update_attributes({:x_pos => @x_pos, :y_pos => @y_pos})
+    redirect_to game_path(@game)
+  end
 
-def join_as_white
-  @game = Game.find(params[:id])
-  return render_not_found if @game.nil?
-  @game.update_attribute(:white_player_id, current_user.id)
-  redirect_to game_path(@game.id)
-end
+  def update
+    @game = Game.find(params[:id])
+    return render_not_found if @game.nil?
+    @game.update_attributes(game_params)
+    redirect_to game_path(@game.id)
+  end
 
-  def game_available
-    return render plain: 'true' if !current_game.white_player_id || !current_game.black_player_id
-    render plain: 'false'
-end
+  def join_as_black
+    @game = Game.find(params[:id])
+    return render_not_found if @game.nil?
+    @game.update_attribute(:black_player_id, current_user.id)
+    redirect_to game_path(@game.id)
+  end
+
+  def join_as_white
+    @game = Game.find(params[:id])
+    return render_not_found if @game.nil?
+    @game.update_attribute(:white_player_id, current_user.id)
+    redirect_to game_path(@game.id)
+  end
+
+    def game_available
+      return render plain: 'true' if !current_game.white_player_id || !current_game.black_player_id
+      render plain: 'false'
+  end
 
   private
 
