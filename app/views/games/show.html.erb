@@ -5,22 +5,23 @@
 <div class="chess-board-render">
 	<% tile_color = 1 %>
 
-	<% for y in 0..7 do %>
+	<% 0.upto(7) do |y| %>
 		<div class="board-row">
 
-			<% for x in 0..7 do %>
+			<% 0.upto(7) do |x| %>
 				<% tile_color = (tile_color == 0 ? 1 : 0) if x > 0 %>
 
 				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
-					<% if @game.tile_is_occupied?(x,y) %>
+					<% @pieces.each do |piece| %>
+						<% if piece.x_pos == x && piece.y_pos == y %>
+							<% scale = 45 %>
+							<% svg_data = @game.get_svg_data_string(piece, x, y, scale, asset_path('Chess_Pieces_Sprite.svg')) %>
 
-						<% scale = 45 %>
-						<% svg_data = @game.get_svg_data_string(x, y, scale, asset_path('Chess_Pieces_Sprite.svg')) %>
-
-						<%= link_to select_path( :piece_id => @piece.id, :x_pos => @piece.x_pos, :y_pos => @piece.y_pos ) do %>
-							<object type="image/svg+xml" class="svg-piece-display" data="<%=svg_data%>" 
-								width ="<%= scale * 2 %>" height="<%= scale * 2 %>"></object>
-						<% end %>
+							<%= link_to select_path( :piece_id => piece.id, :x_pos => piece.x_pos, :y_pos => piece.y_pos ) do %>
+								<object type="image/svg+xml" class="svg-piece-display" data="<%=svg_data%>"
+									width ="<%= scale * 2 %>" height="<%= scale * 2 %>"></object>
+							<% end %>
+							<% end %>
 					<% end %>
 				</div>
 			<% end %>
