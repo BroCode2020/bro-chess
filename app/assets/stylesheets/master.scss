@@ -1,0 +1,30 @@
+@import "bootstrap";
+
+body {
+  background: black !important;
+}
+
+$booyah-box-box-shadow: 1px 1px 2px 0 #d0d0d0;
+$booyah-box-link-color: #289bff;
+
+.booyah-box {
+  background-color: #5A6067;
+  opacity: 0.9;
+  -moz-box-shadow: $booyah-box-box-shadow;
+  -webkit-box-shadow: $booyah-box-box-shadow;
+  box-shadow: $booyah-box-box-shadow;
+  border: 1px solid #ccc;
+  border-color: #e4e4e4 #bebebd #bebebd #e4e4e4;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px 20px 30px;
+  text-align: center;
+  text-orientation: left;
+  color: white;
+
+  a {
+    color: $booyah-box-link-color;
+  }
+}

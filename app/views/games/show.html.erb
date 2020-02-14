@@ -1,113 +1,30 @@
-<h1>This will show all of our games!</h1>
-  <% @games.each do |game| %>
-    <div>
-      <%= game.name %>
-    </div>
+<!--h1>This will show all of our games!</h1>
+<p><%= @game.name %></p-->
 
-  <% end %>
 
 <div class="chess-board-render">
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
+	<% tile_color = 1 %>
 
-	<div class="clear-floaters"><div>
+	<% for y in 0..7 do %>
+		<div class="board-row">
 
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
+			<% for x in 0..7 do %>
+				<% tile_color = (tile_color == 0 ? 1 : 0) if x > 0 %>
 
-	<div class="clear-floaters"><div>
+				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
+					<% if @game.tile_is_occupied?(x,y) %>
 
-	<div class="squares-row">	
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
+						<% scale = 45 %>
+						<% svg_data = @game.get_svg_data_string(x, y, scale, asset_path('Chess_Pieces_Sprite.svg')) %>
 
-	<div class="clear-floaters"><div>
+						<%= link_to select_path( :piece_id => @piece.id, :x_pos => @piece.x_pos, :y_pos => @piece.y_pos ) do %>
+							<object type="image/svg+xml" class="svg-piece-display" data="<%=svg_data%>" 
+								width ="<%= scale * 2 %>" height="<%= scale * 2 %>"></object>
+						<% end %>
+					<% end %>
+				</div>
+			<% end %>
 
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">	
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
-
-	<div class="squares-row">
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-		<div class="board-square black"></div>
-		<div class="board-square white"></div>
-	</div>
-
-	<div class="clear-floaters"><div>
+		</div>
+	<% end %>
 </div>

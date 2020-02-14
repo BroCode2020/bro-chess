@@ -1,0 +1,63 @@
+<!--h1>This will show all of our games!</h1> -->
+<p>Click a valid tile to move to.</p>
+
+
+<div class="chess-board-render">
+
+	<% tile_color = 1 %>
+
+	<% for y in 0..7 do %>
+
+		<div class="board-row">
+
+			<% for x in 0..7 do %>
+
+				<% tile_color = (tile_color == 0 ? 1 : 0) if x > 0 %>
+
+				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
+					<% if @game.tile_is_occupied?(x,y) %>
+
+
+								<% scale = 45 %>
+
+								<% cur_piece = @game.pieces.find_by(x_pos: x, y_pos: y) %>
+								<% color = cur_piece.color %>
+								<% piece_class_name = cur_piece.class.name.downcase %>
+
+								<% case piece_class_name %>
+									<% when 'king'%>
+										<% column_number = 0 %>
+									<% when 'queen'%>
+										<% column_number = 1 %>
+									<% when 'bishop'%>
+										<% column_number = 2 %>
+									<% when 'knight'%>
+										<% column_number = 3 %>
+									<% when 'rook'%>
+										<% column_number = 4 %>
+								  <% when 'pawn'%>
+										<% column_number = 5 %>
+									<% else %>
+										<%= 'INVALID PIECE' %>
+							 <% end %>
+
+							 <% x_coord = scale * column_number %>
+							 <% y_coord = color == 1 ? 0 : scale %>
+
+							 <%= link_to move_path(@game, :piece_id => @piece.id, :x_pos => piece.x_pos, :y_pos => piece.y_pos ) do %>
+
+							 <object type="image/svg+xml" class="svg-piece-display select" data="<%= asset_path('Chess_Pieces_Sprite.svg')%>
+								 #svgView(viewBox(<%= x_coord %>, <%= y_coord %>,<%= scale %>,<%= scale %>))" width ="<%= scale * 2 %>" height="<%= scale * 2 %>">
+							 </object>
+
+							 <% end %>
+
+						<% end %>
+					<% end %>
+				</div>
+
+			<% end %>
+
+		</div>
+	<% end %>
+</div>

@@ -4,7 +4,6 @@ class CreatePieces < ActiveRecord::Migration[5.2]
       t.integer :x_pos
       t.integer :y_pos
       t.string :type
-      t.boolean  :boolean
       t.integer :player_id
       t.integer :game_id
       t.datetime :created_at
