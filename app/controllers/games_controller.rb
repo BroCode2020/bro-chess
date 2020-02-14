@@ -37,8 +37,9 @@ class GamesController < ApplicationController
     @piece_id = params[:piece_id]
     @x_pos = params[:x_pos]
     @y_pos = params[:y_pos]
+    #<!-- @piece.move_to! -->
     @piece.update_attributes({:x_pos => @x_pos, :y_pos => @y_pos})
-    redirect_to game_path(@game)
+    redirect_to game_path(@game.id)
   end
 
   def update
