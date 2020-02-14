@@ -1,6 +1,11 @@
 class Piece < ApplicationRecord
   belongs_to :game
 
+
+  def position
+    "#{self.x_pos}, #{self.y_pos}"
+  end
+
   def move_to!(new_x, new_y)
 		captured = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
 		if captured.present? && self.color != captured.color
