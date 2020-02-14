@@ -16,8 +16,8 @@
 
 						<% scale = 45 %>
 						<% svg_data = @game.get_svg_data_string(x, y, scale, asset_path('Chess_Pieces_Sprite.svg')) %>
-						<object type="image/svg+xml" class="svg-piece-display" data="<%=svg_data%>" 
-							width ="<%= scale * 2 %>" height="<%= scale * 2 %>"></object>
+
+						<img src="<%=svg_data%>" class="svg-piece-display">
 					<% end %>
 				</div>
 			<% end %>
