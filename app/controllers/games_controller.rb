@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
 
   def index
+    @games = Game.all
     @available_games = Game.available
   end
 
@@ -14,6 +15,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @games = Game.all
     @game = Game.find(params[:id])
   end
 
@@ -58,9 +60,9 @@ class GamesController < ApplicationController
     redirect_to game_path(@game.id)
   end
 
-    def game_available
-      return render plain: 'true' if !current_game.white_player_id || !current_game.black_player_id
-      render plain: 'false'
+  def game_available
+    return render plain: 'true' if !current_game.white_player_id || !current_game.black_player_id
+    render plain: 'false'
   end
 
   private
