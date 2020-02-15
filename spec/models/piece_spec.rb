@@ -14,6 +14,7 @@ RSpec.describe Piece, type: :model do
   #testing move_to!
   it "should return true when a piece moves to an empty tile" do
     game = FactoryBot.create(:game)
+    game.pieces.clear
     white_piece = game.pieces.create(x_pos: 0, y_pos: 0, color: true)
     black_piece = game.pieces.create(x_pos: 4, y_pos: 0, color: false)
     expect(white_piece.move_to!(1,0)).to eq(true)
@@ -28,6 +29,7 @@ RSpec.describe Piece, type: :model do
 
   it "should return true when moving to a tile with a piece of opposite color and update captured piece to position nil, nil" do
     game = FactoryBot.create(:game)
+    game.pieces.clear
     white_piece = game.pieces.create(x_pos: 0, y_pos: 0, color: true)
     black_piece = game.pieces.create(x_pos: 1, y_pos: 0, color: false)
     expect(white_piece.move_to!(1,0)).to eq(true)
