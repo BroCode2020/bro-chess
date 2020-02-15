@@ -7,6 +7,7 @@ RSpec.describe Game, type: :model do
   it "should return true for (0,0) when piece is at (x_pos: 0, y_pos: 0)" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	game.pieces.create(x_pos: 0, y_pos: 0)
 	expect(game.tile_is_occupied?(0,0)).to eq(true)
 
@@ -15,7 +16,7 @@ RSpec.describe Game, type: :model do
   it "should return false for (1,1) when piece is at (x_pos: 0, y_pos: 0)" do
 
 	game = FactoryBot.create(:game)
-
+	game.pieces.clear
 	game.pieces.create(x_pos: 0, y_pos: 0)
 	expect(game.tile_is_occupied?(1,1)).to eq(false)
 
@@ -26,6 +27,7 @@ RSpec.describe Game, type: :model do
   it "should return true for inputs that are horizonal" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 5, y_pos: 0)
 
@@ -36,6 +38,7 @@ RSpec.describe Game, type: :model do
   it "should return true for inputs that are vertical" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 0, y_pos: 4)
 
@@ -45,6 +48,7 @@ RSpec.describe Game, type: :model do
   it "should return true for inputs that are diagonal" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 1, y_pos: 1)
 	p2 = game.pieces.create(x_pos: 0, y_pos: 2)
 
@@ -54,6 +58,7 @@ RSpec.describe Game, type: :model do
   it "should return false for inputs that are not horizonal, vertical, or diagonal" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 2, y_pos: 4)
 
@@ -63,6 +68,7 @@ RSpec.describe Game, type: :model do
   it "should return true when targets are horizontally adjacent" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 1, y_pos: 0)
 
@@ -72,6 +78,7 @@ RSpec.describe Game, type: :model do
   it "should return true when targets are vertically adjacent" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 0, y_pos: 1)
 
@@ -81,6 +88,7 @@ RSpec.describe Game, type: :model do
   it "should return true when targets are diagonally adjacent" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 1, y_pos: 1)
 
@@ -92,6 +100,7 @@ RSpec.describe Game, type: :model do
   it "should return false when there are no pieces between two validly positioned targets" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 3, y_pos: 0)
 
@@ -101,6 +110,7 @@ RSpec.describe Game, type: :model do
   it "should return true when there are one or more pieces between between two validly positioned targets" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 4, y_pos: 0)
 	p3 = game.pieces.create(x_pos: 2, y_pos: 0)
@@ -111,6 +121,7 @@ RSpec.describe Game, type: :model do
   it "should return an error when targets have invalid positioning (are not horizontal, vertical, or diagonal)" do
 
 	game = FactoryBot.create(:game)
+	game.pieces.clear
 	p1 = game.pieces.create(x_pos: 0, y_pos: 0)
 	p2 = game.pieces.create(x_pos: 1, y_pos: 3)
 
@@ -122,27 +133,26 @@ RSpec.describe Game, type: :model do
   
   it "should return a piece count of 32." do
 
-  game = FactoryBot.create(:game)
-  expect(game.pieces.count).to eq(32)
-
+	game = FactoryBot.create(:game)
+	expect(game.pieces.count).to eq(32)
   end
 
   it "should return the king as the last piece that was initialized" do
 
-  game = FactoryBot.create(:game)
-  expect(game.pieces.last.type).to eq("King")
+	game = FactoryBot.create(:game)
+	expect(game.pieces.last.type).to eq("King")
   end
 
   it "Should return the x position of the last piece that was created" do
 
-  game = FactoryBot.create(:game)
-  expect(game.pieces.last.x_pos).to eq(4)
+	game = FactoryBot.create(:game)
+	expect(game.pieces.last.x_pos).to eq(4)
   end
 
   it "Should return the y position of the last piece that was created" do
 
-  game = FactoryBot.create(:game)
-  expect(game.pieces.last.y_pos).to eq(7)
+	game = FactoryBot.create(:game)
+	expect(game.pieces.last.y_pos).to eq(7)
   end
 
 end
