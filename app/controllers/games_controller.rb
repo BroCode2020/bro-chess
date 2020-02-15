@@ -17,15 +17,19 @@ class GamesController < ApplicationController
   def show
     @games = Game.all
     @game = Game.find(params[:id])
+    @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|
+      hash[piece.position] = piece
+      hash
+    end
   end
 
   def select
     @game = Game.find(params[:id])
-    @pieces = @game.pieces
-    @piece = Piece.find(params[:piece_id])
-    @piece_id = params[:piece_id]
-    @x_pos = params[:x_pos]
-    @y_pos = params[:y_pos]
+    @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|
+      hash[piece.position] = piece
+      hash
+    end
+    @selected_piece_id = params[:piece_id]
   end
 
   def move
@@ -35,8 +39,9 @@ class GamesController < ApplicationController
     @piece_id = params[:piece_id]
     @x_pos = params[:x_pos]
     @y_pos = params[:y_pos]
+    #<!-- @piece.move_to! -->
     @piece.update_attributes({:x_pos => @x_pos, :y_pos => @y_pos})
-    redirect_to game_path(@game)
+    redirect_to game_path(@game.id)
   end
 
   def update

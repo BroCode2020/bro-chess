@@ -7,12 +7,11 @@ class Game < ApplicationRecord
 
   after_create :initialize_board!
 
-  def get_svg_data_string(x_position, y_position, scale, svg_url)
-   
-    cur_piece = pieces.find_by(x_pos: x_position, y_pos: y_position)
+  def get_svg_data_string(cur_piece, x_position, y_position, scale, svg_url)
+    
     color = cur_piece.color
     piece_class_name = cur_piece.class.name.downcase
-    
+
     case piece_class_name
     when 'king'
       column_number = 0
