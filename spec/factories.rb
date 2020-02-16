@@ -2,8 +2,8 @@ FactoryBot.define do
 
 	factory :game do
 		name { "PlayerName" }
-		white_player_id { 1 }	# watch these defaults, they may be changed, depending on tests
-		black_player_id { 1 }	# typo in definition migration
+		white_player_id { 0 }	# watch these defaults, they may be changed, depending on tests
+		black_player_id { 0 }	# typo in definition migration
 		#pieces { Array.new }	# To avoid errors, pieces will need to be added to this array inside tests
 	end
 
@@ -15,6 +15,11 @@ FactoryBot.define do
 		color { 0 }
 	end
 
+	factory :king do
+  	association :game
+    end
+
+
 	factory :user do
 		sequence :email do |n|
 			"user#{n}@example.com"
@@ -22,6 +27,4 @@ FactoryBot.define do
 		password { "password" }
 	end
 
-	#factories for Populate game feature
-	
 end
