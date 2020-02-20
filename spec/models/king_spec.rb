@@ -27,5 +27,10 @@ RSpec.describe King, type: :model do
     it 'should return false if it moves more than field' do
       expect(king.valid_move?(7, 7)).to eq false
     end
+    it 'should return false if piece of the same color is in target position' do
+			king = FactoryBot.create(:king, color: 0, game: game, x_pos: 5, y_pos: 5)
+			target_piece = FactoryBot.create(:piece, type: Pawn, color: 0, game: game, x_pos: 6, y_pos: 5)
+        expect(king.valid_move?(6, 5)).to eq true
   end
+ end
 end

@@ -22,7 +22,7 @@ class Piece < ApplicationRecord
     return true
 	end
 
-  
+
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 
     if valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
@@ -55,7 +55,7 @@ class Piece < ApplicationRecord
 
   def valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
     # This methods returns true if in general, the inputs are valid.
-    #   'In general', meaning horizontal, vertical, OR diagonal movement 
+    #   'In general', meaning horizontal, vertical, OR diagonal movement
 
     if(start_position_x != end_position_x && start_position_y != end_position_y)
       # if both x and y values change
@@ -76,5 +76,6 @@ class Piece < ApplicationRecord
       return false
     end
   end
+
 
 end
