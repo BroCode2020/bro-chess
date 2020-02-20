@@ -1,6 +1,6 @@
 class Bishop < Piece
 
-	def valid_move (new_x, new_y)
+	def valid_move? (new_x, new_y)
 
 		cur_game = Game.find_by(id: game_id)
 
