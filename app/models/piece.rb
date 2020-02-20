@@ -38,8 +38,7 @@ class Piece < ApplicationRecord
 
       loop do
 
-        return true if game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x 
-          && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
+        return true if game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
         current_x += direction_x
         current_y += direction_y
 
