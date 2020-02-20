@@ -22,6 +22,8 @@ FactoryBot.define do
 	factory :knight do
 	end
 
+	factory :bishop do
+	end
 
 	factory :user do
 		sequence :email do |n|
