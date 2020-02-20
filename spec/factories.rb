@@ -2,9 +2,9 @@ FactoryBot.define do
 
 	factory :game do
 		name { "PlayerName" }
-		white_player_id { 0 }	# watch these defaults, they may be changed, depending on tests
-		black_player_id { 0 }	# typo in definition migration
-		#pieces { Array.new }	# To avoid errors, pieces will need to be added to this array inside tests
+		white_player_id { 0 }
+		black_player_id { 0 }
+		
 	end
 
 	factory :piece do
@@ -17,7 +17,10 @@ FactoryBot.define do
 
 	factory :king do
   	association :game
-    end
+	end
+	
+	factory :knight do
+	end
 
 
 	factory :user do
