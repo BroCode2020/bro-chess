@@ -4,6 +4,13 @@ class Bishop < Piece
 
 		cur_game = Game.find_by(id: game_id)
 
+		# get the absolute value of the distances moved in x and y directions
+
+		x_dist_abs = (new_x - x_pos).abs
+		y_dist_abs = (new_y - y_pos).abs
+
+		return false if x_dist_abs != y_dist_abs
+
 		# if there is a piece at target position...
 
 		if cur_game.tile_is_occupied?(new_x, new_y)
@@ -17,11 +24,7 @@ class Bishop < Piece
 
 		return false if is_obstructed?(x_pos, y_pos, new_x, new_y) != false
 
-		# get the absolute value of the distances moved in x and y directions
-
-		x_dist_abs = (new_x - x_pos).abs
-		y_dist_abs = (new_y - y_pos).abs
-
-		return (x_dist_abs == y_dist_abs)
+		return true
+		
 	end
 end
