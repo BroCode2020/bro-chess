@@ -15,7 +15,7 @@ class Bishop < Piece
 
 		# ensure input is valid in the general sense and isn't obstructed
 
-		return false if is_obstructed(x_pos, y_pos, new_x, new_y) != false
+		return false if is_obstructed?(x_pos, y_pos, new_x, new_y) != false
 
 		# get the absolute value of the distances moved in x and y directions
 
