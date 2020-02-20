@@ -4,7 +4,7 @@ FactoryBot.define do
 		name { "PlayerName" }
 		white_player_id { 0 }
 		black_player_id { 0 }
-		
+
 	end
 
 	factory :piece do
@@ -18,7 +18,7 @@ FactoryBot.define do
 	factory :king do
   	association :game
 	end
-	
+
 	factory :knight do
 	end
 
