@@ -1,15 +1,12 @@
 class Piece < ApplicationRecord
   belongs_to :game
 
-
   def position
     "#{self.x_pos}, #{self.y_pos}"
   end
 
 
-
   def move_to!(new_x, new_y)
-
 		piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
 		if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
 			piece_to_capture.update_attributes(:x_pos => nil, :y_pos => nil) #captured pieces are nil thus not drawn and not clickable
@@ -22,7 +19,7 @@ class Piece < ApplicationRecord
     return true
 	end
 
-  
+
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 
     if valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
@@ -38,10 +35,10 @@ class Piece < ApplicationRecord
 
       loop do
 
-        return true if game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
+        return true if self.game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
+
         current_x += direction_x
         current_y += direction_y
-
         break if ((current_x == end_position_x) && (current_y == end_position_y))
       end
 
@@ -55,7 +52,7 @@ class Piece < ApplicationRecord
 
   def valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
     # This methods returns true if in general, the inputs are valid.
-    #   'In general', meaning horizontal, vertical, OR diagonal movement 
+    #   'In general', meaning horizontal, vertical, OR diagonal movement
 
     if(start_position_x != end_position_x && start_position_y != end_position_y)
       # if both x and y values change
@@ -76,5 +73,4 @@ class Piece < ApplicationRecord
       return false
     end
   end
-
 end
