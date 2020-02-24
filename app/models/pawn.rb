@@ -16,11 +16,11 @@ class Pawn < Piece
       return false if game.tile_is_occupied?(new_x, new_y)
     end
 
-    if (new_y - y_pos).abs == 2 && !has_moved?
+    if (new_y - y_pos).abs == 2 && !pawn_has_moved?
       return false if game.tile_is_occupied?(new_x, new_y)
     end
 
-    if (new_y - y_pos).abs < 1 && has_moved?
+    if (new_y - y_pos).abs < 1 && pawn_has_moved?
       return false
     end
 

@@ -59,11 +59,11 @@ class Piece < ApplicationRecord
     return color == 0
   end
 
-  def has_moved?
+  def pawn_has_moved?
     if color == 1 && y_pos != 1
       return true
     end
-    
+
     if color == 0 && y_pos != 6
       return true
     else 
