@@ -19,6 +19,10 @@ FactoryBot.define do
   	association :game
     end
 
+  factory :pawn do
+  	association :game
+  end
+
 
 	factory :user do
 		sequence :email do |n|

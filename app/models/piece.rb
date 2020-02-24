@@ -51,6 +51,26 @@ class Piece < ApplicationRecord
     end
   end
 
+  def white?
+    return color == 1
+  end
+
+  def black?
+    return color == 0
+  end
+
+  def has_moved?
+    if color == 1 && y_pos != 1
+      return true
+    end
+    
+    if color == 0 && y_pos != 6
+      return true
+    else 
+      return false
+    end
+  end
+
   private
 
   def valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
