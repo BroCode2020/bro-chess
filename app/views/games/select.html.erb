@@ -21,13 +21,17 @@
 					<% if @selected_piece_id == piece.id.to_s
 							image_class = "svg-piece-display select"
 							end %>
+
+							<!-- some jquery here to click a tile to move to -->
+							<!-- pass this new x and y to move_path to update piece -->
+
 					<%= link_to move_path(@game, :piece_id => piece.id, :x_pos => x, :y_pos => y ) do %>
 						<img src="<%=svg_data%>" class="<%= image_class %>">
 					<% end %>
+
 					<% end %>
 				</div>
 			<% end %>
-
 		</div>
 	<% end %>
 </div>
