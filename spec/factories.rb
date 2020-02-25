@@ -1,19 +1,29 @@
-FactoryBot.define do 
-	
+FactoryBot.define do
+
 	factory :game do
 		name { "PlayerName" }
-		white_player_id { 1 }	# watch these defaults, they may be changed, depending on tests
-		black_player_id { 1 }	# typo in definition migration
-		
+
+		white_player_id { 0 }
+		black_player_id { 0 }
+
+
 	end
 
 	factory :piece do
 		x_pos { 0 }
 		y_pos { 0 }
 		type { "Pawn" }
-		player_id { 1 }
 		game_id { 1 }
+		color { 0 }
 	end
+
+	factory :king do
+  	association :game
+	end
+
+	factory :knight do
+	end
+
 
 	factory :user do
 		sequence :email do |n|
@@ -22,6 +32,4 @@ FactoryBot.define do
 		password { "password" }
 	end
 
-	#factories for Populate game feature
-	
 end

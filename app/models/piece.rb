@@ -2,4 +2,80 @@ class Piece < ApplicationRecord
   belongs_to :game
 
 
+  def position
+    "#{self.x_pos}, #{self.y_pos}"
+  end
+
+
+
+  def move_to!(new_x, new_y)
+
+		piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
+		if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
+			piece_to_capture.update_attributes(:x_pos => nil, :y_pos => nil) #captured pieces are nil thus not drawn and not clickable
+			self.update_attributes(:x_pos => new_x, :y_pos => new_y)
+		elsif piece_to_capture.present? && self.color.to_i == piece_to_capture.color
+      return false
+    else
+      self.update_attributes({:x_pos => new_x, :y_pos => new_y})
+    end
+    return true
+	end
+
+
+  def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
+
+    if valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
+
+      direction_x = start_position_x < end_position_x ? 1 : -1
+      direction_x = 0 if start_position_x == end_position_x
+
+      direction_y = start_position_y < end_position_y ? 1 : -1
+      direction_y = 0 if start_position_y == end_position_y
+
+      current_x = start_position_x
+      current_y = start_position_y
+
+      loop do
+
+        return true if game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
+        current_x += direction_x
+        current_y += direction_y
+
+        break if ((current_x == end_position_x) && (current_y == end_position_y))
+      end
+
+      return false
+    else
+      raise 'Invalid input detected. Input is not horizontal, vertical, or diagonal.'
+    end
+  end
+
+  private
+
+  def valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
+    # This methods returns true if in general, the inputs are valid.
+    #   'In general', meaning horizontal, vertical, OR diagonal movement
+
+    if(start_position_x != end_position_x && start_position_y != end_position_y)
+      # if both x and y values change
+      if (end_position_x - start_position_x).abs == (end_position_y - start_position_y).abs
+        # if the x and y value change at the same rate (diagonal movement)
+        return true
+      else
+        return false
+      end
+    elsif(start_position_x != end_position_x)
+      # if only x value changes
+      return true
+    elsif(start_position_y != end_position_y)
+      # if only y value changes
+      return true
+    else
+      #if neither x nor y values change
+      return false
+    end
+  end
+
+
 end
