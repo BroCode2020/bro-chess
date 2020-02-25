@@ -1,3 +1,4 @@
+
 FactoryBot.define do
 
 	factory :game do
@@ -23,6 +24,8 @@ FactoryBot.define do
   	association :game
   end
 
+  factory :knight do
+	end
 
 	factory :user do
 		sequence :email do |n|
@@ -32,3 +35,4 @@ FactoryBot.define do
 	end
 
 end
+

@@ -134,6 +134,16 @@ RSpec.describe Piece, type: :model do
   
     expect(p1.is_obstructed?(p1.x_pos, p1.y_pos, p2.x_pos, p2.y_pos)).to eq(false)
     end
+
+    it "should return false when there are no pieces between two validly positioned targets" do
+  
+      game = FactoryBot.create(:game)
+      game.pieces.clear
+      p1 = game.pieces.create(x_pos: 0, y_pos: 0)
+      p2 = game.pieces.create(x_pos: 1, y_pos: 0)
+    
+      expect(p1.is_obstructed?(p1.x_pos, p1.y_pos, p2.x_pos, p2.y_pos)).to eq(false)
+      end
   
     it "should return true when there are one or more pieces between between two validly positioned targets" do
   

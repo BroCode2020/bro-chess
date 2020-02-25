@@ -22,7 +22,7 @@ class Piece < ApplicationRecord
     return true
 	end
 
-  
+
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
 
     if valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
@@ -33,12 +33,12 @@ class Piece < ApplicationRecord
       direction_y = start_position_y < end_position_y ? 1 : -1
       direction_y = 0 if start_position_y == end_position_y
 
-      current_x = start_position_x + direction_x
-      current_y = start_position_y + direction_y
+      current_x = start_position_x
+      current_y = start_position_y
 
       loop do
 
-        return true if game.tile_is_occupied?(current_x, current_y)
+        return true if game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
         current_x += direction_x
         current_y += direction_y
 
@@ -75,7 +75,7 @@ class Piece < ApplicationRecord
 
   def valid_general_input_target?(start_position_x, start_position_y, end_position_x, end_position_y)
     # This methods returns true if in general, the inputs are valid.
-    #   'In general', meaning horizontal, vertical, OR diagonal movement 
+    #   'In general', meaning horizontal, vertical, OR diagonal movement
 
     if(start_position_x != end_position_x && start_position_y != end_position_y)
       # if both x and y values change
@@ -96,5 +96,6 @@ class Piece < ApplicationRecord
       return false
     end
   end
+
 
 end
