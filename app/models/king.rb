@@ -15,4 +15,8 @@ class King < Piece
 	   y_diff = (y_pos - new_y).abs
      return true if (x_diff <= 1) && (y_diff <= 1)
   end
+
+  def in_check?
+    
+  end
 end

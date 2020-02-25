@@ -29,6 +29,18 @@ RSpec.describe King, type: :model do
     it 'should return false if piece of the same color is in target position' do
 			target_piece = FactoryBot.create(:piece, type: Pawn, color: 0, game: game, x_pos: 5, y_pos: 6)
         expect(king.valid_move?(5, 6)).to eq false
+    end
+
+    describe 'in_check?' do
+
+      it "should return false when this king is not in check" do
+        expect king.in_check?.to eq(false)
+      end
+
+      it "should return true when this king is in check" do
+        expect king.in_check?.to eq(true)
+      end
+
+    end
   end
- end
 end

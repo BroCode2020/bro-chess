@@ -47,25 +47,75 @@ RSpec.describe Game, type: :model do
 	expect(game.pieces.last.y_pos).to eq(7)
   end
 
-	describe 'in_check_state?()' do
 
-		it "should...." do
-			expect(false).to eq(true)
+
+
+
+
+
+
+
+	describe 'in_check_state?' do
+
+		it "should false when neither king is in check" do
+			game = FactoryBot.create(:game)
+			expect(game.in_check_state?).to eq(false)
+		end
+
+		it "should return true when the black king is in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.in_check_state?).to eq(true)
+		end
+
+		it "should return true when the white king is in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.in_check_state?).to eq(true)
+		end
+
+		it "should return true when both kings are in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.in_check_state?).to eq(true)
 		end
 	end
 	
-	describe 'black_king_in_check?()' do
+	describe 'king_in_check?(king_color)' do
 
-		it "should...." do
+		it "should raise an error if king color is not 0 or 1" do
+			game = FactoryBot.create(:game)
+
 			expect(false).to eq(true)
+
+			expect {
+			  game.king_in_check?(3).to raise_error(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
+			}
+		end
+
+		it "should return true when black king is in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.king_in_check?(0)).to eq(true)
+		end
+
+		it "should return true when white king is in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.king_in_check?(1)).to eq(true)
+		end
+
+		it "should return false when black king is not in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.king_in_check?(0)).to eq(false)
+		end
+
+		it "should return false when white king is not in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			expect(game.king_in_check?(1)).to eq(false)
 		end
 	end
 
-	describe 'white_king_in_check?()' do
-
-		it "should...." do
-			expect(false).to eq(true)
-		end
-	end
-	
 end
