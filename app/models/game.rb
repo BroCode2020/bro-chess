@@ -53,8 +53,6 @@ class Game < ApplicationRecord
     pieces.where(x_pos: x, y_pos: y).first
   end
 
-  
-
 
   def initialize_board!
     # White Pieces
@@ -100,6 +98,19 @@ class Game < ApplicationRecord
 
     Queen.create(game_id: id, x_pos: 3, y_pos: 7, color: false)
     King.create(game_id: id, x_pos: 4, y_pos: 7, color: false)
+  end
+
+
+  def in_check_state?
+
+  end
+
+  def black_king_in_check?
+  
+  end
+  
+  def white_king_in_check?
+
   end
 
 

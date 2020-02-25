@@ -2,27 +2,27 @@ require 'rails_helper'
 
 RSpec.describe Game, type: :model do
 
-  # Testing:		tile_is_occupied? (tile_x_position, tile_y_position)
+	describe 'tile_is_occupied?(tile_x_position, tile_y_position)' do
 
-  it "should return true for (0,0) when piece is at (x_pos: 0, y_pos: 0)" do
+		it "should return true for (0,0) when piece is at (x_pos: 0, y_pos: 0)" do
 
-	game = FactoryBot.create(:game)
-	game.pieces.clear
-	game.pieces.create(x_pos: 0, y_pos: 0)
-	expect(game.tile_is_occupied?(0,0)).to eq(true)
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			game.pieces.create(x_pos: 0, y_pos: 0)
 
-  end
+			expect(game.tile_is_occupied?(0,0)).to eq(true)
+		end
 
-  it "should return false for (1,1) when piece is at (x_pos: 0, y_pos: 0)" do
+		it "should return false for (1,1) when piece is at (x_pos: 0, y_pos: 0)" do
 
-	game = FactoryBot.create(:game)
-	game.pieces.clear
-	game.pieces.create(x_pos: 0, y_pos: 0)
-	expect(game.tile_is_occupied?(1,1)).to eq(false)
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			game.pieces.create(x_pos: 0, y_pos: 0)
 
-  end
+			expect(game.tile_is_occupied?(1,1)).to eq(false)
+		end
+	end
 
-  
   it "should return a piece count of 32." do
 
 	game = FactoryBot.create(:game)
@@ -47,4 +47,25 @@ RSpec.describe Game, type: :model do
 	expect(game.pieces.last.y_pos).to eq(7)
   end
 
+	describe 'in_check_state?()' do
+
+		it "should...." do
+			expect(false).to eq(true)
+		end
+	end
+	
+	describe 'black_king_in_check?()' do
+
+		it "should...." do
+			expect(false).to eq(true)
+		end
+	end
+
+	describe 'white_king_in_check?()' do
+
+		it "should...." do
+			expect(false).to eq(true)
+		end
+	end
+	
 end
