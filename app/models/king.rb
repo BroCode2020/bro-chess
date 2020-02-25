@@ -18,5 +18,17 @@ class King < Piece
 
   def in_check?
     
+    opposing_color = (color == 0 ? 1 : 0)
+
+    cur_game = Game.find_by(id: game_id)
+    opposing_pieces = cur_game.pieces.where(color: opposing_color)
+
+    
+    opposing_pieces.each do |p|
+      return true if p.valid_move?(x_pos, y_pos)
+    end
+
+    return false
   end
+
 end
