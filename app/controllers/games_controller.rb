@@ -70,6 +70,13 @@ class GamesController < ApplicationController
     render plain: 'false'
   end
 
+  def forfeit
+    @game = Game.find(params[:id])
+    # @game.forfeiting_player = current_user.id
+    @game.update_attribute(:forfeiting_player, current_user.id)
+    redirect_to root_path
+  end
+
   private
 
   def game_params
