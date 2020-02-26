@@ -32,7 +32,7 @@
           <% end %>
         </ul>
         <ul class="navbar-nav ml-auto">
-          <% if user_signed_in? %>
+          <% if user_signed_in? && controller_name == 'games'%>
             <li class="nav-item">
               <%= link_to 'Forfeit Game', forfeit_path(@game), method: :post, class: "btn btn-danger" %>
             </li>
