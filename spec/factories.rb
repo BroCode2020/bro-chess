@@ -30,7 +30,9 @@ FactoryBot.define do
 	factory :rook do
 		association :game
 	end
-
+  
+  	factory :bishop do
+	end
 
 	factory :user do
 		sequence :email do |n|
@@ -40,3 +42,4 @@ FactoryBot.define do
 	end
 
 end
+
