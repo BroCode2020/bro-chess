@@ -1,15 +1,12 @@
 class Piece < ApplicationRecord
   belongs_to :game
 
-
   def position
     "#{self.x_pos}, #{self.y_pos}"
   end
 
 
-
   def move_to!(new_x, new_y)
-
 		piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
 		if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
 			piece_to_capture.update_attributes(:x_pos => nil, :y_pos => nil) #captured pieces are nil thus not drawn and not clickable
@@ -38,16 +35,36 @@ class Piece < ApplicationRecord
 
       loop do
 
-        return true if game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
+        return true if self.game.tile_is_occupied?(current_x, current_y) && !(current_x == end_position_x && current_y == end_position_y) && !(current_x == start_position_x && current_y == start_position_y)
+
         current_x += direction_x
         current_y += direction_y
-
         break if ((current_x == end_position_x) && (current_y == end_position_y))
       end
 
       return false
     else
       raise 'Invalid input detected. Input is not horizontal, vertical, or diagonal.'
+    end
+  end
+
+  def white?
+    return color == 1
+  end
+
+  def black?
+    return color == 0
+  end
+
+  def pawn_has_moved?
+    if color == 1 && y_pos != 1
+      return true
+    end
+
+    if color == 0 && y_pos != 6
+      return true
+    else 
+      return false
     end
   end
 
@@ -76,6 +93,4 @@ class Piece < ApplicationRecord
       return false
     end
   end
-
-
 end

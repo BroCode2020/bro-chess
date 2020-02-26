@@ -49,6 +49,13 @@ class Game < ApplicationRecord
     return false
   end
 
+  def piece_at(x, y)
+    pieces.where(x_pos: x, y_pos: y).first
+  end
+
+  
+
+
   def initialize_board!
     # White Pieces
     (0..7).each do |i|

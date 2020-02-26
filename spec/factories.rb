@@ -16,13 +16,22 @@ FactoryBot.define do
 	end
 
 	factory :king do
-  	association :game
+  		association :game
 	end
 
 	factory :knight do
+		association :game
 	end
 
-	factory :bishop do
+	factory :pawn do
+		association :game
+	end
+
+	factory :rook do
+		association :game
+	end
+  
+  	factory :bishop do
 	end
 
 	factory :user do
@@ -33,3 +42,4 @@ FactoryBot.define do
 	end
 
 end
+
