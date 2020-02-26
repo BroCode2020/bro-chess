@@ -34,7 +34,7 @@
         <ul class="navbar-nav ml-auto">
           <% if user_signed_in? && controller_name == 'games'%>
             <li class="nav-item">
-              <%= link_to 'Forfeit Game', forfeit_path(@game), method: :post, class: "btn btn-danger" %>
+              <%= link_to 'Forfeit Game', forfeit_path(@game), method: :post, class: "btn btn-danger", data: { confirm: "Do you really want to forfeit the game?"} %>
             </li>
           <% end %>
         </ul>
