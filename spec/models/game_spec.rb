@@ -57,26 +57,29 @@ RSpec.describe Game, type: :model do
 		it "should return true when the black king is in check" do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
-			FactoryBot.create(:king, color: '0', game: game, x_pos: 4, y_pos: 4)
-			FactoryBot.create(:queen, color: '1', game: game, x_pos: 4, y_pos: 2)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 4, y_pos: 4)
+			FactoryBot.create(:queen, color: 1, game: game, x_pos: 4, y_pos: 2)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 7)
+
 			expect(game.in_check_state?).to eq(true)
 		end
 
 		it "should return true when the white king is in check" do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
-			FactoryBot.create(:king, color: '1', game: game, x_pos: 4, y_pos: 4)
-			FactoryBot.create(:queen, color: '0', game: game, x_pos: 6, y_pos: 4)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 4)
+			FactoryBot.create(:queen, color: 0, game: game, x_pos: 6, y_pos: 4)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 7, y_pos: 7)
 			expect(game.in_check_state?).to eq(true)
 		end
 
 		it "should return true when both kings are in check" do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
-			FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
-			FactoryBot.create(:queen, color: '1', game: game, x_pos: 4, y_pos: 0)
-			FactoryBot.create(:king, color: '1', game: game, x_pos: 7, y_pos: 7)
-			FactoryBot.create(:queen, color: '0', game: game, x_pos: 3, y_pos: 7)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 0, y_pos: 0)
+			FactoryBot.create(:queen, color: 1, game: game, x_pos: 4, y_pos: 0)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 7)
+			FactoryBot.create(:queen, color: 0, game: game, x_pos: 3, y_pos: 7)
 			expect(game.in_check_state?).to eq(true)
 		end
 	end
@@ -94,16 +97,16 @@ RSpec.describe Game, type: :model do
 		it "should return true when black king is in check" do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
-			FactoryBot.create(:king, color: '0', game: game, x_pos: 4, y_pos: 4)
-			FactoryBot.create(:queen, color: '1', game: game, x_pos: 4, y_pos: 2)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 4, y_pos: 4)
+			FactoryBot.create(:queen, color: 1, game: game, x_pos: 4, y_pos: 2)
 			expect(game.king_in_check?(0)).to eq(true)
 		end
 
 		it "should return true when white king is in check" do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
-			FactoryBot.create(:king, color: '1', game: game, x_pos: 4, y_pos: 4)
-			FactoryBot.create(:queen, color: '0', game: game, x_pos: 6, y_pos: 4)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 4)
+			FactoryBot.create(:queen, color: 0, game: game, x_pos: 6, y_pos: 4)
 			expect(game.king_in_check?(1)).to eq(true)
 		end
 
