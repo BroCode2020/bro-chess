@@ -47,17 +47,9 @@ RSpec.describe Game, type: :model do
 	expect(game.pieces.last.y_pos).to eq(7)
   end
 
-
-
-
-
-
-
-
-
 	describe 'in_check_state?' do
 
-		it "should false when neither king is in check" do
+		it "should return false when neither king is in check" do
 			game = FactoryBot.create(:game)
 			expect(game.in_check_state?).to eq(false)
 		end
@@ -83,8 +75,8 @@ RSpec.describe Game, type: :model do
 			game.pieces.clear
 			FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 			FactoryBot.create(:queen, color: '1', game: game, x_pos: 4, y_pos: 0)
-			FactoryBot.create(:king, color: '1', game: game, x_pos: 5, y_pos: 5)
-			FactoryBot.create(:queen, color: '0', game: game, x_pos: 3, y_pos: 5)
+			FactoryBot.create(:king, color: '1', game: game, x_pos: 7, y_pos: 7)
+			FactoryBot.create(:queen, color: '0', game: game, x_pos: 3, y_pos: 7)
 			expect(game.in_check_state?).to eq(true)
 		end
 	end
@@ -94,10 +86,8 @@ RSpec.describe Game, type: :model do
 		it "should raise an error if king color is not 0 or 1" do
 			game = FactoryBot.create(:game)
 
-			expect(false).to eq(true)
-
 			expect {
-			  game.king_in_check?(3).to raise_error(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
+			  game.king_in_check?(-1).to raise_error(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
 			}
 		end
 
