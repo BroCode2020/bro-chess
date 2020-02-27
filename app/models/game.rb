@@ -106,7 +106,7 @@ class Game < ApplicationRecord
   end
 
   def king_in_check?(king_color)
-
+    
   end
 
 end
