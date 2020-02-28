@@ -18,21 +18,26 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
-           <% if user_signed_in? %>
-          <li class="nav-item active">
-            <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
-          </li>
+          <% if user_signed_in? %>
+            <li class="nav-item active">
+              <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+            </li>
           <% else %>
             <li class="nav-item active">
-            <%= link_to 'Sign in', new_user_session_path, class: 'nav-link' %>
+              <%= link_to 'Sign in', new_user_session_path, class: 'nav-link' %>
             </li>
-          <li class="nav-item">
-            <%= link_to 'Sign up', new_user_registration_path, class: 'nav-link' %>
-          </li>
-        <% end %>
+            <li class="nav-item">
+              <%= link_to 'Sign up', new_user_registration_path, class: 'nav-link' %>
+            </li>
+          <% end %>
         </ul>
-
-
+        <ul class="navbar-nav ml-auto">
+          <% if user_signed_in? && controller_name == 'games'%>
+            <li class="nav-item">
+              <%= link_to 'Forfeit Game', forfeit_path(@game), method: :post, class: "btn btn-danger", data: { confirm: "Do you really want to forfeit the game?"} %>
+            </li>
+          <% end %>
+        </ul>
       </div>
     </nav>
 
