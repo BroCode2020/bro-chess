@@ -1,7 +1,3 @@
-<!--h1>This will show all of our games!</h1>
-<p><%= @game.name %></p-->
-
-
 <div class="chess-board-render">
 	<% tile_color = 1 %>
 
@@ -17,9 +13,7 @@
 
 					<% if piece %>
 						<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
-						<%= link_to move_path( :piece_id => piece.id, :x_pos => piece.x_pos, :y_pos => piece.y_pos ) do %>
-							<img src="<%=svg_data%>" class="svg-piece-display drag-a-piece" id = "<%= piece.id %>" >
-						<% end %>
+						<img src="<%=svg_data%>" class="svg-piece-display drag-a-piece" id = "<%= piece.id %>" >
 					<% end %>
 				</div>
 			<% end %>
@@ -28,52 +22,37 @@
 	<% end %>
 </div>
 
-
 <script>
-$(document).ready(function(){
-	$(".drag-a-piece").draggable();
 
+$(document).ready(function(){
+	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
 
  	$(".drag-a-piece").hover(function(){
-		console.log("hi");
-		$(this).closest('.board-square').toggleClass("select");
-
+		//console.log("hi");
+		$(this).closest('.board-square').toggleClass("select"); //hovering piece will highlight piece's board square
 	});
-
-	//$(".drag-a-piece").mousedown(function(){
-	//	$(this).closest('.board-square').addClass("select");
-	//});
-
 
 	$(".board-square").droppable({
 			classes: {
-				"ui-droppable-hover": "select"
+				"ui-droppable-hover": "select" //highlight droppable board square on hover
+									//eventually: highlight only squares allowed by selected piece's move logic?
 			},
 			accept: '.drag-a-piece',
 			drop: function( event, ui ) {
 				var res = event.target.id
-				var drop_square = res.split("-");
-				console.log(drop_square)
-				var target_x = drop_square[0]     //need to loopup this information, reach using $(this).closest? or .parent?
-				var target_y = drop_square[1]		//""
+				var drop_square = res.split("-"); //lookup square specified within the loop at line 10
+				//console.log(drop_square)
+				var target_x = drop_square[0]
+				var target_y = drop_square[1]			//split id string into x and y
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 				//console.log(path);
 				$.post(path, {}, function(data, status){
 					//console.log(status)
-					location.reload();
+					location.reload();  //post and reload the board to draw the piece in the position.
 			  });
-
-
-
-						//alert("Piece " + piece_id + " dropped on tile: x= " + target_x + ", y= " + target_y);
-				}
-
-
+			}
 		});
-
-
-});
-
+	});
 
 </script>
