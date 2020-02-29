@@ -52,6 +52,11 @@ RSpec.describe Bishop, type: :model do
 			expect(bishop.valid_move?(1,1)).to eq(true)
 		end
 
+		it 'should return false if movement pattern is diagonal and path is obstructed' do
+			obstructing_piece = FactoryBot.create(:queen, x_pos: 4, y_pos:4, color: 0, game: bishop.game)
+			expect(bishop.valid_move?(6,6)).to eq(true)
+		end
+
 	end
 
 
