@@ -23,15 +23,6 @@ class GamesController < ApplicationController
     end
   end
 
-  def select
-    @game = Game.find(params[:id])
-    @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|
-      hash[piece.position] = piece
-      hash
-    end
-    @selected_piece_id = params[:piece_id]
-  end
-
   def move
     @game = Game.find(params[:id])
     @pieces = @game.pieces
@@ -39,8 +30,7 @@ class GamesController < ApplicationController
     @piece_id = params[:piece_id]
     @x_pos = params[:x_pos]
     @y_pos = params[:y_pos]
-    #<!-- @piece.move_to! -->
-    @piece.update_attributes({:x_pos => @x_pos, :y_pos => @y_pos})
+    @piece.move_to!(@x_pos, @y_pos)
     redirect_to game_path(@game.id)
   end
 
@@ -72,8 +62,13 @@ class GamesController < ApplicationController
 
   def forfeit
     @game = Game.find(params[:id])
+
+    if !@game.forfeiting_player_id.nil?
+      redirect_to root_path, alert: "This game has already been forfeited." and return
+    end
+    
     @game.update_attribute(:forfeiting_player_id, current_user.id)
-    redirect_to root_path
+    redirect_to root_path, notice: "You have forfeited the game. Please play again soon." # This fails to render
   end
 
   private
