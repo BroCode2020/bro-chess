@@ -16,10 +16,18 @@ FactoryBot.define do
 	end
 
 	factory :king do
-  	association :game
+  		association :game
+	end
+
+	factory :queen do
+		association :game
 	end
 
 	factory :knight do
+		association :game
+	end
+
+	factory :pawn do
 		association :game
 	end
 
@@ -27,6 +35,8 @@ FactoryBot.define do
 		association :game
 	end
 
+  	factory :bishop do
+	end
 
 	factory :user do
 		sequence :email do |n|

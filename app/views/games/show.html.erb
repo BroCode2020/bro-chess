@@ -1,6 +1,6 @@
-<!--h1>This will show all of our games!</h1>
-<p><%= @game.name %></p-->
-
+<% if !@game.forfeiting_player_id.nil? %>
+	<%= controller.redirect_to root_path, alert: "This game has already been forfeited." %>
+<% end %>
 
 <div class="chess-board-render">
 	<% tile_color = 1 %>
