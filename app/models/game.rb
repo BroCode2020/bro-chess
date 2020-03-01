@@ -53,8 +53,6 @@ class Game < ApplicationRecord
     pieces.where(x_pos: x, y_pos: y).first
   end
 
-  
-
 
   def initialize_board!
     # White Pieces
@@ -102,5 +100,19 @@ class Game < ApplicationRecord
     King.create(game_id: id, x_pos: 4, y_pos: 7, color: false)
   end
 
+
+  def in_check_state?
+    return (king_in_check?(0) || king_in_check?(1))
+  end
+
+  def king_in_check?(king_color)
+    if(king_color != 0 && king_color != 1)
+      raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
+      # return false
+    end
+
+    king_to_test = pieces.find_by(type: :King, color: king_color)
+    return king_to_test.in_check?
+  end
 
 end

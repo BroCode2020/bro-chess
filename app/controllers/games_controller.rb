@@ -62,8 +62,13 @@ class GamesController < ApplicationController
 
   def forfeit
     @game = Game.find(params[:id])
+
+    if !@game.forfeiting_player_id.nil?
+      redirect_to root_path, alert: "This game has already been forfeited." and return
+    end
+    
     @game.update_attribute(:forfeiting_player_id, current_user.id)
-    redirect_to root_path
+    redirect_to root_path, notice: "You have forfeited the game. Please play again soon." # This fails to render
   end
 
   private
