@@ -11,17 +11,13 @@
 			<% 0.upto(7) do |x| %>
 				<% tile_color = (tile_color == 0 ? 1 : 0) if x > 0 %>
 
-				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>">
-
+				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>" id="<%= "#{x}-#{y}" %>">
 				<!-- loop through every position on the board and look up the piece that's there from @piece_positions -->
+					<% piece = @pieces_by_position["#{x}, #{y}"] %>
 
-				<% piece = @pieces_by_position["#{x}, #{y}"] %>
-
-				<% if piece %>
-					<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
-						<%= link_to select_path( :piece_id => piece.id, :x_pos => piece.x_pos, :y_pos => piece.y_pos ) do %>
-							<img src="<%=svg_data%>" class="svg-piece-display">
-						<% end %>
+					<% if piece %>
+						<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
+						<img src="<%=svg_data%>" class="svg-piece-display drag-a-piece" id = "<%= piece.id %>" >
 					<% end %>
 				</div>
 			<% end %>
@@ -29,3 +25,38 @@
 		</div>
 	<% end %>
 </div>
+
+<script>
+
+$(document).ready(function(){
+	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
+
+ 	$(".drag-a-piece").hover(function(){
+		//console.log("hi");
+		$(this).closest('.board-square').toggleClass("select"); //hovering piece will highlight piece's board square
+	});
+
+	$(".board-square").droppable({
+			classes: {
+				"ui-droppable-hover": "select" //highlight droppable board square on hover
+									//eventually: highlight only squares allowed by selected piece's move logic?
+			},
+			accept: '.drag-a-piece',
+			drop: function( event, ui ) {
+				var res = event.target.id
+				var drop_square = res.split("-"); //lookup square specified within the loop at line 10
+				//console.log(drop_square)
+				var target_x = drop_square[0]
+				var target_y = drop_square[1]			//split id string into x and y
+				var piece_id = ui.draggable.prop('id');
+				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
+				//console.log(path);
+				$.post(path, {}, function(data, status){
+					//console.log(status)
+					location.reload();  //post and reload the board to draw the piece in the position.
+			  });
+			}
+		});
+	});
+
+</script>

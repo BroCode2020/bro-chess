@@ -37,6 +37,9 @@ $board-length: calc(square-side-vmin-length * 8);
 	&.white {
 		background-color: white;
 	}
+	&.select{
+		background-color: #fff969;
+	}
 }
 
 .chess-board-render {
@@ -56,8 +59,4 @@ $board-length: calc(square-side-vmin-length * 8);
 
 .board-row {
 	flex-direction: row;
-}
-
-.select {
-	background: #fff969;
 }
