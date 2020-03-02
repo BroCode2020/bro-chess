@@ -75,7 +75,7 @@ class Piece < ApplicationRecord
     rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
     return false if moved
     return false if obstructed?(rook_x_pos, rook_y_pos)
-    return false if rook.nil? || rook.moved?
+    return false if rook.nil? || rook.moved
     return false if in_check?
     return true
   end

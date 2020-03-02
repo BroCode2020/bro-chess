@@ -33,9 +33,9 @@ class King < Piece
     elsif new_x == 2 && new_y == 7 && moved? == false
       castle!(0, 7) if castle?(0, 7)
     end
-    if true then self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
+     self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
     end
-end
+
 
   def castle!(rook_x_pos, rook_y_pos)
     rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos)
