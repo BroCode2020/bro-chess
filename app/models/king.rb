@@ -76,6 +76,14 @@ class King < Piece
     return false
   end
 
+  def moving_into_check?(x_destination, y_destination)
+    # Note that this method checks the specified destination, but does not check move validity
+      # That is, except for checking if target location is a valid board position
+
+      
+
+  end
+
 def obstructed?(x_destination, y_destination)
    game = Game.find(self.game_id)
    x_location = self.x_pos
