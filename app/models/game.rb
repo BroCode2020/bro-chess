@@ -115,4 +115,12 @@ class Game < ApplicationRecord
     return king_to_test.in_check?
   end
 
+  def player_on_move_id
+    return player_on_move_color == 0 ? black_player_id : white_player_id
+  end
+  
+  def player_on_move
+    return player_on_move_color == 0 ? black_player : white_player
+  end
+
 end
