@@ -6,19 +6,23 @@ class Piece < ApplicationRecord
   end
 
 
-  def move_to!(new_x, new_y)
-    
-		piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
-		if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
-			piece_to_capture.update_attributes(:x_pos => nil, :y_pos => nil) #captured pieces are nil thus not drawn and not clickable
-			self.update_attributes(:x_pos => new_x, :y_pos => new_y)
-		elsif piece_to_capture.present? && self.color.to_i == piece_to_capture.color
-      return false
+   def move_to!(new_x, new_y)
+    if valid_move?(new_x, new_y)
+      piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
+
+      if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
+        piece_to_capture.update_attributes(:x_pos => nil, :y_pos => nil) #captured pieces are nil thus not drawn and not clickable
+        self.update_attributes(:x_pos => new_x, :y_pos => new_y)
+      elsif piece_to_capture.present? && self.color.to_i == piece_to_capture.color
+        return false
+      else
+        self.update_attributes({:x_pos => new_x, :y_pos => new_y})
+      end    
+      return true
     else
-      self.update_attributes({:x_pos => new_x, :y_pos => new_y})
+      return false
     end
-    return true
-	end
+  end
 
 
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
@@ -57,17 +61,7 @@ class Piece < ApplicationRecord
     return color == 0
   end
 
-  def pawn_has_moved?
-    if color == 1 && y_pos != 1
-      return true
-    end
-
-    if color == 0 && y_pos != 6
-      return true
-    else
-      return false
-    end
-  end
+  
 
   private
 
