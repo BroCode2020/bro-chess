@@ -15,19 +15,12 @@ class Piece < ApplicationRecord
 		elsif piece_to_capture.present? && self.color.to_i == piece_to_capture.color
       return false
     else
-      self.update_attributes({:x_pos => new_x, :y_pos => new_y,})
-        self.update_attributes(:moved => true)
+      self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
+
 
     end
     return true
   end
-
-
-  def never_moved?
-  updated_at == created_at
-  end
-
-
 
 
   def is_obstructed?(start_position_x, start_position_y, end_position_x, end_position_y)
@@ -80,31 +73,11 @@ class Piece < ApplicationRecord
 
   def castle?(rook_x_pos, rook_y_pos)
     rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
-    return false if moved?
+    return false if moved
+    return false if obstructed?(rook_x_pos, rook_y_pos)
     return false if rook.nil? || rook.moved?
-  #    return false if game.king_in_check?(self.color)
-    if rook_x_pos == 7
-      while x_pos < rook_x_pos - 1
-        update(x_pos: x_pos + 1)
-        reload
-  # #        if game.king_in_check?(self.color)
-  #           update(x_pos: 4)
-  #           return false
-
-      end
-      update(x_pos: 4)
-    end
-    if rook_x_pos.zero?
-      while x_pos > rook_x_pos + 2
-        update(x_pos: x_pos - 1)
-        # if game.king_in_check?(self.color)
-        #   update(x_pos: 4)
-        #   return false
-
-      end
-      update(x_pos: 4)
-    end
-    true
+    return false if in_check?
+    return true
   end
 
   private
