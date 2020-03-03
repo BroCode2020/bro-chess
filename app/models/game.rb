@@ -127,6 +127,7 @@ class Game < ApplicationRecord
     # Capturing will need to be addressed
     # Need to retain original coordinates, including for caputred pieces
 
+    # Note that piece_to_move will have the color of the player, thus that doesn't need to be a method parameter
   end
 
 end
