@@ -60,30 +60,6 @@ RSpec.describe King, type: :model do
 
   end
 
-  describe 'moving_into_check?(x_destination, y_destination)' do
-    it "should return false if the king's move would not result in it being in check" do
-      game_b = FactoryBot.create(:game)
-      game_b.pieces.clear
-      king_b = FactoryBot.create(:king, color: '0', game: game_b, x_pos: 4, y_pos: 4)
-      queen_b = FactoryBot.create(:queen, color: '0', game: game_b, x_pos: 5, y_pos: 0)
-
-      expect(king_b.moving_into_check?(5,5)).to eq(false)
-    end
-
-    it "should return true if the king's move would result in it being in check" do
-      game_b = FactoryBot.create(:game)
-      game_b.pieces.clear
-      king_b = FactoryBot.create(:king, color: '0', game: game_b, x_pos: 4, y_pos: 4)
-      queen_b = FactoryBot.create(:queen, color: '1', game: game_b, x_pos: 5, y_pos: 0)
-
-      expect(king_b.moving_into_check?(5,5)).to eq(true)
-    end
-
-    it "should raise an error if target position does not exist on the board" do
-      expect { king_b.moving_into_check?(-1,-1) }.to raise_error.with_message 'Invalid position provided. Position is located outside the game board.'
-    end
-  end
-
 end
 describe '#castle!' do
   let!(:game_c)  { FactoryBot.create(:game)}

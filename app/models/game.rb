@@ -115,4 +115,14 @@ class Game < ApplicationRecord
     return king_to_test.in_check?
   end
 
+  def move_puts_self_in_check?(piece_to_move, x_target, y_target)
+
+    # IMPORTANT NOTE: for the time being, this will have to be assumed to be a valid move
+    
+    # This method assumes it is being passed a piece by proper player
+    #    This needs to be taken into consideration with respect to where this method is being called
+
+    # Note that piece_to_move will have the color of the player, thus that doesn't need to be a method parameter
+  end
+
 end

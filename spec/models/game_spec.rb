@@ -121,4 +121,36 @@ RSpec.describe Game, type: :model do
 		end
 	end
 
+	describe 'move_puts_self_in_check?(piece_to_move, x_target, y_target)' do
+
+		it "should raise an error if update_attributes fails" do
+		end
+
+		it "should raise an error if piece_to_move parameter is nil" do
+
+		end
+
+		# situations to include in tests:
+		#	moving the king itself
+		#	moving a different piece
+		#	making a capture with a different piece
+
+
+		it "should return true if the move will result in this player being in check" do
+		end
+
+		it "should return false if the move will not result in this player being in check" do
+		end
+
+		describe "- When king is already in check" do
+			it "should return true if the move will result in this player still being in check" do
+			end
+	
+			it "should return false if the move will not result in this player being in check" do
+			end
+		end
+
+	  end
+	
+
 end
