@@ -125,9 +125,38 @@ class Game < ApplicationRecord
     #    This needs to be taken into consideration with respect to where this method is being called
 
     # Capturing will need to be addressed
-    # Need to retain original coordinates, including for caputred pieces
+    # Need to retain original coordinates, including for captured pieces
 
-    # Note that piece_to_move will have the color of the player, thus that doesn't need to be a method parameter
+    # what happens if piece in destination is a king? could this trigger other logic?
+    # What happends if pawn reaches other side during this check?
+      # Create a property in games to address this? analyzing_move_for_check / 
+
+    raise 'The piece provided is invalid' if piece_to_move.nil?
+
+    original_pos = [piece_to_move.x_pos, piece_to_move.y_pos]
+
+    piece_in_destination = pieces.find_by(x_pos: x_target, y_pos: y_target)
+    dest_piece_original_pos = []
+
+    if piece_in_destination
+      dest_piece_original_pos = [piece_in_destination.x_pos, piece_in_destination.y_pos]
+      piece_in_destination.update_attributes(x_pos: nil, y_pos: nil)
+    end
+
+    piece_to_move.update_attributes(x_pos: x_target, y_pos: y_target)
+
+    # store result, then return attributes to their original state
+
+    in_check_result = king_in_check?(piece_to_move.color)
+
+    piece_to_move.update_attributes(x_pos: original_pos[0], y_pos: original_pos[1])
+
+    if piece_in_destination
+      piece_in_destination.update_attributes(x_pos: dest_piece_original_pos[0], y_pos: dest_piece_original_pos[1])
+    end
+
+    return in_check_result
+    
   end
 
 end

@@ -170,7 +170,7 @@ RSpec.describe Game, type: :model do
 			expect(game.move_puts_self_in_check?(rook, 4, 1)).to eq(false)
 		end
 
-		describe "- When king is already in check: " do
+		describe "- When king is in check," do
 
 			it "should return true if the move will result in this player still being in check" do
 				game = FactoryBot.create(:game)
