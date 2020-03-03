@@ -123,31 +123,108 @@ RSpec.describe Game, type: :model do
 
 	describe 'move_puts_self_in_check?(piece_to_move, x_target, y_target)' do
 
-		it "should raise an error if update_attributes fails" do
-		end
-
 		it "should raise an error if piece_to_move parameter is nil" do
-
+			game = FactoryBot.create(:game)
+			expect { game.move_puts_self_in_check(nil, 0, 0) }.to raise_error('The piece provided is invalid')
 		end
-
-		# situations to include in tests:
-		#	moving the king itself
-		#	moving a different piece
-		#	making a capture with a different piece
-
 
 		it "should return true if the move will result in this player being in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+			queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 1)
+			# b-king is moving into w-queen's path
+
+			expect(game.move_puts_self_in_check(king, 0, 1)).to eq(true)
 		end
 
 		it "should return false if the move will not result in this player being in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+			queen = FactoryBot.create(:queen, color: '0', game: game, x_pos: 7, y_pos: 1)
+			# b-king is moving into b-queen's path
+
+			expect(game.move_puts_self_in_check(king, 0, 1)).to eq(false)
 		end
 
-		describe "- When king is already in check" do
+		it "should return true if the move will result in this player being in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+			rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 0)
+			queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
+			# b-rook is moving, putting b-king in w-queen's path 
+
+			expect(game.move_puts_self_in_check(rook, 4, 1)).to eq(true)
+		end
+
+		it "should return false if the move will not result in this player being in check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+			rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 0)
+			queen = FactoryBot.create(:queen, color: '0', game: game, x_pos: 7, y_pos: 0)
+			# b-rook is moving, putting b-king in b-queen's path 
+
+			expect(game.move_puts_self_in_check(rook, 4, 1)).to eq(false)
+		end
+
+		describe "- When king is already in check: " do
+
 			it "should return true if the move will result in this player still being in check" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
+				# b-king stays in w-queen's path
+	
+				expect(game.move_puts_self_in_check(king, 1, 0)).to eq(true)
 			end
 	
 			it "should return false if the move will not result in this player being in check" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
+				# b-king get out of w-queen's path
+	
+				expect(game.move_puts_self_in_check(king, 0, 1)).to eq(false)
 			end
+	
+			it "should return true if the move will result in this player still being in check" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 1)
+				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
+				# b-rook is moving, while b-king is still in w-queen's path 
+	
+				expect(game.move_puts_self_in_check(rook, 4, 2)).to eq(true)
+			end
+
+			it "should return false if the move will not result in this player being in check" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 1)
+				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
+				# b-rook is moving, blocking w-queen's path 
+	
+				expect(game.move_puts_self_in_check(rook, 4, 0)).to eq(false)
+			end
+
+			it "should return false if the move will not result in this player being in check" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 7, y_pos: 7)
+				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
+				# b-rook captures w-queen, saving b-king 
+	
+				expect(game.move_puts_self_in_check(rook, 7, 0)).to eq(false)
+			end
+
 		end
 
 	  end
