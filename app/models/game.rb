@@ -115,4 +115,17 @@ class Game < ApplicationRecord
     return king_to_test.in_check?
   end
 
+  def player_on_move_id
+    return player_on_move_color == 0 ? black_player_id : white_player_id
+  end
+
+  def player_on_move
+    return player_on_move_color == 0 ? black_player : white_player
+  end
+
+  def complete_turn
+    new_player_on_move_color = player_on_move_color == 0 ? 1 : 0
+    self.update_attributes(player_on_move_color: new_player_on_move_color)
+  end
+
 end

@@ -60,3 +60,27 @@ $board-length: calc(square-side-vmin-length * 8);
 .board-row {
 	flex-direction: row;
 }
+
+.turn-display {
+	position: fixed;
+	
+	width: 100%;
+	text-align: center;
+	cursor: default;
+
+	&.your-turn {
+		color: white;
+		top: 0.3rem;
+		font-size: 1.7rem;
+
+	}
+	&.their-turn{
+		color: #a2a2a2;
+		top: 0.5rem;
+		font-size: 1.5rem;
+	}
+}
+
+.turn-display::selection, .svg-piece-display::selection, .nav-link::selection, .navbar-brand::selection {
+	background-color: transparent;
+}
