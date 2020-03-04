@@ -117,46 +117,42 @@ class Game < ApplicationRecord
 
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
 
-    # Don't forget about casting & en passasant
-
+    # Need to make sure casting & en passasant are properly covered
+    
     # IMPORTANT NOTE: for the time being, this will have to be assumed to be a valid move
 
     # This method assumes it is being passed a piece by proper player
     #    This needs to be taken into consideration with respect to where this method is being called
 
-    # Capturing will need to be addressed
-    # Need to retain original coordinates, including for captured pieces
-
-    # what happens if piece in destination is a king? could this trigger other logic?
-    # What happends if pawn reaches other side during this check?
-      # Create a property in games to address this? analyzing_move_for_check / 
+    # What happens if pawn reaches other side during this move check?
 
     raise 'The piece provided is invalid' if piece_to_move.nil?
 
     original_pos = [piece_to_move.x_pos, piece_to_move.y_pos]
 
     piece_in_destination = pieces.find_by(x_pos: x_target, y_pos: y_target)
-    dest_piece_original_pos = []
 
     if piece_in_destination
-      dest_piece_original_pos = [piece_in_destination.x_pos, piece_in_destination.y_pos]
-      piece_in_destination.update_attributes(x_pos: nil, y_pos: nil)
+      # Change piece's color to a value that is not 0 or 1
+        # This will exclude it from being used to determine if game is in check state
+
+      dest_piece_color = piece_in_destination.color
+      piece_in_destination.update_attributes(color: dest_piece_color + 2)
     end
 
     piece_to_move.update_attributes(x_pos: x_target, y_pos: y_target)
 
-    # store result, then return attributes to their original state
+    # store result (boolean: if game would be in check state), then return attributes to their original state
 
     in_check_result = king_in_check?(piece_to_move.color)
 
     piece_to_move.update_attributes(x_pos: original_pos[0], y_pos: original_pos[1])
 
     if piece_in_destination
-      piece_in_destination.update_attributes(x_pos: dest_piece_original_pos[0], y_pos: dest_piece_original_pos[1])
+      piece_in_destination.update_attributes(color: dest_piece_color)
     end
 
     return in_check_result
-    
   end
 
 end
