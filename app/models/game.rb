@@ -118,7 +118,7 @@ class Game < ApplicationRecord
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
 
     # Need to make sure casting & en passasant are properly covered
-    
+
     # IMPORTANT NOTE: for the time being, this will have to be assumed to be a valid move
 
     # This method assumes it is being passed a piece by proper player
@@ -133,6 +133,8 @@ class Game < ApplicationRecord
     piece_in_destination = pieces.find_by(x_pos: x_target, y_pos: y_target)
 
     if piece_in_destination
+      return false if piece_in_destination.is_a?(King)
+
       # Change piece's color to a value that is not 0 or 1
         # This will exclude it from being used to determine if game is in check state
 
