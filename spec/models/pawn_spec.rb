@@ -120,4 +120,11 @@ it 'should be able to move en passant if en passant situation' do
    pawn_en_passant.move_to!(1, 5)
    expect(pawn_en_passant.valid_move?(1, 5)).to eq false
  end
+ it 'should be able to move en passant if en passant situation and black' do
+   black_pawn = FactoryBot.create(:pawn, color: 'black', x_pos: 0, y_pos: 3, game: game)
+   white_pawn = FactoryBot.create(:pawn, color: 'black', x_pos: 6, y_pos: 6, game: game)
+   white_pawn.move_to!(1, 3)
+   black_pawn.move_to!(1, 2)
+   expect(black_pawn.valid_move?(1, 2)).to eq false
+ end
 end
