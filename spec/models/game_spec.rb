@@ -131,7 +131,10 @@ RSpec.describe Game, type: :model do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
 
-			####################
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 0, y_pos: 3)
+			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
+			FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 4)
 
 			expect(game.in_checkmate_state?).to eq(true)
 		end
@@ -140,7 +143,10 @@ RSpec.describe Game, type: :model do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
 
-			####################
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 0, y_pos: 3)
+			FactoryBot.create(:rook, color: 0, game: game, x_pos: 7, y_pos: 0)
+			FactoryBot.create(:rook, color: 0, game: game, x_pos: 0, y_pos: 1)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 7, y_pos: 4)
 
 			expect(game.in_checkmate_state?).to eq(true)
 		end
@@ -150,16 +156,16 @@ RSpec.describe Game, type: :model do
 	describe 'king_in_checkmate?(king_color)' do
 		it "should raise an error if king color is not 0 or 1" do
 			game = FactoryBot.create(:game)
-
-			expect {
-			  game.king_in_checkmate?(-1).to raise_error(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
-			}
+			expect { game.king_in_checkmate?(-1)}.to raise_error(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
 		end
 
 		it "should return true when black king is in checkmate" do
 			game = FactoryBot.create(:game)
 
-			####################
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 0, y_pos: 3)
+			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
+			FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 4)
 
 			expect(game.king_in_checkmate?(0)).to eq(true)
 		end
@@ -167,7 +173,10 @@ RSpec.describe Game, type: :model do
 		it "should return true when white king is in checkmate" do
 			game = FactoryBot.create(:game)
 
-			####################
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 0, y_pos: 3)
+			FactoryBot.create(:rook, color: 0, game: game, x_pos: 7, y_pos: 0)
+			FactoryBot.create(:rook, color: 0, game: game, x_pos: 0, y_pos: 1)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 7, y_pos: 4)
 
 			expect(game.king_in_checkmate?(1)).to eq(true)
 		end
@@ -181,8 +190,6 @@ RSpec.describe Game, type: :model do
 			game = FactoryBot.create(:game)
 			expect(game.king_in_checkmate?(1)).to eq(false)
 		end
-
-
 
 	end
 
