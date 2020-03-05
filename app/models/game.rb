@@ -139,7 +139,7 @@ class Game < ApplicationRecord
         for x in 0..7 do
           if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
             if !move_puts_self_in_check?(p, x, y)
-              stored_val = true
+              return true
             end
           end
         end
