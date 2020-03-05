@@ -59,6 +59,7 @@ RSpec.describe King, type: :model do
     end
 
   end
+
 end
 describe '#castle!' do
   let!(:game_c)  { FactoryBot.create(:game)}

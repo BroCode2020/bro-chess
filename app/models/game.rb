@@ -115,6 +115,48 @@ class Game < ApplicationRecord
     return king_to_test.in_check?
   end
 
+  def move_puts_self_in_check?(piece_to_move, x_target, y_target)
+
+    # Need to make sure casting & en passasant are properly covered
+
+    # IMPORTANT NOTE: for the time being, this will have to be assumed to be a valid move
+
+    # This method assumes it is being passed a piece by proper player
+    #    This needs to be taken into consideration with respect to where this method is being called
+
+    # What happens if pawn reaches other side during this move check?
+
+    raise 'The piece provided is invalid' if piece_to_move.nil?
+
+    original_pos = [piece_to_move.x_pos, piece_to_move.y_pos]
+
+    piece_in_destination = pieces.find_by(x_pos: x_target, y_pos: y_target)
+
+    if piece_in_destination
+      return false if piece_in_destination.is_a?(King)
+
+      # Change piece's color to a value that is not 0 or 1
+        # This will exclude it from being used to determine if game is in check state
+
+      dest_piece_color = piece_in_destination.color
+      piece_in_destination.update_attributes(color: dest_piece_color + 2)
+    end
+
+    piece_to_move.update_attributes(x_pos: x_target, y_pos: y_target)
+
+    # store result (boolean: if game would be in check state), then return attributes to their original state
+
+    in_check_result = king_in_check?(piece_to_move.color)
+
+    piece_to_move.update_attributes(x_pos: original_pos[0], y_pos: original_pos[1])
+
+    if piece_in_destination
+      piece_in_destination.update_attributes(color: dest_piece_color)
+    end
+
+    return in_check_result
+  end
+    
   def player_on_move_id
     return player_on_move_color == 0 ? black_player_id : white_player_id
   end
