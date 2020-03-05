@@ -121,6 +121,71 @@ RSpec.describe Game, type: :model do
 		end
 	end
 
+	describe 'in_checkmate_state?' do
+		it "should return false when neither king is in checkmate" do
+			game = FactoryBot.create(:game)
+			expect(game.in_checkmate_state?).to eq(false)
+		end
+
+		it "should return true when the black king is in checkmate" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+
+			####################
+
+			expect(game.in_checkmate_state?).to eq(true)
+		end
+
+		it "should return true when the white king is in checkmate" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+
+			####################
+
+			expect(game.in_checkmate_state?).to eq(true)
+		end
+
+	end
+
+	describe 'king_in_checkmate?(king_color)' do
+		it "should raise an error if king color is not 0 or 1" do
+			game = FactoryBot.create(:game)
+
+			expect {
+			  game.king_in_checkmate?(-1).to raise_error(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
+			}
+		end
+
+		it "should return true when black king is in checkmate" do
+			game = FactoryBot.create(:game)
+
+			####################
+
+			expect(game.king_in_checkmate?(0)).to eq(true)
+		end
+
+		it "should return true when white king is in checkmate" do
+			game = FactoryBot.create(:game)
+
+			####################
+
+			expect(game.king_in_checkmate?(1)).to eq(true)
+		end
+
+		it "should return false when black king is not in checkmate" do
+			game = FactoryBot.create(:game)
+			expect(game.king_in_checkmate?(0)).to eq(false)
+		end
+
+		it "should return false when white king is not in checkmate" do
+			game = FactoryBot.create(:game)
+			expect(game.king_in_checkmate?(1)).to eq(false)
+		end
+
+
+
+	end
+
 	describe 'move_puts_self_in_check?(piece_to_move, x_target, y_target)' do
 
 		it "should raise an error if piece_to_move parameter is nil" do
@@ -224,10 +289,7 @@ RSpec.describe Game, type: :model do
 	
 				expect(game.move_puts_self_in_check?(rook, 7, 0)).to eq(false)
 			end
-
 		end
-
-	  end
-	
+	end
 
 end

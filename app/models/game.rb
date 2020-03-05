@@ -108,11 +108,16 @@ class Game < ApplicationRecord
   def king_in_check?(king_color)
     if(king_color != 0 && king_color != 1)
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
-      # return false
     end
 
     king_to_test = pieces.find_by(type: :King, color: king_color)
     return king_to_test.in_check?
+  end
+
+  def in_checkmate_state?
+  end
+  
+  def king_in_checkmate?(king_color)
   end
 
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
