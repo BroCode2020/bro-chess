@@ -5,12 +5,20 @@ class Piece < ApplicationRecord
     "#{self.x_pos}, #{self.y_pos}"
   end
 
+  def valid_move?(new_x, new_y)
+    # This method is meant to be overridden by derived classes
+    piece_at_destination = game.pieces.find_by(x_pos: new_x, y_pos: new_y)
+    return false if piece_at_destination && piece_at_destination.color == color
+    return true
+  end
 
 
-   def move_to!(new_x, new_y)
+  def move_to!(new_x, new_y)
+    new_x = new_x.to_i
+    new_y = new_y.to_i
+    
     if valid_move?(new_x, new_y)
       piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
-
       if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
         piece_to_capture.update_attributes(:x_pos => nil, :y_pos => nil) #captured pieces are nil thus not drawn and not clickable
         self.update_attributes(:x_pos => new_x, :y_pos => new_y)

@@ -34,7 +34,9 @@ class GamesController < ApplicationController
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       alert = 'You cannot move into check. Please select another move.'
     else
-      @piece.move_to!(@x_pos, @y_pos)
+      if @piece.move_to!(@x_pos, @y_pos)
+        @game.complete_turn
+      end
     end
 
     redirect_to game_path(@game.id)
