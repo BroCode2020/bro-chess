@@ -33,7 +33,7 @@ RSpec.describe Bishop, type: :model do
 		end
 		
 		it 'should return false if movement pattern is diagonal (+,+)' do
-			expect(bishop.valid_move?(4,4)).to eq(true)
+			expect(bishop.move_to!(4,4)).to eq(true)
 		end
 
 		it 'should return false if movement pattern is diagonal (+,-)' do
