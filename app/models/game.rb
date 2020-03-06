@@ -147,7 +147,7 @@ class Game < ApplicationRecord
 
     end
 
-    return true
+    return false
   end
 
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
