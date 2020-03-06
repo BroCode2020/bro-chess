@@ -1,31 +1,48 @@
 class Pawn < Piece
 
   def valid_move?(new_x, new_y)
-
+    #at 5,5 want to move to 5,6 -> return true
     return true if valid_diagonal_move?(new_x, new_y)
 
     return false if new_x != x_pos
 
     if white?
-      return false if new_y >= y_pos
-    else
       return false if new_y <= y_pos
+    else
+      return false if new_y >= y_pos
     end
 
     if (new_y - y_pos).abs == 1
       return false if game.tile_is_occupied?(new_x, new_y)
     end
 
-    if (new_y - y_pos).abs == 2 && !pawn_has_moved?
+    if (new_y - y_pos).abs == 2 && !has_moved?
       return false if game.tile_is_occupied?(new_x, new_y)
     end
 
-    if (new_y - y_pos).abs < 1 && pawn_has_moved?
+    if (new_y - y_pos).abs == 2 && has_moved?
+      return false
+    end
+
+    if (new_y - y_pos).abs > 2
       return false
     end
 
     return true
 
+  end
+
+  def has_moved?
+    if color == 1 && y_pos != 1 #white pawns
+      return true
+    end
+
+    if color == 0 && y_pos != 6 #black pawns
+      return true
+    end
+    
+    return false
+    
   end
 
   private
@@ -43,4 +60,7 @@ class Pawn < Piece
     end
 
   end
+
+  
+
 end
