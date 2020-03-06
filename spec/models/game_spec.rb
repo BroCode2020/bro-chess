@@ -161,6 +161,7 @@ RSpec.describe Game, type: :model do
 
 		it "should return true when black king is in checkmate" do
 			game = FactoryBot.create(:game)
+			game.pieces.clear
 
 			FactoryBot.create(:king, color: 0, game: game, x_pos: 0, y_pos: 3, moved: true)
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
@@ -172,6 +173,7 @@ RSpec.describe Game, type: :model do
 
 		it "should return true when white king is in checkmate" do
 			game = FactoryBot.create(:game)
+			game.pieces.clear
 
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 0, y_pos: 3, moved: true)
 			FactoryBot.create(:rook, color: 0, game: game, x_pos: 7, y_pos: 0)

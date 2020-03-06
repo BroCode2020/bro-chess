@@ -123,15 +123,7 @@ class Game < ApplicationRecord
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
     end
 
-    $stderr.puts 'King not in check. Returning true' if !pieces.find_by(type: :King, color: king_color).in_check?
-
     return false if !pieces.find_by(type: :King, color: king_color).in_check?
-
-    #### Verbose implementation: test every friendly piece against every single tile (using move_puts_self_in_check? method)
-
-    $stderr.puts ''
-
-    stored_val = false
 
     pieces.where(color: king_color).each do |p|
 
