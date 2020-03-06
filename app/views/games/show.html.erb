@@ -17,11 +17,14 @@
 
 					<% if piece %>
 						<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
-						<img src="<%=svg_data%>" class="svg-piece-display drag-a-piece" id = "<%= piece.id %>" >
+						<% display_class = "svg-piece-display" %>
+						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color %>
+							<% display_class += " drag-a-piece" %>
+						<% end %>
+						<img src="<%=svg_data%>" class="<%=display_class%>" id = "<%= piece.id %>" >
 					<% end %>
 				</div>
 			<% end %>
-
 		</div>
 	<% end %>
 </div>
@@ -60,3 +63,16 @@ $(document).ready(function(){
 	});
 
 </script>
+
+<% turn_display_class = 'turn-display '%>
+<% if current_user == @game.player_on_move %>
+    <% turn_display_class += 'your-turn' %>
+	<% turn_display_text = 'Your move' %>
+<% else %>
+    <% turn_display_class += 'their-turn' %>
+	<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
+<% end %>
+
+<div class="<%=turn_display_class%>">
+	<%=turn_display_text%>
+<div>

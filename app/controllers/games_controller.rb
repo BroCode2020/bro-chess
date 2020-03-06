@@ -30,7 +30,13 @@ class GamesController < ApplicationController
     @piece_id = params[:piece_id]
     @x_pos = params[:x_pos]
     @y_pos = params[:y_pos]
-    @piece.move_to!(@x_pos, @y_pos)
+
+    if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
+      alert = 'You cannot move into check. Please select another move.'
+    else
+      @piece.move_to!(@x_pos, @y_pos)
+    end
+
     redirect_to game_path(@game.id)
   end
 

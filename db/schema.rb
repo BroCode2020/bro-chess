@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_015548) do
+ActiveRecord::Schema.define(version: 2020_03_02_172456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 2020_02_26_015548) do
     t.datetime "updated_at", null: false
     t.integer "black_player_id"
     t.integer "forfeiting_player_id"
+    t.string "piece_capturable_by_en_passant"
+    t.integer "player_on_move_color", default: 1
   end
 
   create_table "pieces", force: :cascade do |t|
@@ -33,6 +35,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_015548) do
     t.datetime "updated_at", null: false
     t.integer "color"
     t.string "image"
+    t.boolean "moved", default: false
   end
 
   create_table "users", force: :cascade do |t|
