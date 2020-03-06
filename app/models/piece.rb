@@ -5,6 +5,12 @@ class Piece < ApplicationRecord
     "#{self.x_pos}, #{self.y_pos}"
   end
 
+  def valid_move?(new_x, new_y)
+    # This method is meant to be overridden by derived classes
+    piece_at_destination = game.pieces.find_by(x_pos: new_x, y_pos: new_y)
+    return false if piece_at_destination && piece_at_destination.color == color
+    return true
+  end
 
 
    def move_to!(new_x, new_y)
