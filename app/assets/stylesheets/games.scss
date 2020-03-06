@@ -63,7 +63,7 @@ $board-length: calc(square-side-vmin-length * 8);
 
 .turn-display {
 	position: fixed;
-	
+	z-index: 1;
 	width: 100%;
 	text-align: center;
 	cursor: default;

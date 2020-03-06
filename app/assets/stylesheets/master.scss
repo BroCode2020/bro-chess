@@ -28,3 +28,9 @@ $booyah-box-link-color: #289bff;
     color: $booyah-box-link-color;
   }
 }
+
+// navbar toggler?
+
+.navbar-brand, a.nav-link, .nav-item {
+  z-index: 2;
+}
