@@ -81,10 +81,15 @@
 		};
 		firebase.initializeApp(firebaseConfig);
 
-		database_path = `game <%= @game.id%>`
+		database_path = `game <%= @game.id%>/player_on_move_color`
 		firebase.database().ref(database_path).on('value', function(dataSnapshot){
+
 			<% if current_user != @game.player_on_move %>
-				console.log("CHANGED");
+				// Note that 'value' option loads once when everything initializes, then again every time the value changes
+				if(dataSnapshot.val() !== <%=@game.player_on_move_color%>) {
+					// After player-a moves, player-b gets reloaded properly, but player-a get caught in redirect loop 
+					<% controller.redirect_to game_path(@game.id) %>
+				}
 			<% end %>
 		});
 	});
