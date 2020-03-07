@@ -201,7 +201,9 @@ class Game < ApplicationRecord
 
     #firebase = Firebase::Client.new(base_uri)
     
-    firebase = Firebase::Client.new(base_uri);#, ENV['private_key_id'])
+    private_key_json_string = File.open('config/firebase_keys.json').read
+
+    firebase = Firebase::Client.new(base_uri, private_key_json_string);
     # Need to get this set up with security
     
 
