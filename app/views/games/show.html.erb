@@ -80,7 +80,13 @@
 			appId: "1:83722689851:web:520b4909913c3f7e362b1e"
 		};
 		firebase.initializeApp(firebaseConfig);
-		
+
+		database_path = `game <%= @game.id%>`
+		firebase.database().ref(database_path).on('value', function(dataSnapshot){
+			<% if current_user != @game.player_on_move %>
+				console.log("CHANGED");
+			<% end %>
+		});
 	});
 </script>
 
