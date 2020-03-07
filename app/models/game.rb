@@ -201,7 +201,8 @@ class Game < ApplicationRecord
 
     #firebase = Firebase::Client.new(base_uri)
     
-    firebase = Firebase::Client.new(base_uri, ENV['private_key_id'])
+    firebase = Firebase::Client.new(base_uri);#, ENV['private_key_id'])
+    # Need to get this set up with security
     
 
     response = firebase.set("game #{self.id}", :player_on_move_color => new_player_on_move_color)
@@ -210,7 +211,8 @@ class Game < ApplicationRecord
     $stderr.puts '==================================='
     $stderr.puts '==================================='
 
-    $stderr.puts "success? #{response.success?}"
+    # $stderr.
+    puts "success? #{response.success?}"
     $stderr.puts "code #{response.code}"
     $stderr.puts "body #{response.body}"
 
