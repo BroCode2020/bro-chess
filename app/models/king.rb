@@ -1,9 +1,8 @@
 class King < Piece
   def valid_move?(new_x, new_y)
-
-  return false if new_y > 7 || new_x > 7 || new_y < 0 || new_x < 0
-  return false if obstructed?(new_x, new_y)
-
+    return false if new_y > 7 || new_x > 7 || new_y < 0 || new_x < 0
+    return false if new_y == y_pos && new_x == x_pos
+    return false if obstructed?(new_x, new_y)
 
     cur_game = Game.find_by(id: game_id)
     if cur_game.tile_is_occupied?(new_x, new_y)
@@ -11,10 +10,9 @@ class King < Piece
     return false if (p && p.color == color)
     end
 
-
-  x_diff = (x_pos - new_x).abs
-  y_diff = (y_pos - new_y).abs
-  return true if (x_diff <= 1) && (y_diff <= 1) ||
+    x_diff = (x_pos - new_x).abs
+    y_diff = (y_pos - new_y).abs
+    return true if (x_diff <= 1) && (y_diff <= 1) ||
                  new_x == 2 && new_y == 0 && moved? == false ||
                  new_x == 6 && new_y == 0 && moved? == false ||
                  new_x == 2 && new_y == 7 && moved? == false ||
