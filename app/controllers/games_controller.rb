@@ -76,7 +76,7 @@ class GamesController < ApplicationController
     end
     
     @game.update_attribute(:forfeiting_player_id, current_user.id)
-    redirect_to root_path, notice: "You have forfeited the game. Please play again soon." # This fails to render
+    redirect_to root_path, notice: "You have forfeited the game. Please play again soon."
   end
 
   private
