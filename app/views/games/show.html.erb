@@ -64,6 +64,26 @@
 
 </script>
 
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
+
+<script>
+	$(function(){
+
+		var firebaseConfig = {
+			apiKey: "AIzaSyDKLqqj6W0usIqHaKiYwEjTSsNkfmQMl6c",
+			authDomain: "bro-chess-b8ed8.firebaseapp.com",
+			databaseURL: "https://bro-chess-b8ed8.firebaseio.com",
+			projectId: "bro-chess-b8ed8",
+			storageBucket: "bro-chess-b8ed8.appspot.com",
+			messagingSenderId: "83722689851",
+			appId: "1:83722689851:web:520b4909913c3f7e362b1e"
+		};
+		firebase.initializeApp(firebaseConfig);
+		
+	});
+</script>
+
 <% turn_display_class = 'turn-display '%>
 <% if current_user == @game.player_on_move %>
     <% turn_display_class += 'your-turn' %>

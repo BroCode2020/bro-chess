@@ -177,9 +177,19 @@ class Game < ApplicationRecord
     firebase = Firebase::Client.new(base_uri, ENV['private_key_id'])
     
 
-    response = firebase.push("game #{self.id}", :player_on_move_color => new_player_on_move_color)
+    response = firebase.set("game #{self.id}", :player_on_move_color => new_player_on_move_color)
 
-    $stderr.puts response.success?
+    $stderr.puts ''
+    $stderr.puts '==================================='
+    $stderr.puts '==================================='
+
+    $stderr.puts "success? #{response.success?}"
+    $stderr.puts "code #{response.code}"
+    $stderr.puts "body #{response.body}"
+
+
+    $stderr.puts '==================================='
+    $stderr.puts '==================================='
 
   end
 
