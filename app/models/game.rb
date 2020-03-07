@@ -166,8 +166,21 @@ class Game < ApplicationRecord
   end
 
   def complete_turn
+    
     new_player_on_move_color = player_on_move_color == 0 ? 1 : 0
     self.update_attributes(player_on_move_color: new_player_on_move_color)
+
+    base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
+
+    #firebase = Firebase::Client.new(base_uri)
+    
+    firebase = Firebase::Client.new(base_uri, ENV['private_key_id'])
+    
+
+    response = firebase.push("game #{self.id}", :player_on_move_color => new_player_on_move_color)
+
+    $stderr.puts response.success?
+
   end
 
 end
