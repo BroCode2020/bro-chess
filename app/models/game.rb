@@ -152,14 +152,10 @@ class Game < ApplicationRecord
   def stalemate?(king_color)
     return false if king_in_check?(king_color)
     return false if king_in_checkmate?(king_color)
-    puts "passes check tests"
     pieces.where(color: king_color).each do |p|
-      puts "pieces loop"
       for y in 0..7 do
         for x in 0..7 do
-          puts "#{x}-#{y}"
           if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
-            puts "#{p}-#{x}-#{y}"
             return false if (!move_puts_self_in_check?(p, x, y))
           end
         end
