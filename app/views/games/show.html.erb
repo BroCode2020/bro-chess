@@ -81,8 +81,8 @@
 		};
 		firebase.initializeApp(firebaseConfig);
 
-		database_path = `game <%= @game.id%>/player_on_move_color`
-		firebase.database().ref(database_path).on('value', function(dataSnapshot){
+		var database_path = `game <%= @game.id%>`
+		firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
 
 			<% if current_user != @game.player_on_move %>
 				// Note that 'value' option loads once when everything initializes, then again every time the value changes
