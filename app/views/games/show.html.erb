@@ -32,18 +32,21 @@
 <script>
 
 $(document).ready(function(){
+	var holdingPiece = false;
+
 	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
 
- 	$(".drag-a-piece").hover(function(){
-		//console.log("hi");
-		$(this).closest('.board-square').toggleClass("select"); //hovering piece will highlight piece's board square
-	});
+ 	// $(".drag-a-piece").hover(function(){
+	// 	//console.log("hi");
+	// 	$(this).closest('.board-square').toggleClass("select"); //hovering piece will highlight piece's board square
+	// });
 
 	$(".board-square").droppable({
 			classes: {
 				"ui-droppable-hover": "select" //highlight droppable board square on hover
 									//eventually: highlight only squares allowed by selected piece's move logic?
 			},
+			hoverClass: 'select',
 			accept: '.drag-a-piece',
 			drop: function( event, ui ) {
 				var res = event.target.id
@@ -54,6 +57,7 @@ $(document).ready(function(){
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 				//console.log(path);
+				$('.drag-a-piece').draggable('destroy');
 				$.post(path, {}, function(data, status){
 					//console.log(status)
 					location.reload();  //post and reload the board to draw the piece in the position.
