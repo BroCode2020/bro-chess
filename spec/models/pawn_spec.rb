@@ -65,25 +65,4 @@ RSpec.describe Pawn, type: :model do
     end
   end
 
-  describe '#has_moved?' do
-    it "should return false if white and in the second row" do
-       pawn = FactoryBot.create(:pawn, color: 1, game: game, x_pos: 0, y_pos: 1) 
-       expect(pawn.has_moved?).to eq false
-    end
-
-    it "should return true if white and not in the second row" do
-      pawn = FactoryBot.create(:pawn, color: 1, game: game, x_pos: 0, y_pos: 2) 
-      expect(pawn.has_moved?).to eq true
-    end
-
-    it "should return false if black and in the seventh row" do
-      pawn = FactoryBot.create(:pawn, color: 0, game: game, x_pos: 0, y_pos: 6) 
-       expect(pawn.has_moved?).to eq false
-    end
-
-    it "should return true if black and not in the seventh row" do
-      pawn = FactoryBot.create(:pawn, color: 0, game: game, x_pos: 0, y_pos: 5) 
-      expect(pawn.has_moved?).to eq true
-    end
-  end
 end
