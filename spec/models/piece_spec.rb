@@ -22,6 +22,7 @@ RSpec.describe Piece, type: :model do
 
   it "should return false when trying to move to a tile occupied by a piece of same color" do
     game = FactoryBot.create(:game)
+    game.pieces.clear
     white_piece = game.pieces.create(x_pos: 0, y_pos: 0, color: true)
     white_piece_2 = game.pieces.create(x_pos: 1, y_pos: 0, color: true)
     expect(white_piece.move_to!(1,0)).to eq(false)
