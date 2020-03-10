@@ -24,6 +24,8 @@ class King < Piece
 
   def move_to!(new_x, new_y)
 
+    return false if !valid_move?(new_x, new_y)
+
     if new_x == 6 && new_y == 0 && moved? == false
       castle!(7, 0) if castle?(7, 0)
     elsif new_x == 2 && new_y.zero? && moved? == false
@@ -66,8 +68,7 @@ class King < Piece
     opposing_color = (color == 0 ? 1 : 0)
 
     cur_game = Game.find_by(id: game_id)
-    opposing_pieces = cur_game.pieces.where(color: opposing_color)
-
+    opposing_pieces = cur_game.pieces.where(color: opposing_color).where.not(x_pos: nil).where.not(y_pos:nil)
 
     opposing_pieces.each do |p|
       return true if p.valid_move?(x_pos, y_pos)

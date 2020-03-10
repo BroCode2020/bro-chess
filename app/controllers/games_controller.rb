@@ -28,8 +28,8 @@ class GamesController < ApplicationController
     @pieces = @game.pieces
     @piece = Piece.find(params[:piece_id])
     @piece_id = params[:piece_id]
-    @x_pos = params[:x_pos]
-    @y_pos = params[:y_pos]
+    @x_pos = params[:x_pos].to_i
+    @y_pos = params[:y_pos].to_i
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       alert = 'You cannot move into check. Please select another move.'

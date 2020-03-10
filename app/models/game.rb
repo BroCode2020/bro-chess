@@ -61,21 +61,21 @@ class Game < ApplicationRecord
         game_id: id,
         x_pos: i,
         y_pos: 1,
-        color: true
+        color: 0
         )
     end
 
-    Rook.create(game_id: id, x_pos: 0, y_pos: 0, color: true)
-    Rook.create(game_id: id, x_pos: 7, y_pos: 0, color: true)
+    Rook.create(game_id: id, x_pos: 0, y_pos: 0, color: 0)
+    Rook.create(game_id: id, x_pos: 7, y_pos: 0, color: 0)
 
-    Knight.create(game_id: id, x_pos: 1, y_pos: 0, color: true)
-    Knight.create(game_id: id, x_pos: 6, y_pos: 0, color: true)
+    Knight.create(game_id: id, x_pos: 1, y_pos: 0, color: 0)
+    Knight.create(game_id: id, x_pos: 6, y_pos: 0, color: 0)
 
-    Bishop.create(game_id: id, x_pos: 2, y_pos: 0, color: true)
-    Bishop.create(game_id: id, x_pos: 5, y_pos: 0, color: true)
+    Bishop.create(game_id: id, x_pos: 2, y_pos: 0, color: 0)
+    Bishop.create(game_id: id, x_pos: 5, y_pos: 0, color: 0)
 
-    Queen.create(game_id: id, x_pos: 3, y_pos: 0, color: true)
-    King.create(game_id: id, x_pos: 4, y_pos: 0, color: true)
+    Queen.create(game_id: id, x_pos: 3, y_pos: 0, color: 0)
+    King.create(game_id: id, x_pos: 4, y_pos: 0, color: 0)
 
     # Black Pieces
     (0..7).each do |i|
@@ -83,21 +83,21 @@ class Game < ApplicationRecord
         game_id: id,
         x_pos: i,
         y_pos: 6,
-        color: false
+        color: 1
         )
     end
 
-    Rook.create(game_id: id, x_pos: 0, y_pos: 7, color: false)
-    Rook.create(game_id: id, x_pos: 7, y_pos: 7, color: false)
+    Rook.create(game_id: id, x_pos: 0, y_pos: 7, color: 1)
+    Rook.create(game_id: id, x_pos: 7, y_pos: 7, color: 1)
 
-    Knight.create(game_id: id, x_pos: 1, y_pos: 7, color: false)
-    Knight.create(game_id: id, x_pos: 6, y_pos: 7, color: false)
+    Knight.create(game_id: id, x_pos: 1, y_pos: 7, color: 1)
+    Knight.create(game_id: id, x_pos: 6, y_pos: 7, color: 1)
 
-    Bishop.create(game_id: id, x_pos: 2, y_pos: 7, color: false)
-    Bishop.create(game_id: id, x_pos: 5, y_pos: 7, color: false)
+    Bishop.create(game_id: id, x_pos: 2, y_pos: 7, color: 1)
+    Bishop.create(game_id: id, x_pos: 5, y_pos: 7, color: 1)
 
-    Queen.create(game_id: id, x_pos: 3, y_pos: 7, color: false)
-    King.create(game_id: id, x_pos: 4, y_pos: 7, color: false)
+    Queen.create(game_id: id, x_pos: 3, y_pos: 7, color: 1)
+    King.create(game_id: id, x_pos: 4, y_pos: 7, color: 1)
   end
 
 
