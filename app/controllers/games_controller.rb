@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :join_as_black, :join_as_white]
 
   def index
     @games = Game.all
