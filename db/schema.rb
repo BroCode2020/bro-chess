@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2020_03_10_065558) do
-
+ActiveRecord::Schema.define(version: 2020_03_11_070825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,8 +22,10 @@ ActiveRecord::Schema.define(version: 2020_03_10_065558) do
     t.datetime "updated_at", null: false
     t.integer "black_player_id"
     t.integer "forfeiting_player_id"
-    t.string "piece_capturable_by_en_passant"
     t.integer "player_on_move_color", default: 1
+    t.integer "last_moved_piece_id"
+    t.integer "last_moved_prev_x_pos"
+    t.integer "last_moved_prev_y_pos"
   end
 
   create_table "pieces", force: :cascade do |t|
@@ -58,4 +58,5 @@ ActiveRecord::Schema.define(version: 2020_03_10_065558) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "games", "pieces", column: "last_moved_piece_id", name: "games_last_moved_piece_fk"
 end
