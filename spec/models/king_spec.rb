@@ -77,7 +77,7 @@ describe '#castle!' do
        king_cw = FactoryBot.create(:king, color: 1, game: game_b, x_pos: 4, y_pos: 0)
        rook_cr = FactoryBot.create(:rook, color: 1, game: game_b, x_pos: 0, y_pos: 0)
        rook_cl = FactoryBot.create(:rook, color: 1, game: game_b, x_pos: 7, y_pos: 0)
-       king_cw.castle!(7, 0)
+       king_cw.move_to!(6, 0)
        expect(king_cw).to have_attributes(x_pos: 6, y_pos: 0)
 
 

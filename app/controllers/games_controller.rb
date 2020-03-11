@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :join_as_black, :join_as_white]
 
   def index
     @games = Game.all
@@ -28,8 +29,8 @@ class GamesController < ApplicationController
     @pieces = @game.pieces
     @piece = Piece.find(params[:piece_id])
     @piece_id = params[:piece_id]
-    @x_pos = params[:x_pos]
-    @y_pos = params[:y_pos]
+    @x_pos = params[:x_pos].to_i
+    @y_pos = params[:y_pos].to_i
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       alert = 'You cannot move into check. Please select another move.'
@@ -76,6 +77,13 @@ class GamesController < ApplicationController
     end
     
     @game.update_attribute(:forfeiting_player_id, current_user.id)
+    current_user.increment_loss_count
+
+    other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
+    other_player.increment_win_count if other_player
+
+    # Note: other player needs to be redirected (via Firebase)
+
     redirect_to root_path, notice: "You have forfeited the game. Please play again soon."
   end
 

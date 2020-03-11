@@ -31,12 +31,17 @@
 
 <script>
 
+<<<<<<< HEAD
 	$(document).ready(function(){
+=======
+$(document).ready(function(){
+	var holdingPiece = false;
+
+>>>>>>> master
 	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
 
  	$(".drag-a-piece").hover(function(){
-		//console.log("hi");
-		$(this).closest('.board-square').toggleClass("select"); //hovering piece will highlight piece's board square
+		$(this).closest('.board-square').toggleClass("hover");
 	});
 
 	$(".board-square").droppable({
@@ -44,6 +49,7 @@
 				"ui-droppable-hover": "select" //highlight droppable board square on hover
 									//eventually: highlight only squares allowed by selected piece's move logic?
 			},
+			hoverClass: 'select',
 			accept: '.drag-a-piece',
 			drop: function( event, ui ) {
 				var res = event.target.id
@@ -54,6 +60,7 @@
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 				//console.log(path);
+				$('.drag-a-piece').draggable('destroy');
 				$.post(path, {}, function(data, status){
 					//console.log(status)
 					location.reload();  //post and reload the board to draw the piece in the position.
@@ -61,7 +68,23 @@
 			}
 		});
 	});
-
+	function castling(data){
+	    let rook_x_pos = 0;
+	    let rook_y_pos = 0;
+	    (data.color === 0) ?  rook_y_pos = 0 : rook_y_pos = 7;
+	    (data.new_x === 6) ? rook_x_pos = 7 : rook_x_pos = 0;
+	    let rook = $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span");
+	    if (data.type === "King" && data.new_x === 6 && data.new_y === data.y_pos && data.x_pos === 4){
+	      $("[y_pos =" + rook_y_pos + "][x_pos = 5]").append(rook);
+	      $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span").remove();
+	    }
+	    if (data.type === "King" && data.new_x === 2 && data.new_y === data.y_pos && data.x_pos === 4){
+	      $("[y_pos =" + rook_y_pos + "][x_pos = 3]").append(rook);
+	      $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span").remove();
+	    }
+	    rook.css('top', '');
+	    rook.css('left', '');
+	  }
 </script>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
