@@ -11,7 +11,8 @@ Rails.application.routes.draw do
      #patch :join_as_black, :join_as_white
      put :join_as_black, :join_as_white
     end
-    
+  end
 
-   end
+  resources :users, only: :show
+  
  end
