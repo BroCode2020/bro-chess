@@ -3,22 +3,26 @@ class King < Piece
 
   return false if new_y > 7 || new_x > 7 || new_y < 0 || new_x < 0
   return false if obstructed?(new_x, new_y)
+  piece_at_destination = game.pieces.find_by(x_pos: new_x, y_pos: new_y)
+  return false if piece_at_destination && piece_at_destination.color == color
 
 
-    cur_game = Game.find_by(id: game_id)
-    if cur_game.tile_is_occupied?(new_x, new_y)
-    p = cur_game.pieces.find_by(x_pos: new_x, y_pos: new_y)
-    return false if (p && p.color == color)
-    end
+
 
 
   x_diff = (x_pos - new_x).abs
   y_diff = (y_pos - new_y).abs
-  return true if (x_diff <= 1) && (y_diff <= 1) ||
-                 new_x == 2 && new_y == 0 && moved? == false ||
-                 new_x == 6 && new_y == 0 && moved? == false ||
-                 new_x == 2 && new_y == 7 && moved? == false ||
-                 new_x == 6 && new_y == 7 && moved? == false
+  if (x_diff <= 1) && (y_diff <= 1)
+    return true
+  elsif new_x == 2 && new_y == 0 && moved? == false
+    return true
+  elsif new_x == 2 && new_y == 0 && moved? == false
+    return true
+  elsif new_x == 6 && new_y == 0 && moved? == false
+    return true
+  elsif new_x == 6 && new_y == 7 && moved? == false
+    return true
+  end
     return false
   end
 
@@ -28,7 +32,7 @@ class King < Piece
 
     if new_x == 6 && new_y == 0 && moved? == false
       castle!(7, 0) if castle?(7, 0)
-    elsif new_x == 2 && new_y.zero? && moved? == false
+    elsif new_x == 2 && new_y == 0 && moved? == false
       castle!(0, 0) if castle?(0, 0)
     elsif new_x == 6 && new_y == 7 && moved? == false
       castle!(7, 7) if castle?(7, 7)
@@ -36,6 +40,7 @@ class King < Piece
       castle!(0, 7) if castle?(0, 7)
     end
      self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
+     return true
     end
 
 

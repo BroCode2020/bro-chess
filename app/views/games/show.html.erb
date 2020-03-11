@@ -64,7 +64,23 @@ $(document).ready(function(){
 			}
 		});
 	});
-
+	function castling(data){
+	    let rook_x_pos = 0;
+	    let rook_y_pos = 0;
+	    (data.color === 0) ?  rook_y_pos = 0 : rook_y_pos = 7;
+	    (data.new_x === 6) ? rook_x_pos = 7 : rook_x_pos = 0;
+	    let rook = $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span");
+	    if (data.type === "King" && data.new_x === 6 && data.new_y === data.y_pos && data.x_pos === 4){
+	      $("[y_pos =" + rook_y_pos + "][x_pos = 5]").append(rook);
+	      $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span").remove();
+	    }
+	    if (data.type === "King" && data.new_x === 2 && data.new_y === data.y_pos && data.x_pos === 4){
+	      $("[y_pos =" + rook_y_pos + "][x_pos = 3]").append(rook);
+	      $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span").remove();
+	    }
+	    rook.css('top', '');
+	    rook.css('left', '');
+	  }
 </script>
 
 <% turn_display_class = 'turn-display '%>
