@@ -23,9 +23,11 @@ ActiveRecord::Schema.define(version: 2020_03_11_070825) do
     t.integer "black_player_id"
     t.integer "forfeiting_player_id"
     t.integer "player_on_move_color", default: 1
+    t.integer "user_id"
     t.integer "last_moved_piece_id"
     t.integer "last_moved_prev_x_pos"
     t.integer "last_moved_prev_y_pos"
+    t.index ["user_id"], name: "index_games_on_user_id"
   end
 
   create_table "pieces", force: :cascade do |t|
@@ -54,7 +56,9 @@ ActiveRecord::Schema.define(version: 2020_03_11_070825) do
     t.integer "games_won", default: 0
     t.integer "games_lost", default: 0
     t.integer "games_drawn", default: 0
+    t.integer "game_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["game_id"], name: "index_users_on_game_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
