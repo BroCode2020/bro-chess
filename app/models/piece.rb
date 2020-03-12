@@ -16,7 +16,6 @@ class Piece < ApplicationRecord
   def move_to!(new_x, new_y)
     new_x = new_x.to_i
     new_y = new_y.to_i
-
     orig_x = self.x_pos
     orig_y = self.y_pos
 
@@ -33,7 +32,6 @@ class Piece < ApplicationRecord
       else
         # there is no piece to capture
         self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
-
         game.update_attributes(last_moved_piece_id: self.id, last_moved_prev_x_pos: orig_x, last_moved_prev_y_pos: orig_y)
 
       end
@@ -80,8 +78,11 @@ class Piece < ApplicationRecord
     return color == 0
   end
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
 
   private
 

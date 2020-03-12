@@ -83,7 +83,7 @@ RSpec.describe Game, type: :model do
 			expect(game.in_check_state?).to eq(true)
 		end
 	end
-	
+
 	describe 'king_in_check?(king_color)' do
 
 		it "should raise an error if king color is not 0 or 1" do
@@ -228,7 +228,7 @@ RSpec.describe Game, type: :model do
 			king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 			rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 0)
 			queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
-			# b-rook is moving, putting b-king in w-queen's path 
+			# b-rook is moving, putting b-king in w-queen's path
 
 			expect(game.move_puts_self_in_check?(rook, 4, 1)).to eq(true)
 		end
@@ -239,7 +239,7 @@ RSpec.describe Game, type: :model do
 			king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 			rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 0)
 			queen = FactoryBot.create(:queen, color: '0', game: game, x_pos: 7, y_pos: 0)
-			# b-rook is moving, putting b-king in b-queen's path 
+			# b-rook is moving, putting b-king in b-queen's path
 
 			expect(game.move_puts_self_in_check?(rook, 4, 1)).to eq(false)
 		end
@@ -252,28 +252,28 @@ RSpec.describe Game, type: :model do
 				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
 				# b-king stays in w-queen's path
-	
+
 				expect(game.move_puts_self_in_check?(king, 1, 0)).to eq(true)
 			end
-	
+
 			it "should return false if the move will not result in this player being in check" do
 				game = FactoryBot.create(:game)
 				game.pieces.clear
 				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
 				# b-king get out of w-queen's path
-	
+
 				expect(game.move_puts_self_in_check?(king, 0, 1)).to eq(false)
 			end
-	
+
 			it "should return true if the move will result in this player still being in check" do
 				game = FactoryBot.create(:game)
 				game.pieces.clear
 				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 				rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 1)
 				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
-				# b-rook is moving, while b-king is still in w-queen's path 
-	
+				# b-rook is moving, while b-king is still in w-queen's path
+
 				expect(game.move_puts_self_in_check?(rook, 4, 2)).to eq(true)
 			end
 
@@ -283,8 +283,8 @@ RSpec.describe Game, type: :model do
 				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 				rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 4, y_pos: 1)
 				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
-				# b-rook is moving, blocking w-queen's path 
-	
+				# b-rook is moving, blocking w-queen's path
+
 				expect(game.move_puts_self_in_check?(rook, 4, 0)).to eq(false)
 			end
 
@@ -294,11 +294,109 @@ RSpec.describe Game, type: :model do
 				king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
 				rook = FactoryBot.create(:rook, color: '0', game: game, x_pos: 7, y_pos: 7)
 				queen = FactoryBot.create(:queen, color: '1', game: game, x_pos: 7, y_pos: 0)
-				# b-rook captures w-queen, saving b-king 
-	
+				# b-rook captures w-queen, saving b-king
+
 				expect(game.move_puts_self_in_check?(rook, 7, 0)).to eq(false)
 			end
 		end
 	end
+
+	describe "checking for stalemate" do
+			it "should return false if the king is in check" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: 0, game: game, x_pos: 4, y_pos: 4)
+				white_queen = FactoryBot.create(:queen, color: 1, game: game, x_pos: 6, y_pos: 4)
+				expect(game.stalemate?(black_king.color)).to eq(false)
+				expect(game.king_in_check?(black_king.color)).to eq(true)
+			end
+
+			it "should return false if the king is in checkmate" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: 0, game: game, x_pos: 0, y_pos: 3, moved: true)
+				white_rook = FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
+				white_rook = FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
+				white_king = FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 4, moved: true)
+
+				expect(game.stalemate?(black_king.color)).to eq(false)
+				expect(game.king_in_checkmate?(0)).to eq(true)
+			end
+
+
+			it "should return true if king is not in check and there are no valid moves # wiki/stalemate/diagram 1" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 5, y_pos: 0)
+				white_pawn = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 1)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 5, y_pos: 2)
+				expect(game.stalemate?(black_king.color)).to eq(true)
+			end
+
+			it "should return true if king is not in check and there are no valid moves # wiki/stalemate/diagram 2" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				black_bishop = FactoryBot.create(:bishop, color: '0', game: game, x_pos: 0, y_pos: 1)
+				white_rook = FactoryBot.create(:rook, color: '1', game: game, x_pos: 0, y_pos: 7)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 2, y_pos: 1)
+				expect(game.stalemate?(black_king.color)).to eq(true)
+			end
+
+			it "should return true if king is not in check and there are no valid moves # wiki/stalemate/diagram 3" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 7)
+				white_rook = FactoryBot.create(:rook, color: '1', game: game, x_pos: 1, y_pos: 6)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 2, y_pos: 5)
+				expect(game.stalemate?(black_king.color)).to eq(true)
+			end
+
+			it "should return true if king is not in check and there are no valid moves # wiki/stalemate/diagram 4" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 7)
+				black_pawn = FactoryBot.create(:pawn, color: '0', game: game, x_pos: 0, y_pos: 6)
+				white_queen = FactoryBot.create(:rook, color: '1', game: game, x_pos: 1, y_pos: 5)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 6, y_pos: 3)
+				expect(game.stalemate?(black_king.color)).to eq(true)
+			end
+
+			it "should return true if king is not in check and there are no valid moves # wiki/stalemate/diagram 5" do
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 0, y_pos: 0)
+				white_pawn = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 0, y_pos: 1)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 0, y_pos: 2)
+				white_bishop = FactoryBot.create(:bishop, color: '1', game: game, x_pos: 5, y_pos: 4)
+				expect(game.stalemate?(black_king.color)).to eq(true)
+			end
+
+			it "should return false in this scenario where the king only has 1 move to force stalemate or he loses in the longer game # wiki/stalemate/ anand vs kramnik 2007" do
+				#this is not a stalemate, but if black_king captures white_p_atk_king then it is a stalemate
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 4, y_pos: 4)
+				white_p_atk_king = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 3)
+				white_p_protect_own_king = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 7, y_pos: 4)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 7, y_pos: 3)
+				black_p_1 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 6, y_pos: 1)
+				black_p_2 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 2)
+				expect(game.stalemate?(black_king.color)).to eq(false)
+			end
+
+			it "should return true, same scenario above, though black_king takes pawn to force stalemate # wiki/stalemate/ anand vs kramnik 2007" do
+				#this case where black_king camptures white_p_atk_king as described in above test
+				game = FactoryBot.create(:game)
+				game.pieces.clear
+				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 5, y_pos: 3)
+				white_p_protect_own_king = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 7, y_pos: 4)
+				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 7, y_pos: 3)
+				black_p_1 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 6, y_pos: 1)
+				black_p_2 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 2)
+				expect(game.stalemate?(white_king.color)).to eq(true)
+			end
+
+		end
 
 end
