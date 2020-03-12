@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:index, :new, :create, :show, :update, :join_as_black, :join_as_white, :game_available, :forfeit]
 
   def index
     @games = Game.all
@@ -20,7 +20,7 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
 
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You are not a member of this game." and return
+      redirect_to root_path, alert: "You need to sign in or sign up before continuing." and return
     end
 
     @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|
@@ -36,6 +36,10 @@ class GamesController < ApplicationController
     @piece_id = params[:piece_id]
     @x_pos = params[:x_pos].to_i
     @y_pos = params[:y_pos].to_i
+
+    if(current_user.nil?)
+      # redirect_to root_path, alert: "You are not a member of this game." and return
+    end
 
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
       redirect_to root_path, alert: "You are not a member of this game." and return
