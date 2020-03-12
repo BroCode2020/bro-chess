@@ -1,14 +1,14 @@
 class Game < ApplicationRecord
   has_many :pieces
   has_many :users
-  
+
   belongs_to :black_player, class_name: 'User', optional: true
   belongs_to :white_player, class_name: 'User', optional: true
 
   after_create :initialize_board!
 
   def get_svg_data_string(cur_piece, x_position, y_position, scale, svg_url)
-    
+
     color = cur_piece.color
     piece_class_name = cur_piece.class.name.downcase
 
@@ -105,6 +105,7 @@ class Game < ApplicationRecord
     return (king_in_check?(0) || king_in_check?(1))
   end
 
+
   def king_in_check?(king_color)
     if(king_color != 0 && king_color != 1)
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
@@ -114,10 +115,12 @@ class Game < ApplicationRecord
     return king_to_test.in_check?
   end
 
+
   def in_checkmate_state?
     return (king_in_checkmate?(0) || king_in_checkmate?(1))
   end
-  
+
+
   def king_in_checkmate?(king_color)
     if(king_color != 0 && king_color != 1)
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
@@ -141,6 +144,26 @@ class Game < ApplicationRecord
 
     return false
   end
+
+  def in_stalemate_state?
+    return stalemate?(0) || stalemate?(1)
+  end
+
+  def stalemate?(king_color)
+    return false if king_in_check?(king_color)
+    return false if king_in_checkmate?(king_color)
+    pieces.where(color: king_color).each do |p|
+      for y in 0..7 do
+        for x in 0..7 do
+          if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
+            return false if (!move_puts_self_in_check?(p, x, y))
+          end
+        end
+      end
+    end
+    return true
+  end
+
 
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
 
@@ -183,7 +206,7 @@ class Game < ApplicationRecord
 
     return in_check_result
   end
-    
+
   def player_on_move_id
     return player_on_move_color == 0 ? black_player_id : white_player_id
   end

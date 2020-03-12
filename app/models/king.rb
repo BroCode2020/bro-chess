@@ -1,30 +1,27 @@
 class King < Piece
   def valid_move?(new_x, new_y)
+    return false if new_y > 7 || new_x > 7 || new_y < 0 || new_x < 0
+    return false if new_y == y_pos && new_x == x_pos
+    return false if obstructed?(new_x, new_y)
 
-  return false if new_y > 7 || new_x > 7 || new_y < 0 || new_x < 0
-  return false if obstructed?(new_x, new_y)
-  piece_at_destination = game.pieces.find_by(x_pos: new_x, y_pos: new_y)
-  return false if piece_at_destination && piece_at_destination.color == color
+    piece_at_destination = game.pieces.find_by(x_pos: new_x, y_pos: new_y)
+    return false if piece_at_destination && piece_at_destination.color == color
 
-
-
-
-
-  x_diff = (x_pos - new_x).abs
-  y_diff = (y_pos - new_y).abs
-  if (x_diff <= 1) && (y_diff <= 1)
-    return true
-  elsif new_x == 2 && new_y == 0 && moved? == false
-    return true
-  elsif new_x == 2 && new_y == 0 && moved? == false
-    return true
-  elsif new_x == 6 && new_y == 0 && moved? == false
-    return true
-  elsif new_x == 6 && new_y == 7 && moved? == false
-    return true
-  end
-    return false
-  end
+    x_diff = (x_pos - new_x).abs
+    y_diff = (y_pos - new_y).abs
+    if (x_diff <= 1) && (y_diff <= 1)
+      return true
+    elsif new_x == 2 && new_y == 0 && moved? == false
+      return true
+    elsif new_x == 2 && new_y == 0 && moved? == false
+      return true
+    elsif new_x == 6 && new_y == 0 && moved? == false
+      return true
+    elsif new_x == 6 && new_y == 7 && moved? == false
+      return true
+    end
+      return false
+    end
 
   def move_to!(new_x, new_y)
 
