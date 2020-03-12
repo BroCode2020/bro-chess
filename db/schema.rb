@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_02_172456) do
+ActiveRecord::Schema.define(version: 2020_03_11_070825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,12 @@ ActiveRecord::Schema.define(version: 2020_03_02_172456) do
     t.datetime "updated_at", null: false
     t.integer "black_player_id"
     t.integer "forfeiting_player_id"
-    t.string "piece_capturable_by_en_passant"
     t.integer "player_on_move_color", default: 1
+    t.integer "user_id"
+    t.integer "last_moved_piece_id"
+    t.integer "last_moved_prev_x_pos"
+    t.integer "last_moved_prev_y_pos"
+    t.index ["user_id"], name: "index_games_on_user_id"
   end
 
   create_table "pieces", force: :cascade do |t|
@@ -34,7 +38,6 @@ ActiveRecord::Schema.define(version: 2020_03_02_172456) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "color"
-    t.string "image"
     t.boolean "moved", default: false
   end
 
@@ -50,8 +53,14 @@ ActiveRecord::Schema.define(version: 2020_03_02_172456) do
     t.string "uid"
     t.string "name"
     t.text "image"
+    t.integer "games_won", default: 0
+    t.integer "games_lost", default: 0
+    t.integer "games_drawn", default: 0
+    t.integer "game_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["game_id"], name: "index_users_on_game_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "games", "pieces", column: "last_moved_piece_id", name: "games_last_moved_piece_fk"
 end
