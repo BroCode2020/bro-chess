@@ -1,7 +1,7 @@
 class Pawn < Piece
 
   def valid_move?(new_x, new_y)
-
+    return false if !two_players?(new_x, new_y)
     return true if valid_diagonal_move?(new_x, new_y)
     return true if en_passant?(new_x, new_y)
     return false if new_x != x_pos

@@ -1,14 +1,14 @@
 class Game < ApplicationRecord
   has_many :pieces
   has_many :users
-  
+
   belongs_to :black_player, class_name: 'User', optional: true
   belongs_to :white_player, class_name: 'User', optional: true
 
   after_create :initialize_board!
 
   def get_svg_data_string(cur_piece, x_position, y_position, scale, svg_url)
-    
+
     color = cur_piece.color
     piece_class_name = cur_piece.class.name.downcase
 
@@ -117,7 +117,7 @@ class Game < ApplicationRecord
   def in_checkmate_state?
     return (king_in_checkmate?(0) || king_in_checkmate?(1))
   end
-  
+
   def king_in_checkmate?(king_color)
     if(king_color != 0 && king_color != 1)
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
@@ -183,7 +183,7 @@ class Game < ApplicationRecord
 
     return in_check_result
   end
-    
+
   def player_on_move_id
     return player_on_move_color == 0 ? black_player_id : white_player_id
   end
@@ -196,5 +196,7 @@ class Game < ApplicationRecord
     new_player_on_move_color = player_on_move_color == 0 ? 1 : 0
     self.update_attributes(player_on_move_color: new_player_on_move_color)
   end
+
+
 
 end

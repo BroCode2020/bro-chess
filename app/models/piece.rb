@@ -12,6 +12,11 @@ class Piece < ApplicationRecord
     return true
   end
 
+  def two_players?(new_x, new_y)
+
+    return false if game.black_player_id.nil?
+    return true
+  end
 
   def move_to!(new_x, new_y)
     new_x = new_x.to_i

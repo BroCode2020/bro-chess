@@ -1,7 +1,7 @@
 require 'rails_helper'
 RSpec::Matchers.define_negated_matcher :not_change, :change
 RSpec.describe Pawn, type: :model do
-  let(:game) { FactoryBot.create(:game) }
+  let(:game) { FactoryBot.create(:game, black_player_id: 2) }
   let(:white_pawn) { FactoryBot.create(:pawn, color: 1, game: game, x_pos: 5, y_pos: 3) }
   let(:black_pawn) { FactoryBot.create(:pawn, color: 0, game: game, x_pos: 4, y_pos: 4) }
 
@@ -64,7 +64,7 @@ RSpec.describe Pawn, type: :model do
   end
 
   describe '#en_passant?' do
-    let(:game) { FactoryBot.create(:game) }
+    let(:game) { FactoryBot.create(:game, black_player_id: 2) }
     let(:pawn_en_passant) { FactoryBot.create(:pawn, color: 1, game: game, x_pos: 0, y_pos: 3) }
     let(:black_pawn) { FactoryBot.create(:pawn, color: 0, game: game, x_pos: 1, y_pos: 1) }
     let(:pawn_white) { FactoryBot.create(:pawn, color: 0, game: game, x_pos: 1, y_pos: 6) }

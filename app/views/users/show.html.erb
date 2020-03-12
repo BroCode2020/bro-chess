@@ -1,4 +1,4 @@
-</div>
+<div>
 
   <h1><%= @user.email %></h1>
   <h3>Member Since: <%= @user.created_at.strftime("%B %d, %Y") %></h3>
@@ -10,7 +10,7 @@
 
     <% @game.each do |game| %>
       <% if (game.black_player_id == @user.id) || (game.white_player_id == @user.id) %>
-        Game ID: <%= game.id  %>  -  
+        Game ID: <%= game.id  %>  -
         <%= game.created_at.strftime("%B %d, %Y") %>
         <br />
         <br />
