@@ -144,13 +144,6 @@ class Game < ApplicationRecord
 
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
 
-    # Need to make sure casting & en passasant are properly covered
-
-    # IMPORTANT NOTE: for the time being, this will have to be assumed to be a valid move
-
-    # This method assumes it is being passed a piece by proper player
-    #    This needs to be taken into consideration with respect to where this method is being called
-
     # What happens if pawn reaches other side during this move check?
 
     raise 'The piece provided is invalid' if piece_to_move.nil?
@@ -193,39 +186,13 @@ class Game < ApplicationRecord
   end
 
   def complete_turn
-    
     new_player_on_move_color = player_on_move_color == 0 ? 1 : 0
     self.update_attributes(player_on_move_color: new_player_on_move_color)
 
     base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
-
     firebase = Firebase::Client.new(base_uri)
-    
-    # private_key_json_string = File.open('config/firebase_keys.json').read
 
-    # firebase = Firebase::Client.new(base_uri, private_key_json_string);
-    # Need to get this set up with security
-    
-
-    response = firebase.set("game #{self.id}", :player_on_move_color => new_player_on_move_color)
-
-    $stderr.puts ''
-    $stderr.puts '==================================='
-    $stderr.puts '==================================='
-
-    # $stderr.
-    puts "success? #{response.success?}"
-    $stderr.puts "code #{response.code}"
-    $stderr.puts "body #{response.body}"
-
-
-    $stderr.puts '==================================='
-    $stderr.puts '==================================='
-
-    # return response.success?
-
-    # redirect_to controller.game_path(id)
-
+    firebase.set("game #{self.id}", :player_on_move_color => new_player_on_move_color)
   end
 
 end

@@ -29,8 +29,8 @@
 	<% end %>
 </div>
 <% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
-<div id="turn-status-indicator" class="<%=turn_status%>">STATUS: <%=turn_status%></div>
-<!--on-move, waiting, moved-piece-->
+<div id="turn-status-indicator" class="<%=turn_status%>"></div>
+<!-- Possle states: "on-move", "waiting", "moved-piece" -->
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
@@ -55,25 +55,18 @@
 			drop: function( event, ui ) {
 				var res = event.target.id
 				var drop_square = res.split("-"); //lookup square specified within the loop at line 10
-				//console.log(drop_square)
+
 				var target_x = drop_square[0]
 				var target_y = drop_square[1]			//split id string into x and y
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
-				//console.log(path);
+
 				$('.drag-a-piece').draggable('destroy');
 				$('#turn-status-indicator').attr("class","moved-piece");//.hide().show(0);
 
 				$.post(path, {}, function(data, status){
-					//console.log(status)
-					// location.reload();  //post and reload the board to draw the piece in the position.
 					<% turn_status = "moved-piece" %>
-					// $('#turn-status-indicator').attr("class","moved-piece");//.hide().show(0);
-					$('#turn-status-indicator').addClass("moved-piece");
-					$('#turn-status-indicator').removeClass("on-move");
-
-					console.log('#turn-status-indicator to moved-piece')
-					//can remove hide/show after debugging done
+					$('#turn-status-indicator').attr("class","moved-piece");
 				});
 			}
 		});
@@ -100,13 +93,6 @@
 				if($('#turn-status-indicator').hasClass('moved-piece')) {
 					location.reload();
 				}
-				// <% if current_user != @game.player_on_move %>
-				// 	// Note that 'value' option loads once when everything initializes, then again every time the value changes
-				// 	if(dataSnapshot.val() !== <%=@game.player_on_move_color%>) {
-				// 		// After player-a moves, player-b gets reloaded properly, but player-a get caught in redirect loop 
-				// 		
-				// 	}
-				// <% end %>
 			});
 		});
 	});
@@ -130,7 +116,6 @@
 	}
 
 </script>
-
 
 
 <% turn_display_class = 'turn-display '%>
