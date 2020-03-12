@@ -29,18 +29,21 @@
 	<% end %>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
+
 <script>
 
-$(document).ready(function(){
-	var holdingPiece = false;
+	$(document).ready(function(){
+		var holdingPiece = false;
 
-	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
+		$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
 
- 	$(".drag-a-piece").hover(function(){
-		$(this).closest('.board-square').toggleClass("hover");
-	});
+		$(".drag-a-piece").hover(function(){
+			$(this).closest('.board-square').toggleClass("hover");
+		});
 
-	$(".board-square").droppable({
+		$(".board-square").droppable({
 			classes: {
 				"ui-droppable-hover": "select" //highlight droppable board square on hover
 									//eventually: highlight only squares allowed by selected piece's move logic?
@@ -60,10 +63,37 @@ $(document).ready(function(){
 				$.post(path, {}, function(data, status){
 					//console.log(status)
 					location.reload();  //post and reload the board to draw the piece in the position.
-			  });
+			});
 			}
 		});
+
+		$(function(){
+
+			var firebaseConfig = {
+				apiKey: "AIzaSyDKLqqj6W0usIqHaKiYwEjTSsNkfmQMl6c",
+				authDomain: "bro-chess-b8ed8.firebaseapp.com",
+				databaseURL: "https://bro-chess-b8ed8.firebaseio.com",
+				projectId: "bro-chess-b8ed8",
+				storageBucket: "bro-chess-b8ed8.appspot.com",
+				messagingSenderId: "83722689851",
+				appId: "1:83722689851:web:520b4909913c3f7e362b1e"
+			};
+			firebase.initializeApp(firebaseConfig);
+
+			var database_path = `game <%= @game.id%>`
+			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
+
+				<% if current_user != @game.player_on_move %>
+					// Note that 'value' option loads once when everything initializes, then again every time the value changes
+					if(dataSnapshot.val() !== <%=@game.player_on_move_color%>) {
+						// After player-a moves, player-b gets reloaded properly, but player-a get caught in redirect loop 
+						<% controller.redirect_to game_path(@game.id) %>
+					}
+				<% end %>
+			});
+		});
 	});
+	
 	function castling(data){
 	    let rook_x_pos = 0;
 	    let rook_y_pos = 0;
@@ -80,39 +110,11 @@ $(document).ready(function(){
 	    }
 	    rook.css('top', '');
 	    rook.css('left', '');
-	  }
+	}
+
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
 
-<script>
-	$(function(){
-
-		var firebaseConfig = {
-			apiKey: "AIzaSyDKLqqj6W0usIqHaKiYwEjTSsNkfmQMl6c",
-			authDomain: "bro-chess-b8ed8.firebaseapp.com",
-			databaseURL: "https://bro-chess-b8ed8.firebaseio.com",
-			projectId: "bro-chess-b8ed8",
-			storageBucket: "bro-chess-b8ed8.appspot.com",
-			messagingSenderId: "83722689851",
-			appId: "1:83722689851:web:520b4909913c3f7e362b1e"
-		};
-		firebase.initializeApp(firebaseConfig);
-
-		var database_path = `game <%= @game.id%>`
-		firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
-
-			<% if current_user != @game.player_on_move %>
-				// Note that 'value' option loads once when everything initializes, then again every time the value changes
-				if(dataSnapshot.val() !== <%=@game.player_on_move_color%>) {
-					// After player-a moves, player-b gets reloaded properly, but player-a get caught in redirect loop 
-					<% controller.redirect_to game_path(@game.id) %>
-				}
-			<% end %>
-		});
-	});
-</script>
 
 <% turn_display_class = 'turn-display '%>
 <% if current_user == @game.player_on_move %>
