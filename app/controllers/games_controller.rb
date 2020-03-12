@@ -39,8 +39,8 @@ class GamesController < ApplicationController
         @game.complete_turn
       end
     end
-    # Important: The following line is not actually needed for proper routing
-    # redirect_to game_path(@game.id)
+    
+    redirect_to game_path(@game.id)
   end
 
   def update

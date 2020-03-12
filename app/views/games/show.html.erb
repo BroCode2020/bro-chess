@@ -28,6 +28,8 @@
 		</div>
 	<% end %>
 </div>
+<% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
+<div id="turn-status-indicator" class="<%=turn_status%>">STATUS: <%=turn_status%></div>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
@@ -60,10 +62,10 @@
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 				//console.log(path);
 				$('.drag-a-piece').draggable('destroy');
-				$.post(path, {}, function(data, status){
+				$.post(path);/*, {}, function(data, status){
 					//console.log(status)
 					location.reload();  //post and reload the board to draw the piece in the position.
-			});
+				});*/
 			}
 		});
 
