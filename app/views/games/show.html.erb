@@ -30,13 +30,12 @@
 </div>
 <% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
-<!-- Possle states: "on-move", "waiting", "moved-piece" -->
+<!-- Possible states: "on-move", "waiting", "moved-piece" -->
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
 
 <script>
-
 	$(document).ready(function(){
 
 		$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
@@ -61,12 +60,22 @@
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 
-				$('.drag-a-piece').draggable('destroy');
-				$('#turn-status-indicator').attr("class","moved-piece");//.hide().show(0);
+				$('#turn-status-indicator').removeClass("on-move");
+				$('#turn-status-indicator').addClass("moved-piece");
+
+				var unloading = false;
+				$('#turn-status-indicator').unload(function() { 
+					unload = true;
+				});
 
 				$.post(path, {}, function(data, status){
 					<% turn_status = "moved-piece" %>
 					$('#turn-status-indicator').attr("class","moved-piece");
+					window.setTimeout(function(){
+						if(!unloading) {
+							location.reload();
+						}
+					}, 500); // Note the delay time of 500ms
 				});
 			}
 		});
@@ -96,7 +105,9 @@
 			});
 		});
 	});
-	
+</script>
+
+<script>
 	function castling(data){
 	    let rook_x_pos = 0;
 	    let rook_y_pos = 0;
@@ -114,7 +125,6 @@
 	    rook.css('top', '');
 	    rook.css('left', '');
 	}
-
 </script>
 
 
