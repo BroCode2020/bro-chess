@@ -58,14 +58,50 @@ class King < Piece
     end
   end
 
-  # def castle?(rook_x_pos, rook_y_pos)
-  #   rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
-  #   return false if moved
-  #   return false if obstructed?(rook_x_pos, rook_y_pos)
-  #   return false if rook.nil? || rook.moved?
-  #   return false if in_check?
-  #   return true
-  # end
+
+  def castle?(rook_x_pos, rook_y_pos)
+    rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
+    return false if moved
+    return false if obstructed?(rook_x_pos, rook_y_pos)
+    return false if rook.nil? || rook.moved
+    return false if in_check!(x_pos, y_pos)
+    if rook_x_pos == 7
+        while x_pos < rook_x_pos - 1
+          update(x_pos: x_pos + 1)
+          reload
+          if in_check!(x_pos, y_pos)
+            update(x_pos: 4)
+            return false
+          end
+        end
+        update(x_pos: 4)
+      end
+      if rook_x_pos.zero?
+        while x_pos > rook_x_pos + 2
+          update(x_pos: x_pos - 1)
+          if in_check!(x_pos, y_pos)
+            update(x_pos: 4)
+            return false
+          end
+        end
+        update(x_pos: 4)
+      end
+      true
+    end
+
+    def in_check!(x_pos, y_pos)
+
+      opposing_color = (color == 0 ? 1 : 0)
+
+      cur_game = Game.find_by(id: game_id)
+      opposing_pieces = cur_game.pieces.where(color: opposing_color).where.not(x_pos: nil).where.not(y_pos:nil)
+
+      opposing_pieces.each do |p|
+        return true if p.valid_move?(x_pos, y_pos)
+      end
+
+      return false
+    end
 
 
   def in_check?

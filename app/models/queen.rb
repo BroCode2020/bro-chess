@@ -7,7 +7,7 @@ class Queen < Piece
     return true if (x_diff <= 8) && (y_diff == 0)
     return true if (x_diff == 0) && (y_diff <= 8)
     return true if x_diff  ==  y_diff
-  else return false
+    return false
 
 
   end

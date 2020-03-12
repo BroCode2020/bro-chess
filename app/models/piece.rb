@@ -16,7 +16,7 @@ class Piece < ApplicationRecord
   def move_to!(new_x, new_y)
     new_x = new_x.to_i
     new_y = new_y.to_i
-    
+
     if valid_move?(new_x, new_y)
       piece_to_capture = self.game.pieces.where(:x_pos => new_x, :y_pos => new_y).first
       if piece_to_capture.present? && self.color.to_i != piece_to_capture.color.to_i
@@ -28,7 +28,7 @@ class Piece < ApplicationRecord
       else
         # there is no piece to capture
         self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
-      end    
+      end
       return true
     else
       return false
@@ -73,16 +73,8 @@ class Piece < ApplicationRecord
     return color == 0
   end
 
-  
 
-  def castle?(rook_x_pos, rook_y_pos)
-    rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
-    return false if moved
-    return false if obstructed?(rook_x_pos, rook_y_pos)
-    return false if rook.nil? || rook.moved
-    return false if in_check?
-    return true
-  end
+
 
   private
 
