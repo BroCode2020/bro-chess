@@ -222,6 +222,10 @@ class Game < ApplicationRecord
     $stderr.puts '==================================='
     $stderr.puts '==================================='
 
+    # return response.success?
+
+    # redirect_to controller.game_path(id)
+
   end
 
 end

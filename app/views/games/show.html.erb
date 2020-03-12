@@ -30,6 +30,7 @@
 </div>
 <% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
 <div id="turn-status-indicator" class="<%=turn_status%>">STATUS: <%=turn_status%></div>
+<!--on-move, waiting, moved-piece-->
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
@@ -37,7 +38,6 @@
 <script>
 
 	$(document).ready(function(){
-		var holdingPiece = false;
 
 		$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
 
@@ -62,10 +62,19 @@
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 				//console.log(path);
 				$('.drag-a-piece').draggable('destroy');
-				$.post(path);/*, {}, function(data, status){
+				$('#turn-status-indicator').attr("class","moved-piece");//.hide().show(0);
+
+				$.post(path, {}, function(data, status){
 					//console.log(status)
-					location.reload();  //post and reload the board to draw the piece in the position.
-				});*/
+					// location.reload();  //post and reload the board to draw the piece in the position.
+					<% turn_status = "moved-piece" %>
+					// $('#turn-status-indicator').attr("class","moved-piece");//.hide().show(0);
+					$('#turn-status-indicator').addClass("moved-piece");
+					$('#turn-status-indicator').removeClass("on-move");
+
+					console.log('#turn-status-indicator to moved-piece')
+					//can remove hide/show after debugging done
+				});
 			}
 		});
 
@@ -84,14 +93,20 @@
 
 			var database_path = `game <%= @game.id%>`
 			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
-
-				<% if current_user != @game.player_on_move %>
-					// Note that 'value' option loads once when everything initializes, then again every time the value changes
-					if(dataSnapshot.val() !== <%=@game.player_on_move_color%>) {
-						// After player-a moves, player-b gets reloaded properly, but player-a get caught in redirect loop 
-						<% controller.redirect_to game_path(@game.id) %>
-					}
-				<% end %>
+									
+				if($('#turn-status-indicator').hasClass('waiting')) {
+					location.reload();
+				}
+				if($('#turn-status-indicator').hasClass('moved-piece')) {
+					location.reload();
+				}
+				// <% if current_user != @game.player_on_move %>
+				// 	// Note that 'value' option loads once when everything initializes, then again every time the value changes
+				// 	if(dataSnapshot.val() !== <%=@game.player_on_move_color%>) {
+				// 		// After player-a moves, player-b gets reloaded properly, but player-a get caught in redirect loop 
+				// 		
+				// 	}
+				// <% end %>
 			});
 		});
 	});
