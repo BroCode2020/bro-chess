@@ -40,6 +40,9 @@ class GamesController < ApplicationController
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
       redirect_to root_path, alert: "You are not a member of this game." and return
     end
+    if(current_user != @game.player_on_move)
+      redirect_to game_path(@game.id), alert: "You can only move on your turn." and return
+    end
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       alert = 'You cannot move into check. Please select another move.'
