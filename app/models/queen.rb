@@ -1,5 +1,6 @@
 class Queen < Piece
   def valid_move?(new_x, new_y)
+    return false if new_x == x_pos && new_y == y_pos
     return false if obstructed?(new_x, new_y)
 
     x_diff = (x_pos - new_x).abs
@@ -8,7 +9,6 @@ class Queen < Piece
     return true if (x_diff == 0) && (y_diff <= 8)
     return true if x_diff  ==  y_diff
     return false
-
 
   end
 end
