@@ -1,10 +1,8 @@
-<div class="booyah-box col-4">
+<div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
   <h1>Join a Game</h1>
 
   <% if current_user %>
-    <h2>
-      Available Games:
-    </h2>
+    <h2>Available Games:</h2>
     <ul>
       <% @game.each do |game| %>
         <% if game.black_player_id.nil? && game.white_player_id && game.forfeiting_player_id.nil? %>
@@ -22,13 +20,13 @@
         <% end %>
       </ul>
     <% else %>
-      <h2><%= link_to 'Log in to see available games!', new_user_session_path %></h2>
+      <h2><%= link_to 'Log in', new_user_session_path %> to see available games!</h2>
     <% end %>
   </div>
 
   <br />
 <% if current_user %>
-<div class="booyah-box col-4">
+<div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
   <h1>Create Game</h1>
     <div class="row container">
       <%= simple_form_for @game.new do |f| %>
