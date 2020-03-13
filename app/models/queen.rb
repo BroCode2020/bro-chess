@@ -19,7 +19,7 @@ def obstructed?(x_destination, y_destination)
    x_location = self.x_pos
    y_location = self.y_pos
    #check for vertical obstructions
-   if x_location == x_destination
+    if x_location == x_destination
      y_location > y_destination ? incrementer = -1 : incrementer = 1
      y_position = y_location + incrementer
      while y_position != y_destination
@@ -30,7 +30,7 @@ def obstructed?(x_destination, y_destination)
      end
      return false
    #check for horizontal obstructions
-   elsif y_location == y_destination
+    elsif y_location == y_destination
      x_location > x_destination ? incrementer = -1 : incrementer = 1
      x_position = x_location + incrementer
      while x_position != x_destination
@@ -40,9 +40,8 @@ def obstructed?(x_destination, y_destination)
        x_position += incrementer
      end
      return false
-   #check for diagnol obstructions
-   else
-     (x_location - x_destination).abs == (y_location - y_destination).abs
+   #check for diagonal obstructions
+    elsif (x_location - x_destination).abs == (y_location - y_destination).abs
      x_location > x_destination ? x_incrementer = -1 : x_incrementer = 1
      y_location > y_destination ? y_incrementer = -1 : y_incrementer = 1
      x_position = x_location + x_incrementer
@@ -55,5 +54,7 @@ def obstructed?(x_destination, y_destination)
        y_position += y_incrementer
      end
      return false
-   end
+    else
+      return false
+    end
  end
