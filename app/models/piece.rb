@@ -78,11 +78,6 @@ class Piece < ApplicationRecord
     return color == 0
   end
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> master
 
   private
 
