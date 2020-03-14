@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :join_as_black, :join_as_white]
+  before_action :authenticate_user!
 
   def index
     @games = Game.all
@@ -12,6 +12,7 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.create(game_params)
+    @game.transmit_player_on_move_to_firebase(-1)
     redirect_to game_path(@game)
   end
 
@@ -33,14 +34,14 @@ class GamesController < ApplicationController
     @y_pos = params[:y_pos].to_i
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
-      alert = 'You cannot move into check. Please select another move.'
+      redirect_to game_path(@game.id, alert: "This game has already been forfeited." and return)
     else
       if @piece.move_to!(@x_pos, @y_pos)
         @game.complete_turn
+      else
+        redirect_to game_path(@game.id)
       end
     end
-
-    redirect_to game_path(@game.id)
   end
 
   def update

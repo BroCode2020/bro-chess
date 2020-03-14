@@ -57,19 +57,23 @@
 	<% end %>
 </div>
 	<% end %>
+<% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
+<div id="turn-status-indicator" class="<%=turn_status%>"></div>
+<!-- Possible states: "on-move", "waiting", "moved-piece" -->
+
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
 
 <script>
+	$(document).ready(function(){
 
-$(document).ready(function(){
-	var holdingPiece = false;
+		$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
 
-	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
+		$(".drag-a-piece").hover(function(){
+			$(this).closest('.board-square').toggleClass("hover");
+		});
 
- 	$(".drag-a-piece").hover(function(){
-		$(this).closest('.board-square').toggleClass("hover");
-	});
-
-	$(".board-square").droppable({
+		$(".board-square").droppable({
 			classes: {
 				"ui-droppable-hover": "select" //highlight droppable board square on hover
 									//eventually: highlight only squares allowed by selected piece's move logic?
@@ -79,20 +83,60 @@ $(document).ready(function(){
 			drop: function( event, ui ) {
 				var res = event.target.id
 				var drop_square = res.split("-"); //lookup square specified within the loop at line 10
-				//console.log(drop_square)
+
 				var target_x = drop_square[0]
 				var target_y = drop_square[1]			//split id string into x and y
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
-				//console.log(path);
-				$('.drag-a-piece').draggable('destroy');
+
+				$('#turn-status-indicator').removeClass("on-move");
+				$('#turn-status-indicator').addClass("moved-piece");
+
+				var unloading = false;
+				$('#turn-status-indicator').unload(function() { 
+					unload = true;
+				});
+
 				$.post(path, {}, function(data, status){
-					//console.log(status)
-					location.reload();  //post and reload the board to draw the piece in the position.
-			  });
+					<% turn_status = "moved-piece" %>
+					$('#turn-status-indicator').attr("class","moved-piece");
+					window.setTimeout(function(){
+						if(!unloading) {
+							location.reload();
+						}
+					}, 500); // Note the delay time of 500ms
+				});
 			}
 		});
+
+		$(function(){
+
+			var firebaseConfig = {
+				apiKey: "AIzaSyDKLqqj6W0usIqHaKiYwEjTSsNkfmQMl6c",
+				authDomain: "bro-chess-b8ed8.firebaseapp.com",
+				databaseURL: "https://bro-chess-b8ed8.firebaseio.com",
+				projectId: "bro-chess-b8ed8",
+				storageBucket: "bro-chess-b8ed8.appspot.com",
+				messagingSenderId: "83722689851",
+				appId: "1:83722689851:web:520b4909913c3f7e362b1e"
+			};
+			firebase.initializeApp(firebaseConfig);
+
+			var database_path = `game <%= @game.id%>`
+			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
+									
+				if($('#turn-status-indicator').hasClass('waiting')) {
+					location.reload();
+				}
+				if($('#turn-status-indicator').hasClass('moved-piece')) {
+					location.reload();
+				}
+			});
+		});
 	});
+</script>
+
+<script>
 	function castling(data){
 	    let rook_x_pos = 0;
 	    let rook_y_pos = 0;
@@ -109,8 +153,9 @@ $(document).ready(function(){
 	    }
 	    rook.css('top', '');
 	    rook.css('left', '');
-	  }
+	}
 </script>
+
 
 <% turn_display_class = 'turn-display '%>
 <% if current_user == @game.player_on_move %>
