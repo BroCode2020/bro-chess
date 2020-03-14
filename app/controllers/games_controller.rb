@@ -41,19 +41,15 @@ class GamesController < ApplicationController
     @x_pos = params[:x_pos].to_i
     @y_pos = params[:y_pos].to_i
 
-    if(current_user.nil?)
-      # redirect_to root_path, alert: "You are not a member of this game." and return
-    end
-
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You are not a member of this game." and return
+      redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
     end
     if(current_user != @game.player_on_move)
-      redirect_to game_path(@game.id), alert: "You can only move on your turn." and return
+      redirect_to game_path(@game.id), alert: ViewBro.msg_for_moving_outside_of_turn and return
     end
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
-      redirect_to game_path(@game.id), alert: "This game has already been forfeited." and return
+      redirect_to game_path(@game.id), alert: ViewBro.msg_for_already_forfeited and return
     else
       if @piece.move_to!(@x_pos, @y_pos)
         @game.complete_turn
@@ -91,13 +87,13 @@ class GamesController < ApplicationController
 
   def forfeit
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You are not a member of this game." and return
+      redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
     end
     
     @game = Game.find(params[:id])
 
     if !@game.forfeiting_player_id.nil?
-      redirect_to root_path, alert: "This game has already been forfeited." and return
+      redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
     
     @game.update_attribute(:forfeiting_player_id, current_user.id)
