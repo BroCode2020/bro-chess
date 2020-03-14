@@ -1,3 +1,5 @@
+load 'lib/assets/view_bro.rb'
+
 class GamesController < ApplicationController
 
   before_action :authenticate_user!, only: [:index, :new, :create, :show, :update, :join_as_black, :join_as_white, :game_available, :forfeit]
@@ -22,7 +24,7 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
 
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You need to sign in or sign up before continuing." and return
+      redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
 
     @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|

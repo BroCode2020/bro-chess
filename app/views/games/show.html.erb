@@ -1,5 +1,8 @@
+<% load 'lib/assets/view_bro.rb' %>
+<% vb = ViewBro.new %>
+
 <% if !@game.forfeiting_player_id.nil? %>
-	<%= controller.redirect_to root_path, alert: "This game has already been forfeited." %>
+	<%= controller.redirect_to root_path, alert: ViewBro.msg_for_already_forfeited %>
 <% end %>
 
 <% if @game.white_player_id == current_user.id %>
