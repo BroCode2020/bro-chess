@@ -1,15 +1,15 @@
 <% load 'lib/assets/view_bro.rb' %>
-<% vb = ViewBro.new %>
 
 <% if !@game.forfeiting_player_id.nil? %>
 	<%= controller.redirect_to root_path, alert: ViewBro.msg_for_already_forfeited %>
 <% end %>
 
-<% if @game.white_player_id == current_user.id %>
+
 <div class="chess-board-render">
 	<% tile_color = 1 %>
+	<% reverse = (@game.black_player_id == current_user.id) %>
 
-	<% 0.upto(7) do |y| %>
+	<% ViewBro.from_0_to_7(reverse).each do |y| %>
 		<div class="board-row">
 
 			<% 0.upto(7) do |x| %>
@@ -32,34 +32,7 @@
 		</div>
 	<% end %>
 </div>
-<% else %>
-<div class="chess-board-render">
-	<% tile_color = 1 %>
 
-	<% (0..7).to_a.reverse.each do |y| %>
-		<div class="board-row">
-
-			 <% (0..7).to_a.reverse.each do |x| %>
-				<% tile_color = (tile_color == 0 ? 1 : 0) if x < 7 %>
-
-				<div class="board-square <%= tile_color == 0 ? 'black': 'white' %>" id="<%= "#{x}-#{y}" %>">
-				<!-- loop through every position on the board and look up the piece that's there from @piece_positions -->
-					<% piece = @pieces_by_position["#{x}, #{y}"] %>
-
-					<% if piece %>
-						<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
-						<% display_class = "svg-piece-display" %>
-						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color %>
-							<% display_class += " drag-a-piece" %>
-						<% end %>
-						<img src="<%=svg_data%>" class="<%=display_class%>" id = "<%= piece.id %>" >
-					<% end %>
-				</div>
-			<% end %>
-		</div>
-	<% end %>
-</div>
-	<% end %>
 <% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
 <!-- Possible states: "on-move", "waiting", "moved-piece" -->

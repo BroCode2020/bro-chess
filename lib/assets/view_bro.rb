@@ -10,4 +10,9 @@ class ViewBro
 	@@msg_for_game_non_member ="You are not a member of this game."
 	@@msg_for_moving_outside_of_turn ="You can only move on your turn."
 	@@msg_for_not_signed_in = "You need to sign in or sign up before continuing."
+
+	def self.from_0_to_7 (reverse_order)
+		return (0..7).to_a.reverse if reverse_order
+		return (0..7)
+	end
 end
