@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :join_as_black, :join_as_white]
+
+  before_action :authenticate_user!, only: [:index, :new, :create, :show, :update, :join_as_black, :join_as_white, :game_available, :forfeit]
 
   def index
     @games = Game.all
@@ -12,12 +13,18 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.create(game_params)
+    @game.transmit_player_on_move_to_firebase(-1)
     redirect_to game_path(@game)
   end
 
   def show
     @games = Game.all
     @game = Game.find(params[:id])
+
+    if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
+      redirect_to root_path, alert: "You need to sign in or sign up before continuing." and return
+    end
+
     @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|
       hash[piece.position] = piece
       hash
@@ -32,15 +39,26 @@ class GamesController < ApplicationController
     @x_pos = params[:x_pos].to_i
     @y_pos = params[:y_pos].to_i
 
+    if(current_user.nil?)
+      # redirect_to root_path, alert: "You are not a member of this game." and return
+    end
+
+    if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
+      redirect_to root_path, alert: "You are not a member of this game." and return
+    end
+    if(current_user != @game.player_on_move)
+      redirect_to game_path(@game.id), alert: "You can only move on your turn." and return
+    end
+
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
-      alert = 'You cannot move into check. Please select another move.'
+      redirect_to game_path(@game.id, alert: "This game has already been forfeited." and return)
     else
       if @piece.move_to!(@x_pos, @y_pos)
         @game.complete_turn
+      else
+        redirect_to game_path(@game.id)
       end
     end
-
-    redirect_to game_path(@game.id)
   end
 
   def update
@@ -70,6 +88,10 @@ class GamesController < ApplicationController
   end
 
   def forfeit
+    if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
+      redirect_to root_path, alert: "You are not a member of this game." and return
+    end
+    
     @game = Game.find(params[:id])
 
     if !@game.forfeiting_player_id.nil?
