@@ -20,7 +20,7 @@
 					<% piece = @pieces_by_position["#{x}, #{y}"] %>
 
 					<% if piece %>
-						<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
+						<% svg_data = ViewBro.svg_data_string_for_piece(piece, asset_path('Chess_Pieces_Sprite.svg')) %>
 						<% display_class = "svg-piece-display" %>
 						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color %>
 							<% display_class += " drag-a-piece" %>
@@ -35,7 +35,6 @@
 
 <% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
-<!-- Possible states: "on-move", "waiting", "moved-piece" -->
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>

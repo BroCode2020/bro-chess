@@ -104,7 +104,7 @@ class GamesController < ApplicationController
 
     # Note: other player needs to be redirected (via Firebase)
 
-    redirect_to root_path, notice: "You have forfeited the game. Please play again soon."
+    redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
   end
 
   private
