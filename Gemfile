@@ -34,7 +34,6 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'sassc', '~> 2.1.0'
 gem 'devise'
-gem 'omniauth-facebook'
 gem 'rubocop'
 gem 'simple_form', '~> 5.0', '>= 5.0.1'
 gem 'jquery-ui-rails'

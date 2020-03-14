@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  #resources :games
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users
   post 'games/:id/:piece_id/:x_pos/:y_pos', :to => 'games#move', :as => 'move'
   post 'game/:id/forfeit', :to => 'games#forfeit', :as => 'forfeit'
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_11_070825) do
+ActiveRecord::Schema.define(version: 2020_03_14_031037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,10 +49,6 @@ ActiveRecord::Schema.define(version: 2020_03_11_070825) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "provider"
-    t.string "uid"
-    t.string "name"
-    t.text "image"
     t.integer "games_won", default: 0
     t.integer "games_lost", default: 0
     t.integer "games_drawn", default: 0
