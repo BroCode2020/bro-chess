@@ -5,7 +5,7 @@ class ViewBro
 	attr_reader :msg_for_moving_outside_of_turn
 	attr_reader :msg_for_not_signed_in
 
-	attr_reader :msg_for_not_signed
+	attr_reader :svg_data_string_for_piece
 
 	@@msg_for_already_forfeited = "This game has already been forfeited."
 	@@msg_for_forfeited_game ="You have forfeited the game. Please play again soon."
