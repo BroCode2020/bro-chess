@@ -167,13 +167,6 @@ class Game < ApplicationRecord
 
   def move_puts_self_in_check?(piece_to_move, x_target, y_target)
 
-    # Need to make sure casting & en passasant are properly covered
-
-    # IMPORTANT NOTE: for the time being, this will have to be assumed to be a valid move
-
-    # This method assumes it is being passed a piece by proper player
-    #    This needs to be taken into consideration with respect to where this method is being called
-
     # What happens if pawn reaches other side during this move check?
 
     raise 'The piece provided is invalid' if piece_to_move.nil?
@@ -218,6 +211,15 @@ class Game < ApplicationRecord
   def complete_turn
     new_player_on_move_color = player_on_move_color == 0 ? 1 : 0
     self.update_attributes(player_on_move_color: new_player_on_move_color)
+
+    transmit_player_on_move_to_firebase(new_player_on_move_color)
+  end
+
+  def transmit_player_on_move_to_firebase(new_player_on_move_color)
+    base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
+    firebase = Firebase::Client.new(base_uri)
+
+    firebase.set("game #{id}", :player_on_move_color => new_player_on_move_color)
   end
 
 end
