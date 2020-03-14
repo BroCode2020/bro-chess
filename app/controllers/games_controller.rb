@@ -51,7 +51,7 @@ class GamesController < ApplicationController
     end
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
-      redirect_to game_path(@game.id, alert: "This game has already been forfeited." and return)
+      redirect_to game_path(@game.id), alert: "This game has already been forfeited." and return
     else
       if @piece.move_to!(@x_pos, @y_pos)
         @game.complete_turn
