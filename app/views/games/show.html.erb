@@ -67,7 +67,9 @@
 <script>
 	$(document).ready(function(){
 
-		$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
+		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
+			scroll: false,
+		}); 
 
 		$(".drag-a-piece").hover(function(){
 			$(this).closest('.board-square').toggleClass("hover");
