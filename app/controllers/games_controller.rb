@@ -88,6 +88,8 @@ class GamesController < ApplicationController
   end
 
   def forfeit
+    @game = Game.find(params[:id])
+
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
       redirect_to root_path, alert: "You are not a member of this game." and return
     end
