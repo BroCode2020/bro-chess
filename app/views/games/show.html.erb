@@ -69,6 +69,7 @@
 
 		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
 			scroll: false,
+			containment: $('.chess-board-render')
 		}); 
 
 		$(".drag-a-piece").hover(function(){
