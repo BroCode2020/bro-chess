@@ -49,7 +49,7 @@ class GamesController < ApplicationController
     end
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
-      redirect_to game_path(@game.id), alert: ViewBro.msg_for_already_forfeited and return
+      redirect_to game_path(@game.id), alert: ViewBro.msg_for_moving_into_check and return
     else
       if @piece.move_to!(@x_pos, @y_pos)
         @game.complete_turn
