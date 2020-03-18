@@ -98,7 +98,7 @@ class GamesController < ApplicationController
       redirect_to root_path, alert: "This game has already been forfeited." and return
     end
     
-    @game.update_attributes(forfeiting_player_id: current_user.id, game_ended: true)
+    @game.update_attributes(forfeiting_player_id: current_user.id, ended: true)
     current_user.increment_loss_count
 
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
@@ -107,6 +107,19 @@ class GamesController < ApplicationController
     # Note: other player needs to be redirected (via Firebase)
 
     redirect_to root_path, notice: "You have forfeited the game. Please play again soon."
+  end
+
+  def stalemate
+    @game = Game.find(params[:id])
+
+    if @game.in_stalemate_state?
+      redirect_to game_path(@game.id) and return
+    end
+
+    @game.update_attributes(tied: true, ended: true)
+    redirect_to game_path(@game.id), notice: "The game has ended in a stalemate."
+
+    # Note: other player needs to be redirected (via Firebase)
   end
 
   private
