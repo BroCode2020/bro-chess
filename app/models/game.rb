@@ -182,10 +182,6 @@ class Game < ApplicationRecord
     transmit_player_on_move_to_firebase(new_player_on_move_color)
   end
 
-  def signal_end_of_game
-    
-  end
-
   def transmit_game_ended_status_to_firebase(game_ended_boolean_state)
     base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
     firebase = Firebase::Client.new(base_uri)
