@@ -15,6 +15,7 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.create(game_params)
+    @game.transmit_game_ended_status_to_firebase(false)
     @game.transmit_player_on_move_to_firebase(-1)
     redirect_to game_path(@game)
   end
