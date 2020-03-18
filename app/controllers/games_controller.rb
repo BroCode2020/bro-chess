@@ -98,7 +98,7 @@ class GamesController < ApplicationController
       redirect_to root_path, alert: "This game has already been forfeited." and return
     end
     
-    @game.update_attribute(:forfeiting_player_id, current_user.id)
+    @game.update_attributes(forfeiting_player_id: current_user.id, game_ended: true)
     current_user.increment_loss_count
 
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
