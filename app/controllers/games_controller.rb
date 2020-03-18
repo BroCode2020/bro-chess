@@ -2,7 +2,7 @@ load 'lib/assets/view_bro.rb'
 
 class GamesController < ApplicationController
 
-  before_action :authenticate_user!, only: [:index, :new, :create, :show, :update, :join_as_black, :join_as_white, :game_available, :forfeit]
+  before_action :authenticate_user!
 
   def index
     @games = Game.all
@@ -70,6 +70,7 @@ class GamesController < ApplicationController
   def join_as_black
     @game = Game.find(params[:id])
     return render_not_found if @game.nil?
+    @game.transmit_player_on_move_to_firebase(1)
     @game.update_attribute(:black_player_id, current_user.id)
     redirect_to game_path(@game.id)
   end
@@ -77,6 +78,7 @@ class GamesController < ApplicationController
   def join_as_white
     @game = Game.find(params[:id])
     return render_not_found if @game.nil?
+    @game.transmit_player_on_move_to_firebase(1)
     @game.update_attribute(:white_player_id, current_user.id)
     redirect_to game_path(@game.id)
   end
