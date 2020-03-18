@@ -1,3 +1,5 @@
+load 'lib/assets/view_bro.rb'
+
 class GamesController < ApplicationController
 
   before_action :authenticate_user!, only: [:index, :new, :create, :show, :update, :join_as_black, :join_as_white, :game_available, :forfeit]
@@ -22,7 +24,7 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
 
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You need to sign in or sign up before continuing." and return
+      redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
 
     @pieces_by_position = @game.pieces.reduce({}) do |hash, piece|
@@ -39,19 +41,15 @@ class GamesController < ApplicationController
     @x_pos = params[:x_pos].to_i
     @y_pos = params[:y_pos].to_i
 
-    if(current_user.nil?)
-      # redirect_to root_path, alert: "You are not a member of this game." and return
-    end
-
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You are not a member of this game." and return
+      redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
     end
     if(current_user != @game.player_on_move)
-      redirect_to game_path(@game.id), alert: "You can only move on your turn." and return
+      redirect_to game_path(@game.id), alert: ViewBro.msg_for_moving_outside_of_turn and return
     end
 
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
-      redirect_to game_path(@game.id), alert: "This game has already been forfeited." and return
+      flash[:alert] = ViewBro.msg_for_moving_into_check and return
     else
       if @piece.move_to!(@x_pos, @y_pos)
         @game.complete_turn
@@ -91,11 +89,11 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
 
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
-      redirect_to root_path, alert: "You are not a member of this game." and return
+      redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
     end
     
     if !@game.forfeiting_player_id.nil?
-      redirect_to root_path, alert: "This game has already been forfeited." and return
+      redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
     
     @game.update_attributes(forfeiting_player_id: current_user.id, ended: true)
@@ -106,7 +104,7 @@ class GamesController < ApplicationController
 
     # Note: other player needs to be redirected (via Firebase)
 
-    redirect_to root_path, notice: "You have forfeited the game. Please play again soon."
+    redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
   end
 
   def stalemate

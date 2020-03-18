@@ -7,39 +7,6 @@ class Game < ApplicationRecord
 
   after_create :initialize_board!
 
-  def get_svg_data_string(cur_piece, x_position, y_position, scale, svg_url)
-
-    color = cur_piece.color
-    piece_class_name = cur_piece.class.name.downcase
-
-    case piece_class_name
-    when 'king'
-      column_number = 0
-    when 'queen'
-      column_number = 1
-    when 'bishop'
-      column_number = 2
-    when 'knight'
-      column_number = 3
-    when 'rook'
-      column_number = 4
-    when 'pawn'
-      column_number = 5
-    else
-      'INVALID PIECE'
-    end
-
-    x_coord = scale * column_number
-    y_coord = color == 1 ? 0 : scale
-
-    data_string = svg_url +'#svgView(viewBox('
-    data_string += x_coord.to_s + ', ' + y_coord.to_s + ', '
-    data_string += scale.to_s + ', ' + scale.to_s + '))'
-
-    return data_string
-  end
-
-
   def tile_is_occupied? (tile_x_position, tile_y_position)
 
     pieces.each do |p|

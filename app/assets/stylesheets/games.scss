@@ -9,7 +9,8 @@ $square-border-color-dark: #858585;
 $square-side-vmin-length: 11vmin;
 $square-side-min-pixel-length: 20px;
 
-$board-length: calc(square-side-vmin-length * 8);
+$board-length: calc(#{$square-side-vmin-length} * 8);
+$empty-screen-space-x: calc(100vw - #{$board-length});
 
 .board-square, .svg-piece-display {
 	height: $square-side-vmin-length;
@@ -71,14 +72,16 @@ $board-length: calc(square-side-vmin-length * 8);
 }
 
 .chess-board-render {
-	min-width: board-length;
-	min-height: board-length;
 	flex-direction: column;
+
+	width: $board-length;
+	height: $board-length;
+	
+	margin-left: calc(#{$empty-screen-space-x} / 2);
 }
 
 .chess-board-render, .board-row {
 	display: flex;
-	justify-content: center;
 }
 
 .clear-floaters {
