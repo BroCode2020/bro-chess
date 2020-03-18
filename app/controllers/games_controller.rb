@@ -105,22 +105,23 @@ class GamesController < ApplicationController
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
     other_player.increment_win_count if other_player
 
-    # Note: other player needs to be redirected (via Firebase)
-
-    redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
+    @game.signal_end_of_game
+    redirect_to root_path, notice: ViewBro.msg_for_forfeited_game # this needs to be moved
   end
 
   def stalemate
     @game = Game.find(params[:id])
 
-    if @game.in_stalemate_state?
+    if !@game.in_stalemate_state?
       redirect_to game_path(@game.id) and return
     end
 
     @game.update_attributes(tied: true, ended: true)
-    redirect_to game_path(@game.id), notice: "The game has ended in a stalemate."
+    User.find(@game.black_player_id).increment_tie_count
+    User.find(@game.white_player_id).increment_tie_count
+    signal_end_of_game
 
-    # Note: other player needs to be redirected (via Firebase)
+    redirect_to game_path(@game.id), notice: "The game has ended in a stalemate." # this needs to be moved and refactored
   end
 
   private
