@@ -43,8 +43,8 @@
             
 
             <li class="nav-item">
-              <% if @game.forfeiting_player_id.nil? %>
-                <%= link_to 'Forfeit Game', forfeit_path(@game), method: :post, class: "btn btn-danger", data: { confirm: "Do you really want to forfeit the game?"} %>
+              <% if @game.forfeiting_player_id.nil? && !@game.black_player_id.nil? && !@game.white_player_id.nil?%>
+                <%= link_to 'Forfeit Game', forfeit_path(@game.id), method: :post, class: "btn btn-danger", data: { confirm: "Do you really want to forfeit the game?"} %>
               <% end %>
             </li>
           <% end %>
