@@ -105,8 +105,8 @@ class GamesController < ApplicationController
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
     other_player.increment_win_count if other_player
 
-    signal_end_of_game(game.id)
-    redirect_to root_path, notice: ViewBro.msg_for_forfeited_game # this needs to be moved
+    @game.transmit_game_ended_status_to_firebase(true)
+    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
   end
 
   def stalemate
@@ -120,8 +120,8 @@ class GamesController < ApplicationController
     User.find(@game.black_player_id).increment_tie_count
     User.find(@game.white_player_id).increment_tie_count
 
-    signal_end_of_game(game.id)
-    redirect_to game_path(@game.id), notice: msg_for_stalemate # this needs to be moved
+    @game.transmit_game_ended_status_to_firebase(true)
+    # redirect_to game_path(@game.id), notice: msg_for_stalemate
   end
 
   private
@@ -129,10 +129,4 @@ class GamesController < ApplicationController
   def game_params
     params.require(:game).permit(:name, :black_player_id, :white_player_id)
   end
-
-  def signal_end_of_game(id_of_game)
-    @game = Game.find(id_of_game)
-
-  end
-
 end

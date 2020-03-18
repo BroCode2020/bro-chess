@@ -1,9 +1,5 @@
 <% load 'lib/assets/view_bro.rb' %>
 
-<% if !@game.forfeiting_player_id.nil? %>
-	<%= controller.redirect_to root_path, alert: ViewBro.msg_for_already_forfeited %>
-<% end %>
-
 <% is_missing_player = (@game.black_player_id.nil? || @game.white_player_id.nil?) %>
 
 <div class="chess-board-render">
@@ -120,7 +116,11 @@
 
 			var database_path = `game <%= @game.id%>`
 			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
-									
+
+				if(dataSnapshot.val() === true) {
+					location.reload(); // Reloads the game page, which will tell you how the game ended
+				}
+
 				if($('#turn-status-indicator').hasClass('waiting')) {
 					location.reload();
 				}
@@ -130,6 +130,7 @@
 				if($('#turn-status-indicator').hasClass('awaiting-player-join')) {
 					location.reload();
 				}
+
 			});
 		});
 	});
