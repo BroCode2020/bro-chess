@@ -30,14 +30,12 @@
     <div class="row container">
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :white_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "White Player", class: 'btn btn-primary' %>
+        <%= f.submit "White Player", class: 'btn btn-primary btn btn-primary create-game-button left' %>
       <% end %>
       &nbsp; &nbsp; &nbsp;
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "Black Player", class: 'btn btn-primary' %>
+        <%= f.submit "Black Player", class: 'btn btn-primary create-game-button right' %>
       <% end %>
     </div>
-
-  
 <% end %>
