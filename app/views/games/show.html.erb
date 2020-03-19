@@ -48,7 +48,7 @@
 		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
 			scroll: false,
 			containment: $('.chess-board-render')
-		}); 
+		});
 
 		$(".drag-a-piece").hover(function(){
 			$(this).closest('.board-square').toggleClass("hover");
@@ -74,7 +74,7 @@
 				$('#turn-status-indicator').addClass("moved-piece");
 
 				var unloading = false;
-				$('#turn-status-indicator').unload(function() { 
+				$('#turn-status-indicator').unload(function() {
 					unload = true;
 				});
 
@@ -84,10 +84,10 @@
 					window.setTimeout(function(){
 						if(!unloading) {
 							location.reload();
-							/* Because of the approach the Firebase callbacks necessitated, only successful moves 
+							/* Because of the approach the Firebase callbacks necessitated, only successful moves
 								(ones that update piece position in our Rails database) will refresh the page. */
 
-							 /* The solution: 
+							 /* The solution:
 								 - Call a function to refresh the page, but only after waiting a short amount of time
 								 - The refresh function will only reload the page if the "unload" flag is set to false
 								 - If there is a successful move, the page will automatically be redirected, which will
@@ -118,6 +118,7 @@
 			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
 
 				if(dataSnapshot.val() === true) {
+					
 					location.reload(); // Reloads the game page, which will tell you how the game ended
 				}
 

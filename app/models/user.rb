@@ -12,8 +12,8 @@ class User < ApplicationRecord
   end
 
   def increment_tie_count
-    tie_count = games_tied
-    update_attribute(:games_tied, tie_count + 1)
+    tie_count = games_drawn
+    update_attribute(:games_drawn, tie_count + 1)
   end
 
   def increment_win_count

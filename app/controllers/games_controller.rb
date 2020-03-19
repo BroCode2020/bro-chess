@@ -48,11 +48,15 @@ class GamesController < ApplicationController
     if(current_user != @game.player_on_move)
       redirect_to game_path(@game.id), alert: ViewBro.msg_for_moving_outside_of_turn and return
     end
-
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       flash[:alert] = ViewBro.msg_for_moving_into_check and return
     else
       if @piece.move_to!(@x_pos, @y_pos)
+        if @game.in_checkmate_state?
+          redirect_to checkmate_path(@game.id) and return
+        elsif @game.in_stalemate_state?
+          redirect_to stalemate_path(@game.id) and return
+        end
         @game.complete_turn
       else
         redirect_to game_path(@game.id)
@@ -88,17 +92,44 @@ class GamesController < ApplicationController
     render plain: 'false'
   end
 
+  def checkmate
+    @game = Game.find(params[:id])
+
+    if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
+      redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
+    end
+
+    if !@game.forfeiting_player_id.nil?
+      redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
+    end
+
+    if !@game.in_checkmate_state?
+      redirect_to game_path(@game.id) and return
+    end
+
+    other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
+
+    @game.update_attributes(victorious_player_id: current_user.id, ended: true)
+    current_user.increment_win_count
+    other_player.increment_loss_count if other_player
+
+    @game.transmit_game_ended_status_to_firebase(true)
+    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
+
+  end
+
+
   def forfeit
     @game = Game.find(params[:id])
 
     if(current_user.id != @game.black_player_id && current_user.id != @game.white_player_id)
       redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
     end
-    
+
     if !@game.forfeiting_player_id.nil?
       redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
-    
+
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
 
     @game.update_attributes(forfeiting_player_id: current_user.id, victorious_player_id: other_player.id, ended: true)
