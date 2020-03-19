@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_14_034333) do
+ActiveRecord::Schema.define(version: 2020_03_18_064929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,9 @@ ActiveRecord::Schema.define(version: 2020_03_14_034333) do
     t.integer "last_moved_piece_id"
     t.integer "last_moved_prev_x_pos"
     t.integer "last_moved_prev_y_pos"
+    t.boolean "ended", default: false
+    t.boolean "tied", default: false
+    t.integer "victorious_player_id"
   end
 
   create_table "pieces", force: :cascade do |t|

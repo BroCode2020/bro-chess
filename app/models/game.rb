@@ -182,11 +182,18 @@ class Game < ApplicationRecord
     transmit_player_on_move_to_firebase(new_player_on_move_color)
   end
 
+  def transmit_game_ended_status_to_firebase(game_ended_boolean_state)
+    base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
+    firebase = Firebase::Client.new(base_uri)
+
+    firebase.update("game #{id}", :game_ended_boolean => game_ended_boolean_state)
+  end
+
   def transmit_player_on_move_to_firebase(new_player_on_move_color)
     base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
     firebase = Firebase::Client.new(base_uri)
 
-    firebase.set("game #{id}", :player_on_move_color => new_player_on_move_color)
+    firebase.update("game #{id}", :player_on_move_color => new_player_on_move_color)
   end
 
 end

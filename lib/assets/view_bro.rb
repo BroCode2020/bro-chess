@@ -24,6 +24,10 @@ class ViewBro
 		return 'You need to sign in or sign up before continuing.'
 	end
 
+	def self.msg_for_stalemate
+		return 'The game has ended in a stalemate.'
+	end
+
 	def self.svg_scale 
 		return 45
 	end

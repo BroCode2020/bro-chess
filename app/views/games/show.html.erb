@@ -1,9 +1,6 @@
 <% load 'lib/assets/view_bro.rb' %>
 
-<% if !@game.forfeiting_player_id.nil? %>
-	<%= controller.redirect_to root_path, alert: ViewBro.msg_for_already_forfeited %>
-<% end %>
-
+<% is_missing_player = (@game.black_player_id.nil? || @game.white_player_id.nil?) %>
 
 <div class="chess-board-render">
 	<% tile_color = 1 %>
@@ -33,7 +30,12 @@
 	<% end %>
 </div>
 
-<% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
+<% if is_missing_player %>
+	<% turn_status = 'awaiting-player-join' %>
+<% else %>
+	<% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
+<% end %>
+
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
@@ -42,6 +44,7 @@
 <script>
 	$(document).ready(function(){
 
+	<% if !@game.ended && !is_missing_player %>
 		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
 			scroll: false,
 			containment: $('.chess-board-render')
@@ -81,11 +84,22 @@
 					window.setTimeout(function(){
 						if(!unloading) {
 							location.reload();
+							/* Because of the approach the Firebase callbacks necessitated, only successful moves 
+								(ones that update piece position in our Rails database) will refresh the page. */
+
+							 /* The solution: 
+								 - Call a function to refresh the page, but only after waiting a short amount of time
+								 - The refresh function will only reload the page if the "unload" flag is set to false
+								 - If there is a successful move, the page will automatically be redirected, which will
+								 	set the "unload" flag to true
+							 */
 						}
 					}, 500); // Note the delay time of 500ms
 				});
 			}
 		});
+
+		<% end %>
 
 		$(function(){
 
@@ -102,13 +116,21 @@
 
 			var database_path = `game <%= @game.id%>`
 			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
-									
+
+				if(dataSnapshot.val() === true) {
+					location.reload(); // Reloads the game page, which will tell you how the game ended
+				}
+
 				if($('#turn-status-indicator').hasClass('waiting')) {
 					location.reload();
 				}
 				if($('#turn-status-indicator').hasClass('moved-piece')) {
 					location.reload();
 				}
+				if($('#turn-status-indicator').hasClass('awaiting-player-join')) {
+					location.reload();
+				}
+
 			});
 		});
 	});
@@ -134,14 +156,20 @@
 	}
 </script>
 
-
 <% turn_display_class = 'turn-display '%>
-<% if current_user == @game.player_on_move %>
-    <% turn_display_class += 'your-turn' %>
-	<% turn_display_text = 'Your move' %>
+
+<% turn_display_class += (!is_missing_player && current_user == @game.player_on_move && !@game.ended) ? 'your-turn' : 'their-turn' %>
+
+<% if is_missing_player%>
+	<% turn_display_text = 'Waiting on a bro' %>
 <% else %>
-    <% turn_display_class += 'their-turn' %>
-	<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
+	<% if @game.ended %>
+		<% turn_display_text = 'VICTORY' if current_user.id == @game.victorious_player_id %>
+		<% turn_display_text = 'DEFEAT' if !@game.tied && current_user.id != @game.victorious_player_id %>
+		<% turn_display_text = 'DRAW' if @game.tied %>
+	<% else %>
+		<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
+	<% end %>
 <% end %>
 
 <div class="<%=turn_display_class%>">

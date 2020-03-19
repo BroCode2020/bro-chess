@@ -2,7 +2,7 @@ load 'lib/assets/view_bro.rb'
 
 class GamesController < ApplicationController
 
-  before_action :authenticate_user!, only: [:index, :new, :create, :show, :update, :join_as_black, :join_as_white, :game_available, :forfeit]
+  before_action :authenticate_user!
 
   def index
     @games = Game.all
@@ -15,6 +15,7 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.create(game_params)
+    @game.transmit_game_ended_status_to_firebase(false)
     @game.transmit_player_on_move_to_firebase(-1)
     redirect_to game_path(@game)
   end
@@ -69,6 +70,7 @@ class GamesController < ApplicationController
   def join_as_black
     @game = Game.find(params[:id])
     return render_not_found if @game.nil?
+    @game.transmit_player_on_move_to_firebase(1)
     @game.update_attribute(:black_player_id, current_user.id)
     redirect_to game_path(@game.id)
   end
@@ -76,6 +78,7 @@ class GamesController < ApplicationController
   def join_as_white
     @game = Game.find(params[:id])
     return render_not_found if @game.nil?
+    @game.transmit_player_on_move_to_firebase(1)
     @game.update_attribute(:white_player_id, current_user.id)
     redirect_to game_path(@game.id)
   end
@@ -92,21 +95,33 @@ class GamesController < ApplicationController
       redirect_to root_path, alert: ViewBro.msg_for_game_non_member and return
     end
     
-    @game = Game.find(params[:id])
-
     if !@game.forfeiting_player_id.nil?
       redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
     
-    @game.update_attribute(:forfeiting_player_id, current_user.id)
-    current_user.increment_loss_count
-
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
+
+    @game.update_attributes(forfeiting_player_id: current_user.id, victorious_player_id: other_player.id, ended: true)
+    current_user.increment_loss_count
     other_player.increment_win_count if other_player
 
-    # Note: other player needs to be redirected (via Firebase)
+    @game.transmit_game_ended_status_to_firebase(true)
+    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
+  end
 
-    redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
+  def stalemate
+    @game = Game.find(params[:id])
+
+    if !@game.in_stalemate_state?
+      redirect_to game_path(@game.id) and return
+    end
+
+    @game.update_attributes(tied: true, ended: true)
+    User.find(@game.black_player_id).increment_tie_count
+    User.find(@game.white_player_id).increment_tie_count
+
+    @game.transmit_game_ended_status_to_firebase(true)
+    # redirect_to game_path(@game.id), notice: msg_for_stalemate
   end
 
   private
@@ -114,5 +129,4 @@ class GamesController < ApplicationController
   def game_params
     params.require(:game).permit(:name, :black_player_id, :white_player_id)
   end
-
 end
