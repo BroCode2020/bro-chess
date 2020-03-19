@@ -92,22 +92,21 @@ class Game < ApplicationRecord
     if(king_color != 0 && king_color != 1)
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
     end
-    king_in_question = pieces.find_by(type: :King, color: king_color)
-    return false if !king_in_question.in_check?
+
+    return false if !pieces.find_by(type: :King, color: king_color).in_check?
 
     pieces.where(color: king_color).each do |p|
+
       for y in 0..7 do
         for x in 0..7 do
           if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
-            if !move_puts_self_in_check?(p, x, y) && !king_in_question.in_check?
-              return false
+            if !move_puts_self_in_check?(p, x, y)
+              return true
             end
           end
         end
       end
     end
-    return true
-  end
 
   def in_stalemate_state?
     return stalemate?(0) || stalemate?(1)
