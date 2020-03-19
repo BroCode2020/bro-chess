@@ -1,20 +1,26 @@
-<div>
-
+<div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
   <h1><%= @user.email %></h1>
   <h3>Member Since: <%= @user.created_at.strftime("%B %d, %Y") %></h3>
-
-
+  <h4><%=@user.games_won %> Wins</h4>
+  <h4><%=@user.games_lost %> Losses</h4>
+  <h4><%=@user.games_drawn %> Draws</h4>
+</div>
 
 <div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
-    <h1>Game History</h1>
+  <h1>Game History</h1>
+  <br/>
 
-    <% @game.each do |game| %>
-      <% if (game.black_player_id == @user.id) || (game.white_player_id == @user.id) %>
+  <div class="game-history-entry entry-header">
+  </div>
+
+  <% Game.order(:id).each do |game| %>
+    <% if (game.black_player_id == @user.id) || (game.white_player_id == @user.id) %>
+      <div class="game-history-entry">
         Game ID: <%= game.id  %>  -  
         <%= game.created_at.strftime("%B %d, %Y") %>
-        <br />
-        <br />
-      <% end %>
+      </div>
+
+      <hr/>
     <% end %>
-  </div>
+  <% end %>
 </div>
