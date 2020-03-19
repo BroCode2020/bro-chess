@@ -37,6 +37,11 @@ class ViewBro
 		return (0..7)
 	end
 
+	def player_okay_to_join (user_player, game_to_join, join_color)
+		return false if (join_color < 0 || join_color > 1)
+		
+	end
+
 	def self.svg_data_string_for_piece(cur_piece, svg_url)
 
 		color = cur_piece.color
