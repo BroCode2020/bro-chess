@@ -110,9 +110,6 @@ class Game < ApplicationRecord
     return true
   end
 
-    return false
-  end
-
   def in_stalemate_state?
     return stalemate?(0) || stalemate?(1)
   end

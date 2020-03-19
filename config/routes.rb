@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   devise_for :users
   post 'games/:id/:piece_id/:x_pos/:y_pos', :to => 'games#move', :as => 'move'
   post 'game/:id/forfeit', :to => 'games#forfeit', :as => 'forfeit'
-  post 'game/:id/stalemate', :to => 'games#stalemate', :as => 'stalemate'
+  get 'game/:id/stalemate', :to => 'games#stalemate', :as => 'stalemate'
+  get 'game/:id/checkmate', :to => 'games#checkmate', :as => 'checkmate'
 
   root 'static_pages#index'
   resources :games, only: %i[new index create show update] do
@@ -14,5 +15,5 @@ Rails.application.routes.draw do
   end
 
   resources :users, only: :show
-  
+
  end
