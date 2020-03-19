@@ -70,16 +70,20 @@ class GamesController < ApplicationController
   def join_as_black
     @game = Game.find(params[:id])
     return render_not_found if @game.nil?
-    @game.transmit_player_on_move_to_firebase(1)
+    (redirect_to root_path and return) if @game.white_player_id == current_user.id
+
     @game.update_attribute(:black_player_id, current_user.id)
+    @game.transmit_player_on_move_to_firebase(1)
     redirect_to game_path(@game.id)
   end
 
   def join_as_white
     @game = Game.find(params[:id])
     return render_not_found if @game.nil?
-    @game.transmit_player_on_move_to_firebase(1)
+    (redirect_to root_path and return) if @game.black_player_id == current_user.id 
+
     @game.update_attribute(:white_player_id, current_user.id)
+    @game.transmit_player_on_move_to_firebase(1)
     redirect_to game_path(@game.id)
   end
 
