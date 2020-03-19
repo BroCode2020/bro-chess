@@ -500,9 +500,10 @@ RSpec.describe Game, type: :model do
 				white_p_atk_king = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 3)
 				white_p_protect_own_king = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 7, y_pos: 4)
 				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 7, y_pos: 3)
-				black_p_1 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 6, y_pos: 1)
-				black_p_2 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 2)
+				black_p_1 = FactoryBot.create(:pawn, color: '0', game: game, x_pos: 6, y_pos: 1)
+				black_p_2 = FactoryBot.create(:pawn, color: '0', game: game, x_pos: 5, y_pos: 2)
 				expect(game.stalemate?(black_king.color)).to eq(false)
+				expect(game.stalemate?(white_king.color)).to eq(false)
 			end
 
 			it "should return true, same scenario above, though black_king takes pawn to force stalemate # wiki/stalemate/ anand vs kramnik 2007" do
@@ -512,9 +513,11 @@ RSpec.describe Game, type: :model do
 				black_king = FactoryBot.create(:king, color: '0', game: game, x_pos: 5, y_pos: 3)
 				white_p_protect_own_king = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 7, y_pos: 4)
 				white_king = FactoryBot.create(:king, color: '1', game: game, x_pos: 7, y_pos: 3)
-				black_p_1 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 6, y_pos: 1)
-				black_p_2 = FactoryBot.create(:pawn, color: '1', game: game, x_pos: 5, y_pos: 2)
+				black_p_1 = FactoryBot.create(:pawn, color: '0', game: game, x_pos: 6, y_pos: 1)
+				black_p_2 = FactoryBot.create(:pawn, color: '0', game: game, x_pos: 5, y_pos: 2)
+				expect(game.stalemate?(black_king.color)).to eq(false)
 				expect(game.stalemate?(white_king.color)).to eq(true)
+
 			end
 
 		end
