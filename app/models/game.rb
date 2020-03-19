@@ -114,8 +114,6 @@ class Game < ApplicationRecord
   end
 
   def stalemate?(king_color)
-    $stderr.puts "=============================================================================================================================================================================="
-    $stderr.puts "#{king_color}"
     king_in_question = pieces.find_by(type: :King, color: king_color)
     return false if king_in_question.in_check?
     return false if king_in_checkmate?(king_color)
@@ -123,7 +121,6 @@ class Game < ApplicationRecord
       for y in 0..7 do
         for x in 0..7 do
           if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
-            $stderr.puts "p.valid_move?(x, y)"
             return false if (!move_puts_self_in_check?(p, x, y)) && !king_in_question.in_check?
           end
         end
