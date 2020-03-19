@@ -99,10 +99,10 @@ class GamesController < ApplicationController
       redirect_to root_path, alert: ViewBro.msg_for_already_forfeited and return
     end
     
-    @game.update_attributes(forfeiting_player_id: current_user.id, ended: true)
-    current_user.increment_loss_count
-
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
+
+    @game.update_attributes(forfeiting_player_id: current_user.id, victorious_player_id: other_player.id, ended: true)
+    current_user.increment_loss_count
     other_player.increment_win_count if other_player
 
     @game.transmit_game_ended_status_to_firebase(true)
