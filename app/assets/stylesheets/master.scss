@@ -1,7 +1,12 @@
 @import "bootstrap";
 
 body {
-  background: black !important;
+  background: url('bg1.png')no-repeat center center fixed;
+  background-color: black;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 hr {
