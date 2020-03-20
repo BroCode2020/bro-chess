@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_18_064929) do
+ActiveRecord::Schema.define(version: 2020_03_19_225732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_03_18_064929) do
     t.boolean "ended", default: false
     t.boolean "tied", default: false
     t.integer "victorious_player_id"
+    t.integer "pawn_to_promote_color"
   end
 
   create_table "pieces", force: :cascade do |t|
