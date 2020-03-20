@@ -37,15 +37,14 @@ class ViewBro
 		return (0..7)
 	end
 
-	def player_okay_to_join (user_player, game_to_join, join_color)
-		return false if (join_color < 0 || join_color > 1)
-		
+	def self.svg_data_string_for_piece(cur_piece, svg_url)
+		piece_class_name = cur_piece.class.name.downcase
+		self.customized_svg_data_string_for_piece(svg_url, piece_class_name, cur_piece.color, svg_scale)
 	end
 
-	def self.svg_data_string_for_piece(cur_piece, svg_url)
+	def self.customized_svg_data_string_for_piece (svg_url, piece_class_name, color, custom_svg_scale)
 
-		color = cur_piece.color
-		piece_class_name = cur_piece.class.name.downcase
+		piece_class_name = piece_class_name.downcase
 	
 		case piece_class_name
 		when 'king'
@@ -64,13 +63,38 @@ class ViewBro
 		  'INVALID PIECE'
 		end
 	
-		x_coord = svg_scale * column_number
-		y_coord = color == 1 ? 0 : svg_scale
+		x_coord = custom_svg_scale * column_number
+		y_coord = color == 1 ? 0 : custom_svg_scale
 	
 		data_string = svg_url +'#svgView(viewBox('
 		data_string += x_coord.to_s + ', ' + y_coord.to_s + ', '
-		data_string += svg_scale.to_s + ', ' + svg_scale.to_s + '))'
+		data_string += custom_svg_scale.to_s + ', ' + custom_svg_scale.to_s + '))'
 	
 		return data_string
-	  end
+	end
+
+	def self.player_okay_to_join_game? (user_player, game_to_join, join_color)
+		return false if (join_color < 0 || join_color > 1)
+		return false if !game_okay_to_be_joined?(game_to_join)
+		
+		return join_color == 0 ? game_ready_for_black_to_join?(game_to_join) : game_ready_for_white_to_join?(game_to_join)
+	end
+
+	private
+
+	def self.game_okay_to_be_joined? (game_to_join)
+		return false if game_to_join.nil?
+		return false if game_to_join.ended
+		return false if (!game_to_join.black_player_id.nil? && !game_to_join.white_player_id.nil?)
+		return true
+	end
+
+	def self.game_ready_for_black_to_join? (game_to_join)
+		return (game_to_join.black_player_id.nil? && game_to_join.white_player_id)
+	end
+
+	def self.game_ready_for_white_to_join? (game_to_join)
+		return (game_to_join.black_player_id && game_to_join.white_player_id.nil?)
+	end
+
 end
