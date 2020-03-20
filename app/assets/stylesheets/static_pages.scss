@@ -3,3 +3,18 @@
 // Place all the styles related to the static_pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.create-game-button {
+	&.left {
+		// margin-left: 5rem;
+		color: black;
+		background-color: white;
+		border-color: black;
+	}
+	&.right {
+		// margin-right: 5rem;
+		color: white;
+		background-color: black;
+		border-color: white;
+	}
+}
