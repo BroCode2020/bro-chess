@@ -169,7 +169,11 @@
 		<% turn_display_text = 'DEFEAT' if !@game.tied && current_user.id != @game.victorious_player_id %>
 		<% turn_display_text = 'DRAW' if @game.tied %>
 	<% else %>
-		<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
+		<% if current_user == @game.player_on_move %>
+			<% turn_display_text = "Your turn" %>
+		<% else %>
+			<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
+		<% end %>
 	<% end %>
 <% end %>
 
