@@ -113,48 +113,52 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 	background-color: transparent;
 }
 
-.promotion-modal {
-  
+.ui-dialog-title {
+  font-size: 1.5rem;
 }
 
 .promotion-button {
-	width: 121px;
-	height: 86px;
+	width: 120px;
+	height: 120px;
 
 	&.queen-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(48, 50, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(48, 50, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(48, 4, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(48, 4, 95, 40))') no-repeat;
 		}
 	}
 
 	&.bishop-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(94.75, 49.5, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(94.75, 49.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(94.75, 4, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(94.75, 4, 95, 40))') no-repeat;
 		}
 	}
 
 	&.knight-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(140, 49.5, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(140, 49.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(140, 4, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(140, 4, 95, 40))') no-repeat;
 		}
 	}
 	&.rook-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 49.5, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 49.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 4, 90, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 4, 95, 40))') no-repeat;
 		}
 	}
+}
+
+.ui-dialog-titlebar-close {
+	display: none;
 }
 
 
