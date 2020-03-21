@@ -51,8 +51,10 @@ class GamesController < ApplicationController
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       flash[:alert] = ViewBro.msg_for_moving_into_check and return
     else
-      if @piece.is_a?(Pawn) && @piece.would_move_into_promotion?
-        # 
+      if @piece.is_a?(Pawn) && @piece.moving_into_promotion?(@x_pos, @y_pos)
+        @game.update_attribute(:promotion_pending, true)
+        @piece.move_to!(@x_pos, @y_pos)
+        return
       end
 
       if @piece.move_to!(@x_pos, @y_pos)

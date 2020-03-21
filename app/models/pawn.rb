@@ -23,8 +23,9 @@ class Pawn < Piece
     return true
   end
 
-  def would_move_into_promotion?()
-
+  def moving_into_promotion?(new_x, new_y)
+    return false if !valid_move?(new_x, new_y)
+    return color == 0 ? (new_y == 7) : (new_y == 0)
   end
 
   private

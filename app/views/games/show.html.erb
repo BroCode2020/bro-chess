@@ -19,7 +19,7 @@
 					<% if piece %>
 						<% svg_data = ViewBro.svg_data_string_for_piece(piece, asset_path('Chess_Pieces_Sprite.svg')) %>
 						<% display_class = "svg-piece-display" %>
-						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color %>
+						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color && !@game.promotion_pending %>
 							<% display_class += " drag-a-piece" %>
 						<% end %>
 						<img src="<%=svg_data%>" class="<%=display_class%>" id = "<%= piece.id %>" >
@@ -88,10 +88,10 @@
 								(ones that update piece position in our Rails database) will refresh the page. */
 
 							 /* The solution:
-								 - Call a function to refresh the page, but only after waiting a short amount of time
-								 - The refresh function will only reload the page if the "unload" flag is set to false
+								 - Always call a function to refresh the page, but only after waiting a short amount of time
+								 - Said function will only reload the page if the "unload" flag is set to false
 								 - If there is a successful move, the page will automatically be redirected, which will
-								 	set the "unload" flag to true
+								 	set the "unload" flag to true (cancelling the auto-refresh)
 							 */
 						}
 					}, 500); // Note the delay time of 500ms
