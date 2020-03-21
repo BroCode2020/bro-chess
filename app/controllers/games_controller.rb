@@ -161,7 +161,34 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     @promotion = params[:promotion_id].to_i
 
-    puts "promotion: #{@promotion}"
+    pawn = @game.find_promotable_pawn
+
+    if(pawn.nil? || !@game.promotion_pending)
+      redirect_to game_path(@game.id) and return
+    end
+
+    x_position = pawn.x_pos
+    y_position = pawn.y_pos
+    pawn.update_attributes(x_pos: nil, y_pos: nil)
+
+    # does Piece.moved? need to be set?
+    
+    if @promotion == 1
+      Queen.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    elsif @promotion == 2
+      Bishop.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    elsif @promotion == 3
+      Knight.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    elsif @promotion == 4
+      Rook.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    end
+
+    @game.update_attribute(:promotion_pending, false)
+
+    # check for checkmate and stalemate here
+
+    @game.complete_turn
+    # redirect_to game_path(@game.id)
   end
 
   private

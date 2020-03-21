@@ -159,7 +159,6 @@
 					"class": "promotion-button rook-button " + playerColor,
 					click: function() { 
 						onPromotionChosen (4);
-						// then close the modal
 					}
 				}
 			]
@@ -167,8 +166,10 @@
 	}
 
 	function onPromotionChosen(promotionID) {
+		$('#turn-status-indicator').removeClass("on-move");
+		$('#turn-status-indicator').addClass("moved-piece");
 		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
-		$.post(promotionPath, {});
+		$.post(promotionPath);
 	}
 </script>
 
