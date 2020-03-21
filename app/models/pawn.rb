@@ -23,6 +23,10 @@ class Pawn < Piece
     return true
   end
 
+  def would_move_into_promotion?()
+
+  end
+
   private
 
   def valid_diagonal_move?(new_x, new_y)
@@ -39,37 +43,32 @@ class Pawn < Piece
   end
 
   def diagonal_ep(new_x, new_y)
-  x_diff = (new_x - x_pos).abs
-  y_diff = (new_y - y_pos)
+    x_diff = (new_x - x_pos).abs
+    y_diff = (new_y - y_pos)
 
-
-  if white?
-    return true if x_diff == 1 && y_diff == -1
-  else
-    return true if x_diff == 1 && y_diff == 1
+    if white?
+      return true if x_diff == 1 && y_diff == -1
+    else
+      return true if x_diff == 1 && y_diff == 1
+    end
   end
-end
 
-
-
-
-
-def en_passant?(new_x, new_y)
- #has to move one space forward diagonal left or right
- return false unless diagonal_ep(new_x, new_y)
- adjacent_right = game.pieces.where(x_pos: x_pos + 1, y_pos: y_pos, type: "Pawn").first
- adjacent_left = game.pieces.where(x_pos: x_pos - 1, y_pos: y_pos, type: "Pawn").first
- # must have a pawn adjacent
- return false unless adjacent_left || adjacent_right
- if new_x < x_pos && adjacent_left # moving diagonal left with enemy pawn to left
-   return false unless game.last_moved_piece_id == adjacent_left.id # enemy pawn has to be last piece moved
-   return false unless (game.last_moved_prev_y_pos - adjacent_left.y_pos).abs == 2 # has to be 2 space move
-   return adjacent_left.update_attributes(:x_pos => nil, :y_pos => nil) # will evaluate to true, can be used for capture logic later
- elsif new_x > x_pos && adjacent_right # moving diagonal right with enemy pawn to right
-   return false unless game.last_moved_piece_id == adjacent_right.id # enemy pawn has to be last piece moved
-   return false unless (game.last_moved_prev_y_pos - adjacent_right.y_pos).abs == 2 # has to be 2 space move
-   return adjacent_right.update_attributes(:x_pos => nil, :y_pos => nil) # will evaluate to true, and capture opposing pawn
- end
- return false
-end
+  def en_passant?(new_x, new_y)
+    #has to move one space forward diagonal left or right
+    return false unless diagonal_ep(new_x, new_y)
+    adjacent_right = game.pieces.where(x_pos: x_pos + 1, y_pos: y_pos, type: "Pawn").first
+    adjacent_left = game.pieces.where(x_pos: x_pos - 1, y_pos: y_pos, type: "Pawn").first
+    # must have a pawn adjacent
+    return false unless adjacent_left || adjacent_right
+    if new_x < x_pos && adjacent_left # moving diagonal left with enemy pawn to left
+      return false unless game.last_moved_piece_id == adjacent_left.id # enemy pawn has to be last piece moved
+      return false unless (game.last_moved_prev_y_pos - adjacent_left.y_pos).abs == 2 # has to be 2 space move
+      return adjacent_left.update_attributes(:x_pos => nil, :y_pos => nil) # will evaluate to true, can be used for capture logic later
+    elsif new_x > x_pos && adjacent_right # moving diagonal right with enemy pawn to right
+      return false unless game.last_moved_piece_id == adjacent_right.id # enemy pawn has to be last piece moved
+      return false unless (game.last_moved_prev_y_pos - adjacent_right.y_pos).abs == 2 # has to be 2 space move
+      return adjacent_right.update_attributes(:x_pos => nil, :y_pos => nil) # will evaluate to true, and capture opposing pawn
+    end
+    return false
+  end
 end

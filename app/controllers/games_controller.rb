@@ -51,6 +51,10 @@ class GamesController < ApplicationController
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       flash[:alert] = ViewBro.msg_for_moving_into_check and return
     else
+      if @piece.is_a?(Pawn) && @piece.would_move_into_promotion?
+        # 
+      end
+
       if @piece.move_to!(@x_pos, @y_pos)
         if @game.in_checkmate_state?
           redirect_to checkmate_path(@game.id) and return
