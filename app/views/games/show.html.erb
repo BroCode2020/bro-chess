@@ -43,6 +43,8 @@
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
 
 <script>
+	var turnStatusIndicator = $('#turn-status-indicator');
+
 	$(document).ready(function(){
 
 	<% if !@game.ended && !is_missing_player %>
@@ -72,17 +74,17 @@
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 
-				$('#turn-status-indicator').removeClass("on-move");
-				$('#turn-status-indicator').addClass("moved-piece");
+				turnStatusIndicator.removeClass("on-move");
+				turnStatusIndicator.addClass("moved-piece");
 
 				var unloading = false;
-				$('#turn-status-indicator').unload(function() {
+				turnStatusIndicator.unload(function() {
 					unload = true;
 				});
 
 				$.post(path, {}, function(data, status){
 					<% turn_status = "moved-piece" %>
-					$('#turn-status-indicator').attr("class","moved-piece");
+					turnStatusIndicator.attr("class","moved-piece");
 					window.setTimeout(function(){
 						if(!unloading) {
 							location.reload();
@@ -128,13 +130,13 @@
 					location.reload(); // Reloads the game page, which will tell you how the game ended
 				}
 
-				if($('#turn-status-indicator').hasClass('waiting')) {
+				if(turnStatusIndicator.hasClass('waiting')) {
 					location.reload();
 				}
-				if($('#turn-status-indicator').hasClass('moved-piece')) {
+				if(turnStatusIndicator.hasClass('moved-piece')) {
 					location.reload();
 				}
-				if($('#turn-status-indicator').hasClass('awaiting-player-join')) {
+				if(turnStatusIndicator.hasClass('awaiting-player-join')) {
 					location.reload();
 				}
 
@@ -166,8 +168,8 @@
 	}
 
 	function onPromotionChosen(promotionID) {
-		$('#turn-status-indicator').removeClass("on-move");
-		$('#turn-status-indicator').addClass("moved-piece");
+		turnStatusIndicator.removeClass("on-move");
+		turnStatusIndicator.addClass("moved-piece");
 		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
 		$.post(promotionPath);
 	}

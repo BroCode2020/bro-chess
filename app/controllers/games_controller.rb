@@ -185,10 +185,14 @@ class GamesController < ApplicationController
 
     @game.update_attribute(:promotion_pending, false)
 
-    # check for checkmate and stalemate here
+    if @game.in_checkmate_state?
+      redirect_to checkmate_path(@game.id) and return
+    end
+    if @game.in_stalemate_state?
+      redirect_to stalemate_path(@game.id) and return
+    end
 
     @game.complete_turn
-    # redirect_to game_path(@game.id)
   end
 
   private
