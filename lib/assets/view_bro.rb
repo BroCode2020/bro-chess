@@ -38,9 +38,13 @@ class ViewBro
 	end
 
 	def self.svg_data_string_for_piece(cur_piece, svg_url)
-
-		color = cur_piece.color
 		piece_class_name = cur_piece.class.name.downcase
+		self.customized_svg_data_string_for_piece(svg_url, piece_class_name, cur_piece.color, svg_scale)
+	end
+
+	def self.customized_svg_data_string_for_piece (svg_url, piece_class_name, color, custom_svg_scale)
+
+		piece_class_name = piece_class_name.downcase
 	
 		case piece_class_name
 		when 'king'
@@ -59,12 +63,12 @@ class ViewBro
 		  'INVALID PIECE'
 		end
 	
-		x_coord = svg_scale * column_number
-		y_coord = color == 1 ? 0 : svg_scale
+		x_coord = custom_svg_scale * column_number
+		y_coord = color == 1 ? 0 : custom_svg_scale
 	
 		data_string = svg_url +'#svgView(viewBox('
 		data_string += x_coord.to_s + ', ' + y_coord.to_s + ', '
-		data_string += svg_scale.to_s + ', ' + svg_scale.to_s + '))'
+		data_string += custom_svg_scale.to_s + ', ' + custom_svg_scale.to_s + '))'
 	
 		return data_string
 	  end

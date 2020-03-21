@@ -101,7 +101,7 @@
 			}
 		});
 
-		<% if @game.promotion_pending %>
+		<% if @game.promotion_pending && current_user == @game.player_on_move%>
 			openPawnPromotionModal();
 		<% end %>
 
