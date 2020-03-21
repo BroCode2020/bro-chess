@@ -1,5 +1,3 @@
-<% load 'lib/assets/view_bro.rb' %>
-
 <div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
   <h1>Join a Game</h1>
 
@@ -7,12 +5,12 @@
     <h2>Available Games:</h2>
     <ul>
       <% @game.each do |game| %>
-        <% if ViewBro.player_okay_to_join_game?(current_user, game, 0) %>
+        <% if game.black_player_id.nil? && game.white_player_id && game.forfeiting_player_id.nil? %>
           <li>Waiting for
             <b>black</b>
             to join...
             <%= link_to 'Join this game', join_as_black_game_path(game), method: :put %></li>
-        <% elsif ViewBro.player_okay_to_join_game?(current_user, game, 1) %>
+          <% elsif game.black_player_id && game.white_player_id.nil? && game.forfeiting_player_id.nil? %>
             <li>Waiting for
               <b>white</b>
               to join...
@@ -32,12 +30,14 @@
     <div class="row container">
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :white_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "White Player", class: 'btn btn-primary btn btn-primary create-game-button left' %>
+        <%= f.submit "White Player", class: 'btn btn-primary' %>
       <% end %>
       &nbsp; &nbsp; &nbsp;
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "Black Player", class: 'btn btn-primary create-game-button right' %>
+        <%= f.submit "Black Player", class: 'btn btn-primary' %>
       <% end %>
     </div>
+
+
 <% end %>
