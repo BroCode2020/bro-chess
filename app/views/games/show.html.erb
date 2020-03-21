@@ -37,6 +37,7 @@
 <% end %>
 
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
+<div id="promotion-modal"></div>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
@@ -45,6 +46,7 @@
 	$(document).ready(function(){
 
 	<% if !@game.ended && !is_missing_player %>
+
 		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
 			scroll: false,
 			containment: $('.chess-board-render')
@@ -99,7 +101,11 @@
 			}
 		});
 
+		<% if @game.promotion_pending %>
+			openPawnPromotionModal();
 		<% end %>
+
+	<% end %>
 
 		$(function(){
 
@@ -135,6 +141,37 @@
 			});
 		});
 	});
+
+	function openPawnPromotionModal () {
+		$('#promotion-modal').dialog({
+			open: function (){
+				$(this).html("PLACEHOLDER PROMOTION TEXT");
+			},
+			modal: true,
+			dialogClass: 'booyah-box promotion-modal',
+			buttons: [
+				{
+					text: "Rook",
+					click: function() { 
+						onPromotionChosen ("Rook");
+						// then close the modal
+					}
+				}
+			]
+		}); // choices: rook, knight, bishop, queen
+	}
+
+	function onPromotionChosen(pieceType) {
+		console.log(pieceType);
+		if(pieceType == "rook") {
+		}
+		else if(pieceType == "knight") {
+		}
+		else if(pieceType == "bishop") {
+		}
+		else if(pieceType == "queen") {
+		}
+	}
 </script>
 
 <script>
