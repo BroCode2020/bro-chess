@@ -120,13 +120,15 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 .promotion-button {
 	width: 90px;
 	height: 90px;
-	
-	// scale 45
+
 	&.rook-button {
-		background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 8, 90, 40))') no-repeat;
-
+		&.black {
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 53, 90, 40))') no-repeat;
+		}
+		&.white {
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 8, 90, 40))') no-repeat;
+		}
 	}
-
 }
 
 

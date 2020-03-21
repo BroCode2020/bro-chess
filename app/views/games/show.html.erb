@@ -143,6 +143,9 @@
 	});
 
 	function openPawnPromotionModal () {
+
+		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
+
 		$('#promotion-modal').dialog({
 			open: function (){
 				$(this).html("PLACEHOLDER PROMOTION TEXT");
@@ -151,7 +154,7 @@
 			dialogClass: 'booyah-box promotion-modal',
 			buttons: [
 				{
-					"class": "promotion-button rook-button",
+					"class": "promotion-button rook-button " + playerColor,
 					click: function() { 
 						onPromotionChosen ("Rook");
 						// then close the modal
@@ -164,6 +167,7 @@
 	function onPromotionChosen(pieceType) {
 		console.log(pieceType);
 		if(pieceType == "rook") {
+
 		}
 		else if(pieceType == "knight") {
 		}
