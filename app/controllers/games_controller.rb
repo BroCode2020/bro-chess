@@ -120,8 +120,6 @@ class GamesController < ApplicationController
     other_player.increment_loss_count if other_player
 
     @game.transmit_game_ended_status_to_firebase(true)
-    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
-
   end
 
 
@@ -143,7 +141,6 @@ class GamesController < ApplicationController
     other_player.increment_win_count if other_player
 
     @game.transmit_game_ended_status_to_firebase(true)
-    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
   end
 
   def stalemate
@@ -158,7 +155,13 @@ class GamesController < ApplicationController
     User.find(@game.white_player_id).increment_tie_count
 
     @game.transmit_game_ended_status_to_firebase(true)
-    # redirect_to game_path(@game.id), notice: msg_for_stalemate
+  end
+
+  def promote
+    @game = Game.find(params[:id])
+    @promotion = params[:promotion_id].to_i
+
+    puts "promotion: #{@promotion}"
   end
 
   private

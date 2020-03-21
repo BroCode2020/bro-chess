@@ -141,7 +141,7 @@ class Game < ApplicationRecord
     firebase = Firebase::Client.new(base_uri)
     firebase.update("game #{id}", :player_on_move_color => new_player_on_move_color)
   end
-  def promote_pawn(promotion_type)
+  def promote_pawn(promotion_type) # this will be converted to integer representation, must likely
     pawn = find_promotable_pawn
     return if pawn.nil?
     x_position = pawn.x_pos
@@ -153,9 +153,6 @@ class Game < ApplicationRecord
     self.update_attribute(:promotion_pending, false)
     complete_turn
   end
-
-  private
-
   def find_promotable_pawn
     pawn = self.pieces.find_by(y_pos: 7, color: 0, type: :Pawn)
     return pawn if pawn

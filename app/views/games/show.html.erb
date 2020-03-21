@@ -158,25 +158,17 @@
 				{
 					"class": "promotion-button rook-button " + playerColor,
 					click: function() { 
-						onPromotionChosen ("rook");
+						onPromotionChosen (4);
 						// then close the modal
 					}
 				}
 			]
-		}); // choices: rook, knight, bishop, queen
+		}); // choices: queen(1), bishop(2), knight(3), rook(4) 
 	}
 
-	function onPromotionChosen(pieceType) {
-		
-		if(pieceType === "rook") {
-			console.log(pieceType);
-		}
-		else if(pieceType === "knight") {
-		}
-		else if(pieceType === "bishop") {
-		}
-		else if(pieceType === "queen") {
-		}
+	function onPromotionChosen(promotionID) {
+		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
+		$.post(promotionPath, {});
 	}
 </script>
 
