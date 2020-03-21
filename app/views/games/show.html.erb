@@ -149,7 +149,6 @@
 
 		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
 		
-
 		$('#promotion-modal').dialog({
 			open: function (){
 				$(this).html("PLACEHOLDER PROMOTION TEXT");
@@ -157,6 +156,24 @@
 			modal: true,
 			dialogClass: 'booyah-box promotion-modal',
 			buttons: [
+				{
+					"class": "promotion-button queen-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (1);
+					}
+				},
+				{
+					"class": "promotion-button bishop-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (2);
+					}
+				},
+				{
+					"class": "promotion-button knight-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (3);
+					}
+				},
 				{
 					"class": "promotion-button rook-button " + playerColor,
 					click: function() { 
