@@ -113,6 +113,24 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 	background-color: transparent;
 }
 
+.promotion-modal {
+  
+}
+
+.promotion-button {
+	width: 90px;
+	height: 90px;
+	
+	// scale 45
+	&.rook-button {
+		background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 8, 90, 40))') no-repeat;
+
+	}
+
+}
+
+
+
 @media only screen and (min-width: 500px)  {
 	.turn-display.your-turn {
 		top: 0.3rem;
