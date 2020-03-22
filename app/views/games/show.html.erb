@@ -94,7 +94,7 @@
 							 /* The solution:
 								 - Always call a function to refresh the page, but only after waiting a short amount of time
 								 - Said function will only reload the page if the "unload" flag is set to false
-								 - If there is a successful move, the page will automatically be redirected, which will
+								 - If there is a successful move, the page will automatically be redirected, which wills
 								 	set the "unload" flag to true (cancelling the auto-refresh)
 							 */
 						}
@@ -125,9 +125,8 @@
 			var database_path = `game <%= @game.id%>`
 			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
 
-				if(dataSnapshot.val() === true) {
-					
-					location.reload(); // Reloads the game page, which will tell you how the game ended
+				if(dataSnapshot.val() === true) {			
+					location.reload();
 				}
 
 				if(turnStatusIndicator.hasClass('waiting')) {
@@ -179,7 +178,7 @@
 					}
 				}
 			]
-		}); // choices: queen(1), bishop(2), knight(3), rook(4) 
+		});
 	}
 
 	function onPromotionChosen(promotionID) {

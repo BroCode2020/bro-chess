@@ -117,42 +117,47 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
   font-size: 1.5rem;
 }
 
+.promotion-modal {
+	opacity: 1.0 !important;
+	z-index: 2;
+}
+
 .promotion-button {
 	width: 120px;
-	height: 120px;
+	height: 110px;
 
 	&.queen-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(48, 50, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(48, 4, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
 		}
 	}
 
 	&.bishop-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(94.75, 49.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(94.75, 4, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 0, 95, 40))') no-repeat;
 		}
 	}
 
 	&.knight-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(140, 49.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(140, 4, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 0, 95, 40))') no-repeat;
 		}
 	}
 	&.rook-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 49.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(188, 4, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 0, 95, 40))') no-repeat;
 		}
 	}
 }
