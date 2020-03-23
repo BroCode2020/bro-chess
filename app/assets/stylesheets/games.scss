@@ -128,36 +128,36 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 
 	&.queen-button {
 		&.black {
-			background: image-image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
 		}
 	}
 
 	&.bishop-button {
 		&.black {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 0, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 0, 95, 40))') no-repeat;
 		}
 	}
 
 	&.knight-button {
 		&.black {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 45.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 0, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 0, 95, 40))') no-repeat;
 		}
 	}
 	&.rook-button {
 		&.black {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 45.5, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
-			background: image-url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 0, 95, 40))') no-repeat;
+			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 0, 95, 40))') no-repeat;
 		}
 	}
 }
