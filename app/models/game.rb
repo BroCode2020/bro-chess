@@ -68,7 +68,7 @@ class Game < ApplicationRecord
     end
     king_in_question = pieces.find_by(type: :King, color: king_color)
     return false if !king_in_question.in_check?
-    pieces.where(color: king_color).each do |p|
+    pieces.where(color: king_color).where.not(x_pos: nil).where.not(y_pos: nil).each do |p|
       for y in 0..7 do
         for x in 0..7 do
           if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
@@ -88,7 +88,7 @@ class Game < ApplicationRecord
     king_in_question = pieces.find_by(type: :King, color: king_color)
     return false if king_in_question.in_check?
     return false if king_in_checkmate?(king_color)
-    pieces.where(color: king_color).each do |p|
+    pieces.where(color: king_color).where.not(x_pos: nil).where.not(y_pos: nil).each do |p|
       for y in 0..7 do
         for x in 0..7 do
           if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
@@ -140,5 +140,14 @@ class Game < ApplicationRecord
     base_uri = 'https://bro-chess-b8ed8.firebaseio.com/'
     firebase = Firebase::Client.new(base_uri)
     firebase.update("game #{id}", :player_on_move_color => new_player_on_move_color)
+  end
+  def find_promotable_pawn
+    pawn = self.pieces.find_by(y_pos: 7, color: 0, type: :Pawn)
+    return pawn if pawn
+
+    pawn = self.pieces.find_by(y_pos: 0, color: 1, type: :Pawn)
+    return pawn if pawn
+
+    return nil
   end
 end

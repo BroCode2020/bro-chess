@@ -19,7 +19,7 @@
 					<% if piece %>
 						<% svg_data = ViewBro.svg_data_string_for_piece(piece, asset_path('Chess_Pieces_Sprite.svg')) %>
 						<% display_class = "svg-piece-display" %>
-						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color %>
+						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color && !@game.promotion_pending %>
 							<% display_class += " drag-a-piece" %>
 						<% end %>
 						<img src="<%=svg_data%>" class="<%=display_class%>" id = "<%= piece.id %>" >
@@ -37,14 +37,18 @@
 <% end %>
 
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
+<div id="promotion-modal"></div>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
 
 <script>
+	var turnStatusIndicator = $('#turn-status-indicator');
+
 	$(document).ready(function(){
 
 	<% if !@game.ended && !is_missing_player %>
+
 		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
 			scroll: false,
 			containment: $('.chess-board-render')
@@ -70,17 +74,17 @@
 				var piece_id = ui.draggable.prop('id');
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
 
-				$('#turn-status-indicator').removeClass("on-move");
-				$('#turn-status-indicator').addClass("moved-piece");
+				turnStatusIndicator.removeClass("on-move");
+				turnStatusIndicator.addClass("moved-piece");
 
 				var unloading = false;
-				$('#turn-status-indicator').unload(function() {
+				turnStatusIndicator.unload(function() {
 					unload = true;
 				});
 
 				$.post(path, {}, function(data, status){
 					<% turn_status = "moved-piece" %>
-					$('#turn-status-indicator').attr("class","moved-piece");
+					turnStatusIndicator.attr("class","moved-piece");
 					window.setTimeout(function(){
 						if(!unloading) {
 							location.reload();
@@ -88,10 +92,10 @@
 								(ones that update piece position in our Rails database) will refresh the page. */
 
 							 /* The solution:
-								 - Call a function to refresh the page, but only after waiting a short amount of time
-								 - The refresh function will only reload the page if the "unload" flag is set to false
-								 - If there is a successful move, the page will automatically be redirected, which will
-								 	set the "unload" flag to true
+								 - Always call a function to refresh the page, but only after waiting a short amount of time
+								 - Said function will only reload the page if the "unload" flag is set to false
+								 - If there is a successful move, the page will automatically be redirected, which wills
+								 	set the "unload" flag to true (cancelling the auto-refresh)
 							 */
 						}
 					}, 500); // Note the delay time of 500ms
@@ -99,7 +103,11 @@
 			}
 		});
 
+		<% if @game.promotion_pending && current_user == @game.player_on_move%>
+			openPawnPromotionModal();
 		<% end %>
+
+	<% end %>
 
 		$(function(){
 
@@ -117,24 +125,68 @@
 			var database_path = `game <%= @game.id%>`
 			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
 
-				if(dataSnapshot.val() === true) {
-					
-					location.reload(); // Reloads the game page, which will tell you how the game ended
+				if(dataSnapshot.val() === true) {			
+					location.reload();
 				}
 
-				if($('#turn-status-indicator').hasClass('waiting')) {
+				if(turnStatusIndicator.hasClass('waiting')) {
 					location.reload();
 				}
-				if($('#turn-status-indicator').hasClass('moved-piece')) {
+				if(turnStatusIndicator.hasClass('moved-piece')) {
 					location.reload();
 				}
-				if($('#turn-status-indicator').hasClass('awaiting-player-join')) {
+				if(turnStatusIndicator.hasClass('awaiting-player-join')) {
 					location.reload();
 				}
 
 			});
 		});
 	});
+
+	function openPawnPromotionModal () {
+		var playerColor;
+
+		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
+		
+		$('#promotion-modal').dialog({
+			title: "Select a promotion:",
+			modal: true,
+			dialogClass: 'booyah-box promotion-modal',
+			buttons: [
+				{
+					"class": "promotion-button queen-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (1);
+					}
+				},
+				{
+					"class": "promotion-button bishop-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (2);
+					}
+				},
+				{
+					"class": "promotion-button knight-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (3);
+					}
+				},
+				{
+					"class": "promotion-button rook-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (4);
+					}
+				}
+			]
+		});
+	}
+
+	function onPromotionChosen(promotionID) {
+		turnStatusIndicator.removeClass("on-move");
+		turnStatusIndicator.addClass("moved-piece");
+		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
+		$.post(promotionPath);
+	}
 </script>
 
 <script>

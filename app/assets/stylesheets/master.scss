@@ -1,5 +1,7 @@
 @import "bootstrap";
 
+$box-background-color: #5A6067;
+
 body {
   background: image_url('bg1.jpg'); no-repeat: center center fixed;
   background-color: black;
@@ -17,7 +19,7 @@ $booyah-box-box-shadow: 1px 1px 2px 0 #d0d0d0;
 $booyah-box-link-color: #289bff;
 
 .booyah-box {
-  background-color: #5A6067;
+  background-color: $box-background-color;
   opacity: 0.9;
   -moz-box-shadow: $booyah-box-box-shadow;
   -webkit-box-shadow: $booyah-box-box-shadow;
@@ -37,8 +39,6 @@ $booyah-box-link-color: #289bff;
     color: $booyah-box-link-color;
   }
 }
-
-// navbar toggler?
 
 .navbar-brand, a.nav-link, .nav-item, .navbar-toggler {
   z-index: 2;

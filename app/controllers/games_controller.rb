@@ -51,6 +51,12 @@ class GamesController < ApplicationController
     if @game.move_puts_self_in_check?(@piece, @x_pos, @y_pos)
       flash[:alert] = ViewBro.msg_for_moving_into_check and return
     else
+      if @piece.is_a?(Pawn) && @piece.moving_into_promotion?(@x_pos, @y_pos)
+        @game.update_attribute(:promotion_pending, true)
+        @piece.move_to!(@x_pos, @y_pos)
+        return
+      end
+
       if @piece.move_to!(@x_pos, @y_pos)
         if @game.in_checkmate_state?
           redirect_to checkmate_path(@game.id) and return
@@ -114,8 +120,6 @@ class GamesController < ApplicationController
     other_player.increment_loss_count if other_player
 
     @game.transmit_game_ended_status_to_firebase(true)
-    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
-
   end
 
 
@@ -137,7 +141,6 @@ class GamesController < ApplicationController
     other_player.increment_win_count if other_player
 
     @game.transmit_game_ended_status_to_firebase(true)
-    # redirect_to root_path, notice: ViewBro.msg_for_forfeited_game
   end
 
   def stalemate
@@ -152,7 +155,44 @@ class GamesController < ApplicationController
     User.find(@game.white_player_id).increment_tie_count
 
     @game.transmit_game_ended_status_to_firebase(true)
-    # redirect_to game_path(@game.id), notice: msg_for_stalemate
+  end
+
+  def promote
+    @game = Game.find(params[:id])
+    @promotion = params[:promotion_id].to_i
+
+    pawn = @game.find_promotable_pawn
+
+    if(pawn.nil? || !@game.promotion_pending)
+      redirect_to game_path(@game.id) and return
+    end
+
+    x_position = pawn.x_pos
+    y_position = pawn.y_pos
+    pawn.update_attributes(x_pos: nil, y_pos: nil)
+
+    # does Piece.moved? need to be set?
+    
+    if @promotion == 1
+      Queen.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    elsif @promotion == 2
+      Bishop.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    elsif @promotion == 3
+      Knight.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    elsif @promotion == 4
+      Rook.create(game: @game, x_pos: x_position, y_pos: y_position, color: pawn.color)
+    end
+
+    @game.update_attribute(:promotion_pending, false)
+
+    if @game.in_checkmate_state?
+      redirect_to checkmate_path(@game.id) and return
+    end
+    if @game.in_stalemate_state?
+      redirect_to stalemate_path(@game.id) and return
+    end
+
+    @game.complete_turn
   end
 
   private
