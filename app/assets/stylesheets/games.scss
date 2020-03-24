@@ -125,7 +125,7 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 .promotion-button {
 	width: 120px;
 	height: 110px;
-
+/*
 	&.queen-button {
 		&.black {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
@@ -134,7 +134,7 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
 		}
 	}
-
+*/
 	&.bishop-button {
 		&.black {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;

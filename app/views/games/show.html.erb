@@ -152,6 +152,7 @@
 			title: "Select a promotion:",
 			modal: true,
 			dialogClass: 'booyah-box promotion-modal',
+			open: addModalImages(),
 			buttons: [
 				{
 					"class": "promotion-button queen-button " + playerColor,
@@ -181,12 +182,23 @@
 		});
 	}
 
-	function onPromotionChosen(promotionID) {
+	function onPromotionChosen (promotionID) {
 		turnStatusIndicator.removeClass("on-move");
 		turnStatusIndicator.addClass("moved-piece");
 		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
 		$.post(promotionPath);
 	}
+
+	function addModalImages(playerColorString) {
+		var playerColor = -1;
+		if(playerColorString == "black") playerColor = 0; 
+		if(playerColorString == "white") playerColor = 1;
+		if(playerColor == -1) return;
+		
+		// New rendering code here
+
+	}
+
 </script>
 
 <script>

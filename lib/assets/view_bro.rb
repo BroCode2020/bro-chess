@@ -43,7 +43,6 @@ class ViewBro
 	end
 
 	def self.customized_svg_data_string_for_piece (svg_url, piece_class_name, color, custom_svg_scale)
-
 		piece_class_name = piece_class_name.downcase
 	
 		case piece_class_name
