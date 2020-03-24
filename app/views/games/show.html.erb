@@ -38,6 +38,7 @@
 
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
 <div id="promotion-modal"></div>
+<% promotion_svg_scale = 45 %>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
@@ -89,9 +90,9 @@
 						if(!unloading) {
 							location.reload();
 							/* Because of the approach the Firebase callbacks necessitated, only successful moves
-								(ones that update piece position in our Rails database) will refresh the page. */
+								(ones that update piece position in our Rails database) will refresh the page.
 
-							 /* The solution:
+								The solution:
 								 - Always call a function to refresh the page, but only after waiting a short amount of time
 								 - Said function will only reload the page if the "unload" flag is set to false
 								 - If there is a successful move, the page will automatically be redirected, which wills
@@ -155,7 +156,7 @@
 			open: addModalImages(),
 			buttons: [
 				{
-					"class": "promotion-button queen-button " + playerColor,
+					"class": "promotion-button queen-button",// + playerColor,
 					click: function() { 
 						onPromotionChosen (1);
 					}
@@ -180,6 +181,8 @@
 				}
 			]
 		});
+
+		addModalImages();
 	}
 
 	function onPromotionChosen (promotionID) {
@@ -189,13 +192,22 @@
 		$.post(promotionPath);
 	}
 
-	function addModalImages(playerColorString) {
-		var playerColor = -1;
-		if(playerColorString == "black") playerColor = 0; 
-		if(playerColorString == "white") playerColor = 1;
-		if(playerColor == -1) return;
+	function addModalImages() {
+
+		<% player_color = @game.player_on_move_color %>
+		<% svg_url = %>
+
+		var piece_types = ["queen", "bishop", "knight", "rook"]; // use ruby array instead, then convert to JS 
+		var selectorClasses = ["queen-button", "bishop-button", "knight-button", "rook-button"];
+		var buttonSvgData = new Array(4);
+
+		buttonSvgData[0] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'queen', player_color, promotion_svg_scale) %>"; 
+
+		console.log(`<img src="${buttonSvgData[0]}">`);
 		
-		// New rendering code here
+		// Need to: refactor and put into loop
+		
+		$(`<img src="${buttonSvgData[0]} class=""></img>`).appendTo('.promotion-button.queen-button');
 
 	}
 

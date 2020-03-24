@@ -12,6 +12,9 @@ $square-side-min-pixel-length: 20px;
 $board-length: calc(#{$square-side-vmin-length} * 8);
 $empty-screen-space-x: calc(100vw - #{$board-length});
 
+$dark-tile-color: #3e3e3e;
+$light-tile-color: white;
+
 .board-square, .svg-piece-display {
 	height: $square-side-vmin-length;
 	width: $square-side-vmin-length;
@@ -26,21 +29,17 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 	border-width: .25vmin;
 	border-style: solid;
 
-	border-top-color: $square-border-color-light;
-	border-left-color: $square-border-color-light;
-
-	border-bottom-color: $square-border-color-dark;
-	border-right-color: $square-border-color-dark;
+	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
 
 	&.black {
-		background: #3e3e3e;
+		background: $dark-tile-color;
 
 		&.hover:hover{
 			animation: hover-anim-light 2s linear infinite;
 		}
 	}
 	&.white {
-		background-color: white;
+		background-color: $light-tile-color;
 
 		&.hover:hover{
 			animation: hover-anim-dark 2s linear infinite;
@@ -118,47 +117,72 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 }
 
 .promotion-modal {
-	opacity: 1.0 !important;
+	opacity: 1.0 !important;		// Remove this once each button has its own background
 	z-index: 2;
+
+	::selection {
+		background-color: transparent;
+	}
+	:hover {
+		cursor: default;
+	}
 }
 
 .promotion-button {
-	width: 120px;
-	height: 110px;
-/*
+
+	img {
+//		display: block;
+		width: 128px;
+		height: 128px;
+	}
+
+	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
+
 	&.queen-button {
+		background-color: $light-tile-color;
+		/*
 		&.black {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
 		}
 		&.white {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
 		}
+		*/
 	}
-*/
+
 	&.bishop-button {
+		background-color: $dark-tile-color;
+		/*
 		&.black {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 0, 95, 40))') no-repeat;
 		}
+		*/
 	}
 
 	&.knight-button {
+		background-color: $dark-tile-color;
+		/*
 		&.black {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 0, 95, 40))') no-repeat;
 		}
+		*/
 	}
 	&.rook-button {
+		background-color: $light-tile-color;
+		/*
 		&.black {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 45.5, 95, 40))') no-repeat;
 		}
 		&.white {
 			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 0, 95, 40))') no-repeat;
 		}
+		*/
 	}
 }
 
