@@ -114,6 +114,10 @@ $light-tile-color: white;
 
 .ui-dialog-title {
   font-size: 1.5rem;
+
+	:hover {
+		cursor: default;
+	}
 }
 
 .promotion-modal {
@@ -129,6 +133,7 @@ $light-tile-color: white;
 }
 
 .promotion-button {
+	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
 
 	img {
 //		display: block;
@@ -136,61 +141,29 @@ $light-tile-color: white;
 		height: 128px;
 	}
 
-	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
+	:hover {
+		cursor: pointer;
+	}
 
 	&.queen-button {
 		background-color: $light-tile-color;
-		/*
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
-		}
-		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
-		}
-		*/
 	}
 
 	&.bishop-button {
 		background-color: $dark-tile-color;
-		/*
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;
-		}
-		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 0, 95, 40))') no-repeat;
-		}
-		*/
 	}
 
 	&.knight-button {
 		background-color: $dark-tile-color;
-		/*
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 45.5, 95, 40))') no-repeat;
-		}
-		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 0, 95, 40))') no-repeat;
-		}
-		*/
 	}
 	&.rook-button {
 		background-color: $light-tile-color;
-		/*
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 45.5, 95, 40))') no-repeat;
-		}
-		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 0, 95, 40))') no-repeat;
-		}
-		*/
 	}
 }
 
 .ui-dialog-titlebar-close {
 	display: none;
 }
-
-
 
 @media only screen and (min-width: 500px)  {
 	.turn-display.your-turn {

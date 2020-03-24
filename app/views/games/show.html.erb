@@ -204,10 +204,9 @@
 		buttonSvgData[2] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'knight', player_color, promotion_svg_scale) %>"; 
 		buttonSvgData[3] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'rook', player_color, promotion_svg_scale) %>"; 
 
-		// Next: put into loop
-		
-		$(`<img src="${buttonSvgData[0]}">`).appendTo(`.promotion-button.${selectorClasses[0]}`);
-
+		for(i = 0; i < buttonSvgData.length; i++) {
+			$(`<img src="${buttonSvgData[i]}">`).appendTo(`.promotion-button.${selectorClasses[i]}`);
+		}
 	}
 
 </script>
