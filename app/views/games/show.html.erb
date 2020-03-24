@@ -193,21 +193,20 @@
 	}
 
 	function addModalImages() {
-
 		<% player_color = @game.player_on_move_color %>
 		<% svg_url = %>
 
-		var piece_types = ["queen", "bishop", "knight", "rook"]; // use ruby array instead, then convert to JS 
 		var selectorClasses = ["queen-button", "bishop-button", "knight-button", "rook-button"];
 		var buttonSvgData = new Array(4);
 
 		buttonSvgData[0] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'queen', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[1] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'bishop', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[2] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'knight', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[3] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'rook', player_color, promotion_svg_scale) %>"; 
 
-		console.log(`<img src="${buttonSvgData[0]}">`);
+		// Next: put into loop
 		
-		// Need to: refactor and put into loop
-		
-		$(`<img src="${buttonSvgData[0]} class=""></img>`).appendTo('.promotion-button.queen-button');
+		$(`<img src="${buttonSvgData[0]}">`).appendTo(`.promotion-button.${selectorClasses[0]}`);
 
 	}
 
