@@ -152,11 +152,21 @@ $promotion-square-side-min-pixel-length: 30px;
 		cursor: pointer;
 		background-color: $select-color;
 	}
-	&.queen-button, &.knight-button  {
-		background-color: $light-tile-color;
+	&.queen-button, &.rook-button  {
+		&.white {
+			background-color: $light-tile-color;
+		}
+		&.black {
+			background-color: $dark-tile-color;
+		}
 	}
-	&.bishop-button, &.rook-button {
-		background-color: $dark-tile-color;
+	&.bishop-button, &.knight-button {
+		&.white {
+			background-color: $dark-tile-color;
+		}
+		&.black {
+			background-color: $light-tile-color;
+		}
 	}
 }
 

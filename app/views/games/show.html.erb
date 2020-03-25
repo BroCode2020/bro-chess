@@ -145,14 +145,11 @@
 	});
 
 	function openPawnPromotionModal () {
-		var playerColor;
-
 		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
 		
 		$('#promotion-modal').dialog({
 			title: "Select a promotion:",
 			dialogClass: 'booyah-box promotion-modal',
-			open: addModalImages(),
 			buttons: [
 				{
 					"class": "promotion-button queen-button",
@@ -181,7 +178,7 @@
 			]
 		});
 
-		addModalImages();
+		addModalImages(playerColor);
 	}
 
 	function onPromotionChosen (promotionID) {
@@ -191,7 +188,7 @@
 		$.post(promotionPath);
 	}
 
-	function addModalImages() {
+	function addModalImages(colorClass) {
 		// add 'promotion-button-row' divs
 
 		var $dialogData = $('.ui-dialog-buttonset');
@@ -221,6 +218,18 @@
 		for(i = 0; i < buttonSvgData.length; i++) {
 			$(`<img src="${buttonSvgData[i]}">`).appendTo(`.promotion-button.${selectorClasses[i]}`);
 		}
+
+		// add black/white css class to each button
+
+		modalHTML = $dialogData.html();
+		colorClass = ' ' + colorClass;
+		
+		for(i = 0; i < selectorClasses.length; i++) {
+			modalHTML = modalHTML.replace(selectorClasses[i], selectorClasses[i] + colorClass);
+		}
+
+
+		$dialogData.html(modalHTML);
 		
 	}
 
