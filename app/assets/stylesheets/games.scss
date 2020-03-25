@@ -2,6 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$select-color: #fff969;
 
 $square-border-color-light: #bebebe;
 $square-border-color-dark: #858585;
@@ -46,7 +47,7 @@ $light-tile-color: white;
 		}
 	}
 	&.select{
-		background-color: #fff969;
+		background-color: $select-color;
 	}
 	&.hover:hover{
 		animation: hover-anim-dark 2s linear infinite;
@@ -134,35 +135,35 @@ $light-tile-color: white;
 
 .promotion-button {
 	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
+	padding: 0;
 
 	img {
 //		display: block;
-		width: 128px;
-		height: 128px;
+		width: 22vmin;
+		height: 22vmin;
 	}
-
 	:hover {
 		cursor: pointer;
+		background-color: $select-color;
 	}
-
-	&.queen-button {
+	&.queen-button, &.knight-button  {
 		background-color: $light-tile-color;
 	}
-
-	&.bishop-button {
+	&.bishop-button, &.rook-button {
 		background-color: $dark-tile-color;
 	}
+}
 
-	&.knight-button {
-		background-color: $dark-tile-color;
-	}
-	&.rook-button {
-		background-color: $light-tile-color;
-	}
+.promotion-button-row {
+	display: flex;
 }
 
 .ui-dialog-titlebar-close {
 	display: none;
+}
+
+.ui-dialog-buttonset {
+	
 }
 
 @media only screen and (min-width: 500px)  {
