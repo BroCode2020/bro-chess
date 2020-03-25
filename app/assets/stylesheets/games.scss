@@ -16,6 +16,9 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 $dark-tile-color: #3e3e3e;
 $light-tile-color: white;
 
+$promotion-square-side-vmin-length: 22vmin;
+$promotion-square-side-min-pixel-length: 30px;
+
 .board-square, .svg-piece-display {
 	height: $square-side-vmin-length;
 	width: $square-side-vmin-length;
@@ -139,8 +142,11 @@ $light-tile-color: white;
 
 	img {
 //		display: block;
-		width: 22vmin;
-		height: 22vmin;
+		width: $promotion-square-side-vmin-length;
+		height: $promotion-square-side-vmin-length;
+
+		min-height: $promotion-square-side-min-pixel-length;
+		min-width: $promotion-square-side-min-pixel-length;
 	}
 	:hover {
 		cursor: pointer;
@@ -155,7 +161,8 @@ $light-tile-color: white;
 }
 
 .promotion-button-row {
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
 }
 
 .ui-dialog-titlebar-close {
@@ -163,7 +170,8 @@ $light-tile-color: white;
 }
 
 .ui-dialog-buttonset {
-	
+	display: grid;
+	grid-template-rows: 1fr 1fr;
 }
 
 @media only screen and (min-width: 500px)  {

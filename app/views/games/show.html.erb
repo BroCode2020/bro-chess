@@ -151,30 +151,29 @@
 		
 		$('#promotion-modal').dialog({
 			title: "Select a promotion:",
-			modal: true,
 			dialogClass: 'booyah-box promotion-modal',
 			open: addModalImages(),
 			buttons: [
 				{
-					"class": "promotion-button queen-button",// + playerColor,
+					"class": "promotion-button queen-button",
 					click: function() { 
 						onPromotionChosen (1);
 					}
 				},
 				{
-					"class": "promotion-button bishop-button " + playerColor,
+					"class": "promotion-button bishop-button",
 					click: function() { 
 						onPromotionChosen (2);
 					}
 				},
 				{
-					"class": "promotion-button knight-button " + playerColor,
+					"class": "promotion-button knight-button",
 					click: function() { 
 						onPromotionChosen (3);
 					}
 				},
 				{
-					"class": "promotion-button rook-button " + playerColor,
+					"class": "promotion-button rook-button",
 					click: function() { 
 						onPromotionChosen (4);
 					}
@@ -193,6 +192,21 @@
 	}
 
 	function addModalImages() {
+		// add 'promotion-button-row' divs
+
+		var $dialogData = $('.ui-dialog-buttonset');
+
+		var promotionRowOpeningHTML = '<div class="promotion-button-row">'
+		var knightButtonOpeningHTML = '<button type="button" class="promotion-button knight-button">';
+		var closeDiv = '</div>';
+
+		var modalHTML = promotionRowOpeningHTML + $dialogData.html() + closeDiv;
+		modalHTML = modalHTML.replace(knightButtonOpeningHTML, closeDiv + promotionRowOpeningHTML + knightButtonOpeningHTML)
+
+		$dialogData.html(modalHTML);
+
+		// add images to buttons
+
 		<% player_color = @game.player_on_move_color %>
 		<% svg_url = %>
 
@@ -207,6 +221,7 @@
 		for(i = 0; i < buttonSvgData.length; i++) {
 			$(`<img src="${buttonSvgData[i]}">`).appendTo(`.promotion-button.${selectorClasses[i]}`);
 		}
+		
 	}
 
 </script>
