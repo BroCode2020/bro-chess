@@ -38,6 +38,30 @@
         <%= f.submit "Black Player", class: 'btn create-game-button black' %>
       <% end %>
     </div>
+  </div>
+<% end %>
 
+<br />
 
+<% if current_user %>
+  <div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
+    <h1>Resume Game</h1>
+        <% games_in_progress = Game.where(ended: false, black_player_id: current_user.id).or(Game.where(ended: false, white_player_id: current_user.id)).to_a %>
+        <% if games_in_progress && games_in_progress.length > 0 %>
+          <% games_in_progress.each do |game|%>
+            <li>
+              <% is_black_player_in_game = (game.black_player_id == current_user.id) %>
+              <%= link_to 'Continue', game_path(game.id) %>
+              <% if game.white_player_id != current_user.id %>
+                 game with <%= game.white_player.email %> 
+                (<%= game.player_on_move == current_user ? 'Your ': 'Their' %> move)
+              <% else %>
+                practice game
+              <% end %>
+            </li>
+          <% end %>
+        <% else %>
+            <h2>You have no games in progress</h2>
+        <% end %>
+    </div>
 <% end %>
