@@ -61,9 +61,14 @@
             <li class="game-listing">
               <% is_black_player_in_game = (game.black_player_id == current_user.id) %>
               <%= link_to 'Continue', game_path(game.id) %>
-              <% if game.white_player_id != current_user.id %>
-                 game with <%= game.white_player.email %> 
-                (<%= game.player_on_move == current_user ? 'Your ': 'Their' %> move)
+              <% if game.white_player_id != game.black_player_id %>
+                <% if game.black_player_id == current_user.id %>
+                  game with <%= game.white_player.email %> 
+                  (<%= game.player_on_move == current_user ? 'Your ': 'Their' %> move)
+                <% else %>
+                  game with <%= game.black_player.email %> 
+                  (<%= game.player_on_move == current_user ? 'Your ': 'Their' %> move)
+                <% end %>            
               <% else %>
                 practice game
               <% end %>

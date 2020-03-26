@@ -114,10 +114,12 @@ class GamesController < ApplicationController
     end
 
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
-
     @game.update_attributes(victorious_player_id: current_user.id, ended: true)
-    current_user.increment_win_count
-    other_player.increment_loss_count if other_player
+
+    if @game.black_player_id != @game.white_player_id
+      current_user.increment_win_count
+      other_player.increment_loss_count if other_player
+    end
 
     @game.transmit_game_ended_status_to_firebase(true)
   end
@@ -135,10 +137,12 @@ class GamesController < ApplicationController
     end
 
     other_player = User.find_by(id: @game.black_player_id == current_user.id ? @game.white_player_id : @game.black_player_id)
-
     @game.update_attributes(forfeiting_player_id: current_user.id, victorious_player_id: other_player.id, ended: true)
-    current_user.increment_loss_count
-    other_player.increment_win_count if other_player
+    
+    if @game.black_player_id != @game.white_player_id
+      current_user.increment_loss_count
+      other_player.increment_win_count if other_player
+    end
 
     @game.transmit_game_ended_status_to_firebase(true)
   end
@@ -151,8 +155,11 @@ class GamesController < ApplicationController
     end
 
     @game.update_attributes(tied: true, ended: true)
-    User.find(@game.black_player_id).increment_tie_count
-    User.find(@game.white_player_id).increment_tie_count
+
+    if @game.black_player_id != @game.white_player_id
+      User.find(@game.black_player_id).increment_tie_count
+      User.find(@game.white_player_id).increment_tie_count
+    end
 
     @game.transmit_game_ended_status_to_firebase(true)
   end
