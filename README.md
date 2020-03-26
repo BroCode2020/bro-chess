@@ -1,24 +1,24 @@
-# README
+# Bro Chess
+## Developed by the BroCode team:
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+---
 
-Things you may want to cover:
+### **Philip Cox** ###
+[Github](https://github.com/damaskprint)
 
-* Ruby version
+---
 
-* System dependencies
+### **Julian Smith** ###
+[Github](https://github.com/Gamesmith9000), [Portfolio](https://juliansmith.dev/)
 
-* Configuration
+---
 
-* Database creation
+### **Dylan Stoker** ###
+[Github](https://github.com/dmstoker)
 
-* Database initialization
+---
 
-* How to run the test suite
+### **Eric Whitehead** ###
+[Github](https://github.com/t195eric)
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+---
