@@ -29,16 +29,20 @@
           <%= User.find(other_player_id).email if other_player_id != nil %>
         </div>
         <div>
-          <% if game.ended %>
-            <% if game.tied %>
-              <% status = 'Tied' %>
-            <% elsif game.victorious_player_id == @user.id %>
-              <% status = 'Won' %>
-            <% elsif !game.victorious_player_id.nil? && game.victorious_player_id != @user.id %>
-              <% status = 'Lost' %>
+          <% if game.white_player_id != game.black_player_id %>
+            <% if game.ended %>
+              <% if game.tied %>
+                <% status = 'Tied' %>
+              <% elsif game.victorious_player_id == @user.id %>
+                <% status = 'Won' %>
+              <% elsif !game.victorious_player_id.nil? && game.victorious_player_id != @user.id %>
+                <% status = 'Lost' %>
+              <% end %>
+            <% else %>
+              <% status = other_player_id.nil? ? 'Open' : 'In Progress' %>
             <% end %>
           <% else %>
-            <% status = other_player_id.nil? ? 'Open' : 'In Progress' %>
+            <% status = 'Practice' %>
           <% end %>
           <%= status %>
         </div>
