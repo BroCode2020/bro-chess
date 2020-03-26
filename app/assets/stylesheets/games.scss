@@ -141,7 +141,6 @@ $promotion-square-side-min-pixel-length: 30px;
 	padding: 0;
 
 	img {
-//		display: block;
 		width: $promotion-square-side-vmin-length;
 		height: $promotion-square-side-vmin-length;
 
@@ -168,19 +167,6 @@ $promotion-square-side-min-pixel-length: 30px;
 			background-color: $light-tile-color;
 		}
 	}
-
-	&.promotion-button-left {
-
-	}
-
-	&.promotion-button-right {
-		
-	}
-}
-
-.promotion-button-row {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
 }
 
 .ui-dialog-titlebar-close {
@@ -189,6 +175,7 @@ $promotion-square-side-min-pixel-length: 30px;
 
 .ui-dialog-buttonset {
 	display: grid;
+	grid-template-columns: 1fr 1fr;
 	grid-template-rows: 1fr 1fr;
 }
 
