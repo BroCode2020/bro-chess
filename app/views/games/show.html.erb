@@ -146,15 +146,26 @@
 
 	function openPawnPromotionModal () {
 		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
+		var pos;
+		if(playerColor === "black") {
+			pos = {
+				my: 'right top',
+				at: 'center top',
+				of: '#4-6' ////////////////////
+			};
+		}
+		else if (playerColor === "white") {
+			pos = {
+				my: 'right top',
+				at: 'center top',
+				of: '#4-1'
+			};
+		}
 		
 		$('#promotion-modal').dialog({
 			title: "Select a promotion:",
 			dialogClass: 'booyah-box promotion-modal',
-			position: {
-				my: 'center bottom',
-				at: 'center top',
-				of: '#3-3'
-			},
+			position: pos,
 			buttons: [
 				{
 					"class": "promotion-button queen-button " + playerColor,
