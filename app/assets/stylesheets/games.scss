@@ -116,6 +116,10 @@ $promotion-square-side-min-pixel-length: 30px;
 	background-color: transparent;
 }
 
+.ui-dialog {
+	width: fit-content !important;
+}
+
 .ui-dialog-title {
   font-size: 1.5rem;
 
