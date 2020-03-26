@@ -2,9 +2,9 @@
   <h1><%= @user.email %></h1>
   <h3>Member Since: <%= @user.created_at.strftime("%B %d, %Y") %></h3>
   <div class="win-loss-draw-stats">
-    <div><%=@user.games_won %> Wins</div>
-    <div><%=@user.games_drawn %> Draws</div>
-    <div><%=@user.games_lost %> Losses</div>
+    <div><%=@user.games_won %> <%= @user.games_won == 1 ? 'Win' : 'Wins'%></div>
+    <div><%=@user.games_drawn %> <%= @user.games_drawn == 1 ? 'Draw' : 'Draws'%></div>
+    <div><%=@user.games_lost %> <%= @user.games_lost == 1 ? 'Loss' : 'Losses'%></div>
   </div>
 </div>
 
@@ -29,16 +29,20 @@
           <%= User.find(other_player_id).email if other_player_id != nil %>
         </div>
         <div>
-          <% if game.ended %>
-            <% if game.tied %>
-              <% status = 'Tied' %>
-            <% elsif game.victorious_player_id == @user.id %>
-              <% status = 'Won' %>
-            <% elsif !game.victorious_player_id.nil? && game.victorious_player_id != @user.id %>
-              <% status = 'Lost' %>
+          <% if game.white_player_id != game.black_player_id %>
+            <% if game.ended %>
+              <% if game.tied %>
+                <% status = 'Tied' %>
+              <% elsif game.victorious_player_id == @user.id %>
+                <% status = 'Won' %>
+              <% elsif !game.victorious_player_id.nil? && game.victorious_player_id != @user.id %>
+                <% status = 'Lost' %>
+              <% end %>
+            <% else %>
+              <% status = other_player_id.nil? ? 'Open' : 'In Progress' %>
             <% end %>
           <% else %>
-            <% status = other_player_id.nil? ? 'Open' : 'In Progress' %>
+            <% status = 'Practice' %>
           <% end %>
           <%= status %>
         </div>

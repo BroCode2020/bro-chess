@@ -5,16 +5,24 @@
     <h2>Available Games:</h2>
     <ul>
       <% @game.each do |game| %>
-        <% if game.black_player_id.nil? && game.white_player_id && game.forfeiting_player_id.nil? %>
-          <li>Waiting for
-            <b>black</b>
-            to join...
-            <%= link_to 'Join this game', join_as_black_game_path(game), method: :put %></li>
-          <% elsif game.black_player_id && game.white_player_id.nil? && game.forfeiting_player_id.nil? %>
-            <li>Waiting for
-              <b>white</b>
-              to join...
-              <%= link_to 'Join this game', join_as_white_game_path(game), method: :put %></li>
+        <% if game.black_player_id.nil? && game.white_player_id && !game.ended %>
+          <li class="game-listing">
+            <% if game.white_player != current_user%>
+              Waiting for <b>black</b> to join...
+            <% else %>
+              Practice (your game)
+            <% end %>
+            <%= link_to 'Join this game', join_as_black_game_path(game), method: :put %>
+          </li>
+          <% elsif game.black_player_id && game.white_player_id.nil? && !game.ended %>
+            <li class="game-listing">
+              <% if game.black_player != current_user%>
+                Waiting for <b>white</b> to join...
+              <% else %>
+                Practice (your game)
+              <% end %>
+              <%= link_to 'Join this game', join_as_white_game_path(game), method: :put %>
+            </li>
           <% end %>
         <% end %>
       </ul>
@@ -27,17 +35,47 @@
 <% if current_user %>
 <div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
   <h1>Create Game</h1>
-    <div class="row container">
+    <div class="create-game-button-row">
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :white_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "White Player", class: 'btn btn-primary' %>
+        <%= f.submit "White Player", class: 'btn create-game-button white' %>
       <% end %>
       &nbsp; &nbsp; &nbsp;
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "Black Player", class: 'btn btn-primary' %>
+        <%= f.submit "Black Player", class: 'btn create-game-button black' %>
       <% end %>
     </div>
+  </div>
+<% end %>
 
+<br />
 
+<% if current_user %>
+  <div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
+    <h1>Resume Game</h1>
+        <% games_in_progress = Game.where(ended: false, black_player_id: current_user.id).or(Game.where(ended: false, white_player_id: current_user.id)) %>
+        <% games_in_progress = games_in_progress.where.not(black_player_id: nil).where.not(white_player_id: nil).to_a %>
+        <% if games_in_progress && games_in_progress.length > 0 %>
+          <% games_in_progress.each do |game|%>
+            <li class="game-listing">
+              <% is_black_player_in_game = (game.black_player_id == current_user.id) %>
+              <%= link_to 'Continue', game_path(game.id) %>
+              <% if game.white_player_id != game.black_player_id %>
+                <% if game.black_player_id == current_user.id %>
+                  game with <%= game.white_player.email %> 
+                  (<%= game.player_on_move == current_user ? 'Your ': 'Their' %> move)
+                <% else %>
+                  game with <%= game.black_player.email %> 
+                  (<%= game.player_on_move == current_user ? 'Your ': 'Their' %> move)
+                <% end %>            
+              <% else %>
+                practice game
+              <% end %>
+            </li>
+          <% end %>
+        <% else %>
+            <h2>You have no games in progress</h2>
+        <% end %>
+    </div>
 <% end %>

@@ -263,6 +263,10 @@
 			<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
 		<% end %>
 	<% end %>
+
+	<% if @game.black_player_id == @game.white_player_id %>
+		<% turn_display_text += ' (' + (@game.player_on_move_color == 0 ? 'Black' : 'White') + ')' %>
+	<% end %>
 <% end %>
 
 <div class="<%=turn_display_class%>">
