@@ -27,15 +27,15 @@
 <% if current_user %>
 <div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
   <h1>Create Game</h1>
-    <div class="row container">
+    <div class="create-game-button-row">
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :white_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "White Player", class: 'btn btn-primary' %>
+        <%= f.submit "White Player", class: 'btn create-game-button white' %>
       <% end %>
       &nbsp; &nbsp; &nbsp;
       <%= simple_form_for @game.new do |f| %>
         <%= f.input :black_player_id, :as => :hidden, :input_html => { :value => current_user.id } %>
-        <%= f.submit "Black Player", class: 'btn btn-primary' %>
+        <%= f.submit "Black Player", class: 'btn create-game-button black' %>
       <% end %>
     </div>
 

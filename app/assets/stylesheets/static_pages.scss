@@ -3,3 +3,38 @@
 // Place all the styles related to the static_pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$create-button-width: 8rem;
+
+.create-game-button-row {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+
+.create-game-button {
+
+
+	&.white {
+		color: black;
+		background-color: white;
+		border-color: black;
+		width: $create-button-width;
+		
+		&:hover {
+			background-color: #cacaca;
+
+		}
+	}
+	&.black {
+		color: white;
+		background-color: black;
+		border-color: white;
+		width: $create-button-width;
+
+		&:hover {
+			background-color: #2f2f2f;
+		}
+	}
+}
