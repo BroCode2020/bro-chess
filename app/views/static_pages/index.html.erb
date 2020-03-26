@@ -5,12 +5,12 @@
     <h2>Available Games:</h2>
     <ul>
       <% @game.each do |game| %>
-        <% if game.black_player_id.nil? && game.white_player_id && game.forfeiting_player_id.nil? %>
+        <% if game.black_player_id.nil? && game.white_player_id && !game.ended %>
           <li>Waiting for
             <b>black</b>
             to join...
             <%= link_to 'Join this game', join_as_black_game_path(game), method: :put %></li>
-          <% elsif game.black_player_id && game.white_player_id.nil? && game.forfeiting_player_id.nil? %>
+          <% elsif game.black_player_id && game.white_player_id.nil? && !game.ended %>
             <li>Waiting for
               <b>white</b>
               to join...
