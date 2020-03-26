@@ -2,6 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$select-color: #fff969;
 
 $square-border-color-light: #bebebe;
 $square-border-color-dark: #858585;
@@ -11,6 +12,12 @@ $square-side-min-pixel-length: 20px;
 
 $board-length: calc(#{$square-side-vmin-length} * 8);
 $empty-screen-space-x: calc(100vw - #{$board-length});
+
+$dark-tile-color: #3e3e3e;
+$light-tile-color: white;
+
+$promotion-square-side-vmin-length: 22vmin;
+$promotion-square-side-min-pixel-length: 30px;
 
 .board-square, .svg-piece-display {
 	height: $square-side-vmin-length;
@@ -26,28 +33,24 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 	border-width: .25vmin;
 	border-style: solid;
 
-	border-top-color: $square-border-color-light;
-	border-left-color: $square-border-color-light;
-
-	border-bottom-color: $square-border-color-dark;
-	border-right-color: $square-border-color-dark;
+	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
 
 	&.black {
-		background: #3e3e3e;
+		background: $dark-tile-color;
 
 		&.hover:hover{
 			animation: hover-anim-light 2s linear infinite;
 		}
 	}
 	&.white {
-		background-color: white;
+		background-color: $light-tile-color;
 
 		&.hover:hover{
 			animation: hover-anim-dark 2s linear infinite;
 		}
 	}
 	&.select{
-		background-color: #fff969;
+		background-color: $select-color;
 	}
 	&.hover:hover{
 		animation: hover-anim-dark 2s linear infinite;
@@ -113,51 +116,59 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 	background-color: transparent;
 }
 
+.ui-dialog {
+	width: fit-content !important;
+}
+
 .ui-dialog-title {
   font-size: 1.5rem;
+
+	:hover {
+		cursor: default;
+	}
 }
 
 .promotion-modal {
-	opacity: 1.0 !important;
+	opacity: 1.0 !important;		// Remove this once each button has its own background
 	z-index: 2;
+
+	::selection {
+		background-color: transparent;
+	}
+	:hover {
+		cursor: default;
+	}
 }
 
 .promotion-button {
-	width: 120px;
-	height: 110px;
+	border-color: $square-border-color-light $square-border-color-dark $square-border-color-dark $square-border-color-light;
+	padding: 0;
 
-	&.queen-button {
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 46.5, 95, 40))') no-repeat;
-		}
+	img {
+		width: $promotion-square-side-vmin-length;
+		height: $promotion-square-side-vmin-length;
+
+		min-height: $promotion-square-side-min-pixel-length;
+		min-width: $promotion-square-side-min-pixel-length;
+	}
+	:hover {
+		cursor: pointer;
+		background-color: $select-color;
+	}
+	&.queen-button, &.rook-button  {
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(47, 0, 95, 40))') no-repeat;
+			background-color: $light-tile-color;
+		}
+		&.black {
+			background-color: $dark-tile-color;
 		}
 	}
-
-	&.bishop-button {
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 45.5, 95, 40))') no-repeat;
-		}
+	&.bishop-button, &.knight-button {
 		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(92.25, 0, 95, 40))') no-repeat;
+			background-color: $dark-tile-color;
 		}
-	}
-
-	&.knight-button {
 		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 45.5, 95, 40))') no-repeat;
-		}
-		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(137, 0, 95, 40))') no-repeat;
-		}
-	}
-	&.rook-button {
-		&.black {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 45.5, 95, 40))') no-repeat;
-		}
-		&.white {
-			background: url('Chess_Pieces_Sprite.svg#svgView(viewBox(182, 0, 95, 40))') no-repeat;
+			background-color: $light-tile-color;
 		}
 	}
 }
@@ -166,7 +177,11 @@ $empty-screen-space-x: calc(100vw - #{$board-length});
 	display: none;
 }
 
-
+.ui-dialog-buttonset {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+}
 
 @media only screen and (min-width: 500px)  {
 	.turn-display.your-turn {
