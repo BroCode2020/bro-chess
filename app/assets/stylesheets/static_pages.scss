@@ -12,7 +12,6 @@ $create-button-width: 8rem;
 	justify-content: center;
 }
 
-
 .create-game-button {
 
 
@@ -37,4 +36,9 @@ $create-button-width: 8rem;
 			background-color: #2f2f2f;
 		}
 	}
+}
+
+li.game-listing {
+	text-align: left;
+	margin-left: 4rem;
 }

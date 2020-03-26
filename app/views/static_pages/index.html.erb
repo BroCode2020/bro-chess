@@ -6,7 +6,7 @@
     <ul>
       <% @game.each do |game| %>
         <% if game.black_player_id.nil? && game.white_player_id && !game.ended %>
-          <li>
+          <li class="game-listing">
             <% if game.white_player != current_user%>
               Waiting for <b>black</b> to join...
             <% else %>
@@ -15,7 +15,7 @@
             <%= link_to 'Join this game', join_as_black_game_path(game), method: :put %>
           </li>
           <% elsif game.black_player_id && game.white_player_id.nil? && !game.ended %>
-            <li>
+            <li class="game-listing">
               <% if game.black_player != current_user%>
                 Waiting for <b>white</b> to join...
               <% else %>
@@ -58,7 +58,7 @@
         <% games_in_progress = games_in_progress.where.not(black_player_id: nil).where.not(white_player_id: nil).to_a %>
         <% if games_in_progress && games_in_progress.length > 0 %>
           <% games_in_progress.each do |game|%>
-            <li>
+            <li class="game-listing">
               <% is_black_player_in_game = (game.black_player_id == current_user.id) %>
               <%= link_to 'Continue', game_path(game.id) %>
               <% if game.white_player_id != current_user.id %>
