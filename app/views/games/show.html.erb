@@ -38,6 +38,7 @@
 
 <div id="turn-status-indicator" class="<%=turn_status%>"></div>
 <div id="promotion-modal"></div>
+<% promotion_svg_scale = 45 %>
 
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
@@ -89,9 +90,9 @@
 						if(!unloading) {
 							location.reload();
 							/* Because of the approach the Firebase callbacks necessitated, only successful moves
-								(ones that update piece position in our Rails database) will refresh the page. */
+								(ones that update piece position in our Rails database) will refresh the page.
 
-							 /* The solution:
+								The solution:
 								 - Always call a function to refresh the page, but only after waiting a short amount of time
 								 - Said function will only reload the page if the "unload" flag is set to false
 								 - If there is a successful move, the page will automatically be redirected, which wills
@@ -144,14 +145,27 @@
 	});
 
 	function openPawnPromotionModal () {
-		var playerColor;
-
 		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
+		var pos;
+		if(playerColor === "black") {
+			pos = {
+				my: 'right top',
+				at: 'center top',
+				of: '#4-6' ////////////////////
+			};
+		}
+		else if (playerColor === "white") {
+			pos = {
+				my: 'right top',
+				at: 'center top',
+				of: '#4-1'
+			};
+		}
 		
 		$('#promotion-modal').dialog({
 			title: "Select a promotion:",
-			modal: true,
 			dialogClass: 'booyah-box promotion-modal',
+			position: pos,
 			buttons: [
 				{
 					"class": "promotion-button queen-button " + playerColor,
@@ -179,14 +193,36 @@
 				}
 			]
 		});
+
+		addModalImages(playerColor);
 	}
 
-	function onPromotionChosen(promotionID) {
+	function onPromotionChosen (promotionID) {
 		turnStatusIndicator.removeClass("on-move");
 		turnStatusIndicator.addClass("moved-piece");
 		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
 		$.post(promotionPath);
 	}
+
+	function addModalImages() {
+		// add images to buttons
+
+		<% player_color = @game.player_on_move_color %>
+		<% svg_url = %>
+
+		var selectorClasses = ["queen-button", "bishop-button", "knight-button", "rook-button"];
+		var buttonSvgData = new Array(4);
+
+		buttonSvgData[0] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'queen', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[1] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'bishop', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[2] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'knight', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[3] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'rook', player_color, promotion_svg_scale) %>"; 
+
+		for(i = 0; i < buttonSvgData.length; i++) {
+			$(`<img src="${buttonSvgData[i]}">`).appendTo(`.promotion-button.${selectorClasses[i]}`);
+		}
+	}
+
 </script>
 
 <script>
