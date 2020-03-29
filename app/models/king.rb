@@ -61,12 +61,12 @@ class King < Piece
     return false if moved
     return false if obstructed?(rook_x_pos, rook_y_pos)
     return false if rook.nil? || rook.moved
-    return false if in_check!(x_pos, y_pos)
+    return false if in_check?(x_pos, y_pos)
     if rook_x_pos == 7
         while x_pos < rook_x_pos - 1
           update(x_pos: x_pos + 1)
           reload
-          if in_check!(x_pos, y_pos)
+          if in_check?(x_pos, y_pos)
             update(x_pos: 4)
             return false
           end
@@ -76,7 +76,7 @@ class King < Piece
       if rook_x_pos.zero?
         while x_pos > rook_x_pos + 2
           update(x_pos: x_pos - 1)
-          if in_check!(x_pos, y_pos)
+          if in_check?(x_pos, y_pos)
             update(x_pos: 4)
             return false
           end
@@ -86,7 +86,7 @@ class King < Piece
       true
     end
 
-    def in_check!(x_pos, y_pos)
+    def in_check?(x_pos, y_pos)
 
       opposing_color = (color == 0 ? 1 : 0)
 
@@ -100,22 +100,7 @@ class King < Piece
       return false
     end
 
-
-  def in_check?
-
-    opposing_color = (color == 0 ? 1 : 0)
-
-    cur_game = Game.find_by(id: game_id)
-    opposing_pieces = cur_game.pieces.where(color: opposing_color).where.not(x_pos: nil).where.not(y_pos:nil)
-
-    opposing_pieces.each do |p|
-      return true if p.valid_move?(x_pos, y_pos)
-    end
-
-    return false
-  end
-
-def obstructed?(x_destination, y_destination)
+  def obstructed?(x_destination, y_destination)
    game = Game.find(self.game_id)
    x_location = self.x_pos
    y_location = self.y_pos
@@ -142,7 +127,7 @@ def obstructed?(x_destination, y_destination)
      end
      return false
    #check for diagnol obstructions
- else
+  else
      x_location > x_destination ? x_incrementer = -1 : x_incrementer = 1
      y_location > y_destination ? y_incrementer = -1 : y_incrementer = 1
      x_position = x_location + x_incrementer
@@ -156,6 +141,6 @@ def obstructed?(x_destination, y_destination)
      end
      return false
    end
- end
+  end
 
 end
