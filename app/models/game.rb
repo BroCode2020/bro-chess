@@ -71,8 +71,8 @@ class Game < ApplicationRecord
     pieces.where(color: king_color).where.not(x_pos: nil).where.not(y_pos: nil).each do |p|
       for y in 0..7 do
         for x in 0..7 do
-          if p.valid_move?(x, y) && p.x_pos != x && p.y_pos != y
-            if !move_puts_self_in_check?(p, x, y) && !king_in_question.in_check?
+          if p.valid_move?(x, y) && (p.x_pos != x && p.y_pos != y)
+            if !move_puts_self_in_check?(p, x, y) # && !king_in_question.in_check?
               return false
             end
           end
