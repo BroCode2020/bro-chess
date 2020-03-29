@@ -86,7 +86,7 @@ class King < Piece
       true
     end
 
-    def in_check?(x_pos, y_pos)
+    def in_check?
 
       opposing_color = (color == 0 ? 1 : 0)
 
