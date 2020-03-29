@@ -1,7 +1,7 @@
 class Knight < Piece
 
 	def valid_move?(new_x, new_y)
-
+		return false if new_x == x_pos && new_y == y_pos
 		cur_game = Game.find_by(id: game_id)
 
 		# if there is a piece at target position...

@@ -1,7 +1,7 @@
 class Bishop < Piece
 
 	def valid_move? (new_x, new_y)
-
+		return false if new_x == x_pos && new_y == y_pos
 		cur_game = Game.find_by(id: game_id)
 
 		# get the absolute value of the distances moved in x and y directions
