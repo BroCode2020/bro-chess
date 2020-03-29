@@ -67,6 +67,10 @@ class Game < ApplicationRecord
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
     end
     king_in_question = pieces.find_by(type: :King, color: king_color)
+    if !king_in_question.in_check?
+      $stderr.puts ''
+      $stderr.puts 'king is not in check'
+    end
     return false if !king_in_question.in_check?
     pieces.where(color: king_color).where.not(x_pos: nil).where.not(y_pos: nil).each do |p|
       for y in 0..7 do

@@ -21,7 +21,7 @@ class King < Piece
       return true
     end
       return false
-    end
+  end
 
   def move_to!(new_x, new_y)
 
@@ -38,7 +38,7 @@ class King < Piece
     end
      self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
      return true
-    end
+  end
 
 
   def castle!(rook_x_pos, rook_y_pos)
@@ -61,12 +61,12 @@ class King < Piece
     return false if moved
     return false if obstructed?(rook_x_pos, rook_y_pos)
     return false if rook.nil? || rook.moved
-    return false if in_check?(x_pos, y_pos)
+    return false if in_check?
     if rook_x_pos == 7
         while x_pos < rook_x_pos - 1
           update(x_pos: x_pos + 1)
           reload
-          if in_check?(x_pos, y_pos)
+          if in_check?
             update(x_pos: 4)
             return false
           end
@@ -76,7 +76,7 @@ class King < Piece
       if rook_x_pos.zero?
         while x_pos > rook_x_pos + 2
           update(x_pos: x_pos - 1)
-          if in_check?(x_pos, y_pos)
+          if in_check?
             update(x_pos: 4)
             return false
           end
@@ -87,7 +87,6 @@ class King < Piece
     end
 
     def in_check?
-
       opposing_color = (color == 0 ? 1 : 0)
 
       cur_game = Game.find_by(id: game_id)
