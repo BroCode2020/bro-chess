@@ -1,8 +1,8 @@
 class Rook < Piece
   def valid_move?(new_x, new_y)
+    return false if new_y == y_pos && new_x == x_pos
     return false if out_of_bounds?(new_x)
     return false if out_of_bounds?(new_y)
-
     return false unless move_along_row?(new_x, new_y) || move_along_column?(new_x, new_y)
 
     pieces = Piece.where(game_id: game.id)

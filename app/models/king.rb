@@ -20,8 +20,8 @@ class King < Piece
     elsif new_x == 6 && new_y == 7 && moved? == false
       return true
     end
-      return false
-    end
+    return false
+  end
 
   def move_to!(new_x, new_y)
 

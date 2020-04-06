@@ -303,6 +303,44 @@ RSpec.describe Game, type: :model do
 			expect(game.king_in_checkmate?(0)).to eq(true)
 		end
 
+		it "should return false in this scenario where the king can move out of check" do
+			game = FactoryBot.create(:game)
+			game.pieces.clear
+			#black pieces
+	    FactoryBot.create(:pawn, color: 0, game: game, x_pos: 0, y_pos: 1)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 1, y_pos: 1)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 2, y_pos: 1)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 3, y_pos: 1)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 4, y_pos: 2)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 5, y_pos: 1)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 6, y_pos: 1)
+			FactoryBot.create(:pawn, color: 0, game: game, x_pos: 7, y_pos: 1)
+	    FactoryBot.create(:rook, color: 0, game: game, x_pos: 0, y_pos: 0)
+	    FactoryBot.create(:rook, color: 0, game: game, x_pos: 7, y_pos: 0)
+			FactoryBot.create(:knight, color: 0, game: game, x_pos: 1, y_pos: 0)
+	    FactoryBot.create(:knight, color: 0, game: game, x_pos: 6, y_pos: 0)
+			FactoryBot.create(:queen, color: 0, game: game, x_pos: 2, y_pos: 0)
+			FactoryBot.create(:bishop, color: 0, game: game, x_pos: 5, y_pos: 0)
+			FactoryBot.create(:bishop, color: 0, game: game, x_pos: 7, y_pos: 4)
+			FactoryBot.create(:king, color: 0, game: game, x_pos: 4, y_pos: 0)
+			#White Pieces
+	    FactoryBot.create(:pawn, color: 1, game: game, x_pos: 0, y_pos: 6)
+			FactoryBot.create(:pawn, color: 1, game: game, x_pos: 1, y_pos: 6)
+			FactoryBot.create(:pawn, color: 1, game: game, x_pos: 2, y_pos: 6)
+			FactoryBot.create(:pawn, color: 1, game: game, x_pos: 3, y_pos: 6)
+			FactoryBot.create(:pawn, color: 1, game: game, x_pos: 6, y_pos: 4)
+			FactoryBot.create(:pawn, color: 1, game: game, x_pos: 7, y_pos: 6)
+			FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 7)
+			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 7)
+			FactoryBot.create(:knight, color: 1, game: game, x_pos: 1, y_pos: 7)
+			FactoryBot.create(:knight, color: 1, game: game, x_pos: 1, y_pos: 7)
+			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 2, y_pos: 7)
+			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 5, y_pos: 7)
+			FactoryBot.create(:queen, color: 1, game: game, x_pos: 3, y_pos: 7)
+			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
+			expect(game.king_in_checkmate?(1)).to eq(false)
+		end
+
 		it "should return false when black king is not in checkmate" do
 			game = FactoryBot.create(:game)
 			expect(game.king_in_checkmate?(0)).to eq(false)
@@ -418,6 +456,7 @@ RSpec.describe Game, type: :model do
 
 				expect(game.move_puts_self_in_check?(rook, 7, 0)).to eq(false)
 			end
+
 		end
 	end
 

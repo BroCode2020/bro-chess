@@ -1,7 +1,7 @@
 class Bishop < Piece
 
 	def valid_move? (new_x, new_y)
-
+		return false if new_y == y_pos && new_x == x_pos
 		cur_game = Game.find_by(id: game_id)
 
 		# get the absolute value of the distances moved in x and y directions
@@ -17,7 +17,7 @@ class Bishop < Piece
 			p = cur_game.pieces.find_by(x_pos: new_x, y_pos: new_y)
 
 			# if the piece at target location and this piece are the same color, move is invalid
-			return false if (p && p.color == color)		
+			return false if (p && p.color == color)
 		end
 
 		# ensure input is valid in the general sense and isn't obstructed
@@ -25,6 +25,6 @@ class Bishop < Piece
 		return false if is_obstructed?(x_pos, y_pos, new_x, new_y) != false
 
 		return true
-		
+
 	end
 end
