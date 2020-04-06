@@ -47,44 +47,35 @@ class King < Piece
     if rook_x_pos == 7
       update_attributes(x_pos: x_pos + 2)
       rook.update_attributes(x_pos: rook_x_pos - 2)
-      reload
     elsif rook_x_pos.zero?
       update_attributes(x_pos: x_pos - 2)
       rook.update_attributes(x_pos: rook_x_pos + 3)
-      reload
     end
   end
 
 
   def castle?(rook_x_pos, rook_y_pos)
+    return false if moved || in_check?
     rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
-    return false if moved
     return false if obstructed?(rook_x_pos, rook_y_pos)
     return false if rook.nil? || rook.moved
-    return false if in_check?
+    return false if rook_x_pos != 7 && rook_x_pos != 0
     if rook_x_pos == 7
-        while x_pos < rook_x_pos - 1
-          update(x_pos: x_pos + 1)
-          reload
-          if in_check?
-            update(x_pos: 4)
-            return false
-          end
-        end
-        update(x_pos: 4)
+      new_x_pos = x_pos
+      while new_x_pos < rook_x_pos - 1
+        new_x_pos += 1
+        return false if game.move_puts_self_in_check?(self, new_x_pos, y_pos)
       end
-      if rook_x_pos.zero?
-        while x_pos > rook_x_pos + 2
-          update(x_pos: x_pos - 1)
-          if in_check?
-            update(x_pos: 4)
-            return false
-          end
-        end
-        update(x_pos: 4)
-      end
-      true
     end
+    if rook_x_pos.zero?
+      new_x_pos = x_pos
+      while new_x_pos > rook_x_pos + 2
+        new_x_post -= 1
+        return false if game.move_puts_self_in_check?(self, new_x_pos, y_pos)
+      end
+    end
+    true
+  end
 
     def in_check?
       opposing_color = (color == 0 ? 1 : 0)
