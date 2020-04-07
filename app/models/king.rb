@@ -1,26 +1,38 @@
 class King < Piece
   def valid_move?(new_x, new_y)
+    $stderr.puts 'marker 0' if new_x == 6 && new_y == 0
     return false if new_y > 7 || new_x > 7 || new_y < 0 || new_x < 0
+    $stderr.puts 'marker 1' if new_x == 6 && new_y == 0
     return false if new_y == y_pos && new_x == x_pos
+    $stderr.puts 'marker 2' if new_x == 6 && new_y == 0
     return false if obstructed?(new_x, new_y)
+    $stderr.puts 'marker 3' if new_x == 6 && new_y == 0
 
     piece_at_destination = game.pieces.find_by(x_pos: new_x, y_pos: new_y)
     return false if piece_at_destination && piece_at_destination.color == color
 
+    $stderr.puts 'marker 4' if new_x == 6 && new_y == 0
+
     x_diff = (x_pos - new_x).abs
     y_diff = (y_pos - new_y).abs
     if (x_diff <= 1) && (y_diff <= 1)
+      $stderr.puts 'marker 5-a' if new_x == 6 && new_y == 0
       return true
-    elsif new_x == 2 && new_y == 0 && moved? == false
+    elsif new_x == 2 && new_y == 0 && !moved && !in_check?
+      $stderr.puts 'marker 5-b' if new_x == 6 && new_y == 0
       return true
-    elsif new_x == 2 && new_y == 0 && moved? == false
+    elsif new_x == 2 && new_y == 0 && !moved && !in_check?
+      $stderr.puts 'marker 5-c' if new_x == 6 && new_y == 0
       return true
-    elsif new_x == 6 && new_y == 0 && moved? == false
+    elsif new_x == 6 && new_y == 0 && !moved && !in_check?
+      $stderr.puts 'marker 5-d' if new_x == 6 && new_y == 0
       return true
-    elsif new_x == 6 && new_y == 7 && moved? == false
+    elsif new_x == 6 && new_y == 7 && !moved && !in_check?
+      $stderr.puts 'marker 5-e' if new_x == 6 && new_y == 0
       return true
-    end
+    else
       return false
+    end
   end
 
   def move_to!(new_x, new_y)
@@ -95,7 +107,7 @@ class King < Piece
    x_location = self.x_pos
    y_location = self.y_pos
    #check for vertical obstructions
-   if x_location == x_destination
+   if x_location == x_destination && y_location != y_destination
      y_location > y_destination ? incrementer = -1 : incrementer = 1
      y_position = y_location + incrementer
      while y_position != y_destination
@@ -106,7 +118,7 @@ class King < Piece
      end
      return false
    #check for horizontal obstructions
-   elsif y_location == y_destination
+   elsif y_location == y_destination && x_location != x_destination
      x_location > x_destination ? incrementer = -1 : incrementer = 1
      x_position = x_location + incrementer
      while x_position != x_destination
@@ -117,7 +129,7 @@ class King < Piece
      end
      return false
    #check for diagnol obstructions
-  else
+  elif x_location == x_destination && y_location == y_destination
      x_location > x_destination ? x_incrementer = -1 : x_incrementer = 1
      y_location > y_destination ? y_incrementer = -1 : y_incrementer = 1
      x_position = x_location + x_incrementer

@@ -474,7 +474,7 @@ RSpec.describe Game, type: :model do
 			it "should return false if the king is in checkmate" do
 				game = FactoryBot.create(:game)
 				game.pieces.clear
-				black_king = FactoryBot.create(:king, color: 0, game: game, x_pos: 0, y_pos: 3, moved: true)
+				black_king = FactoryBot.create(:king, color: 0, game: game, x_pos: 3, y_pos: 0, moved: true)
 				white_rook = FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
 				white_rook = FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
 				white_king = FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 4, moved: true)
