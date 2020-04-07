@@ -338,6 +338,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 5, y_pos: 7)
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 3, y_pos: 7)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
+			print_board(game)
 			expect(game.king_in_checkmate?(1)).to eq(false)
 		end
 
@@ -560,4 +561,43 @@ RSpec.describe Game, type: :model do
 
 		end
 
+end
+
+def print_board(game_instance)
+	spacing = '  '
+	no_piece = '...'
+	$stderr.puts spacing
+	0.upto(7) do |y|
+		row = ''
+		0.upto(7) do |x|
+			p_text = ''
+			p = game_instance.pieces.find_by(x_pos: x, y_pos: y)
+			if p
+				if(p.color == 0 || p.color == 1)
+					p_text = p.color == 0 ? 'b-' : 'w-'
+					if(p.is_a? Pawn)
+						p_text += 'P'
+					elsif(p.is_a? Rook)
+						p_text += 'R'
+					elsif(p.is_a? Knight)
+						p_text += 'K'
+					elsif(p.is_a? Bishop)
+						p_text += 'B'
+					elsif(p.is_a? Queen)
+						p_text += 'Q'
+					elsif(p.is_a? King)
+						p_text += '#'
+					end
+				else
+					p_text = "c=#{p.color}"
+				end
+			else
+				p_text = no_piece
+			end
+			p_text += spacing if x != 7
+			row += p_text
+			$stderr.puts row if x == 7
+			$stderr.puts spacing if x == 7
+		end
+	end
 end
