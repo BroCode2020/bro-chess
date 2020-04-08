@@ -13,7 +13,6 @@ class Pawn < Piece
     return false if game.piece_at(new_x, new_y)
 
     y_move_dist = (new_y - y_pos).abs
-    $stderr.puts "game.tile_is_occupied?(#{new_x}, #{new_y}) returned #{game.tile_is_occupied?(new_x, new_y)}"
     if (y_move_dist == 1)
       return false if game.tile_is_occupied?(new_x, new_y)
     elsif (y_move_dist == 2)

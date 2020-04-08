@@ -127,7 +127,6 @@ RSpec.describe Game, type: :model do
 		it "should return true when the black king is in checkmate" do
 			game = FactoryBot.create(:game)
 			game.pieces.clear
-			$stderr.puts ''
 			FactoryBot.create(:king, color: 0, game: game, x_pos: 3, y_pos: 0, moved: true)
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
@@ -257,7 +256,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 5, y_pos: 7)
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 3, y_pos: 7)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
-			print_board(game)
+
 			expect(game.king_in_checkmate?(1)).to eq(true)
 		end
 

@@ -60,45 +60,25 @@ class Game < ApplicationRecord
     return king_to_test.in_check?
   end
   def in_checkmate_state?
-    $stderr.puts 'started: in_checkmate_state?()'
-    result = (king_in_checkmate?(0) || king_in_checkmate?(1))
-    $stderr.puts "in_checkmate_state?() returned #{result}"
-    return result
-    #return (king_in_checkmate?(0) || king_in_checkmate?(1))
+    return (king_in_checkmate?(0) || king_in_checkmate?(1))
   end
   def king_in_checkmate?(king_color)
-    $stderr.puts "started: king_in_checkmate?(#{king_color})"
     if(king_color != 0 && king_color != 1)
       raise(RuntimeError, 'Invalid color provided. Must be 0 for black or 1 for white.')
     end
     king_in_question = pieces.find_by(type: :King, color: king_color)
-    if !king_in_question.in_check?
-      $stderr.puts 'king is not in check:...'
-      $stderr.puts "king_in_checkmate?(#{king_color}) returned false"
-    end
     return false if !king_in_question.in_check?
     pieces.where(color: king_color).where.not(x_pos: nil).where.not(y_pos: nil).each do |p|
-      $stderr.puts "======================================" if p.x_pos == 7 && p.y_pos == 6
       for y in 0..7 do
         for x in 0..7 do
-          if p == king_in_question && p.valid_move?(x, y)
-            $stderr.puts "VALID MOVE FOR KING: (#{x},#{y})"
-          end
-          if p.valid_move?(x, y) # && (p.x_pos != x && p.y_pos != y)
-            if p == king_in_question
-              result = move_puts_self_in_check?(p, x, y)
-              $stderr.puts "move_puts_self_in_check?(#{p},#{x},#{y}) returned #{result}"
-            end
-            if !move_puts_self_in_check?(p, x, y) # && !king_in_question.in_check?
-              $stderr.puts "   Pawn's pos: (#{p.x_pos}, #{p.y_pos})" if p.is_a?(Pawn)
-              $stderr.puts "king_in_checkmate?(#{king_color}) returned false"
+          if p.valid_move?(x, y)
+            if !move_puts_self_in_check?(p, x, y)
               return false
             end
           end
         end
       end
     end
-    $stderr.puts "king_in_checkmate?(#{king_color}) returned true"
     return true
   end
   def in_stalemate_state?
@@ -133,7 +113,6 @@ class Game < ApplicationRecord
     if piece_in_destination && !piece_in_destination.is_a?(King)
       piece_in_destination.update_attribute(:color, dest_piece_color)
     end
-    $stderr.puts "move_puts_self_in_check?(#{piece_to_move},#{x_target},#{y_target}) returned #{in_check_result}"
     return in_check_result
   end
   def player_on_move_id
