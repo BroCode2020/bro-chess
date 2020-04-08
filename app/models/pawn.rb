@@ -10,6 +10,8 @@ class Pawn < Piece
     return false if white? && new_y >= y_pos
     return false if black? && new_y <= y_pos
 
+    return false if game.piece_at(new_x, new_y)
+
     y_move_dist = (new_y - y_pos).abs
     $stderr.puts "game.tile_is_occupied?(#{new_x}, #{new_y}) returned #{game.tile_is_occupied?(new_x, new_y)}"
     if (y_move_dist == 1)
