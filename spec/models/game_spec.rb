@@ -5,7 +5,6 @@ RSpec.describe Game, type: :model do
 	describe 'tile_is_occupied?(tile_x_position, tile_y_position)' do
 
 		it "should return true for (0,0) when piece is at (x_pos: 0, y_pos: 0)" do
-
 			game = FactoryBot.create(:game)
 			game.pieces.clear
 			game.pieces.create(x_pos: 0, y_pos: 0)
@@ -14,7 +13,6 @@ RSpec.describe Game, type: :model do
 		end
 
 		it "should return false for (1,1) when piece is at (x_pos: 0, y_pos: 0)" do
-
 			game = FactoryBot.create(:game)
 			game.pieces.clear
 			game.pieces.create(x_pos: 0, y_pos: 0)
@@ -60,7 +58,6 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:king, color: 0, game: game, x_pos: 4, y_pos: 4)
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 4, y_pos: 2)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 7)
-
 			expect(game.in_check_state?).to eq(true)
 		end
 
@@ -135,8 +132,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 4, moved: true)
-			print_board(game)
-			$stderr.puts 'STARTING TEST'
+			
 			expect(game.in_checkmate_state?).to eq(true)
 		end
 
@@ -148,7 +144,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:rook, color: 0, game: game, x_pos: 7, y_pos: 0)
 			FactoryBot.create(:rook, color: 0, game: game, x_pos: 0, y_pos: 1)
 			FactoryBot.create(:king, color: 0, game: game, x_pos: 7, y_pos: 4, moved: true)
-			print_board(game)
+
 			expect(game.in_checkmate_state?).to eq(true)
 		end
 
@@ -168,7 +164,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 7, y_pos: 0)
 			FactoryBot.create(:rook, color: 1, game: game, x_pos: 0, y_pos: 1)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 7, y_pos: 4, moved: true)
-			print_board(game)
+
 			expect(game.king_in_checkmate?(0)).to eq(true)
 		end
 
@@ -180,7 +176,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:rook, color: 0, game: game, x_pos: 7, y_pos: 0)
 			FactoryBot.create(:rook, color: 0, game: game, x_pos: 0, y_pos: 1)
 			FactoryBot.create(:king, color: 0, game: game, x_pos: 7, y_pos: 4, moved: true)
-			print_board(game)
+
 			expect(game.king_in_checkmate?(1)).to eq(true)
 		end
 
@@ -220,7 +216,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 2, y_pos: 4) #bishop with a lane to the queen, taking away the option for black king to capture queen
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 5, y_pos: 1) #queen in checkmate position
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
-			print_board(game)
+
 			expect(game.king_in_checkmate?(0)).to eq(true)
 		end
 
@@ -341,7 +337,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 5, y_pos: 7)
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 3, y_pos: 7)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
-			print_board(game)
+
 			expect(game.king_in_checkmate?(1)).to eq(false)
 		end
 
