@@ -89,6 +89,7 @@ class Game < ApplicationRecord
               $stderr.puts "move_puts_self_in_check?(#{p},#{x},#{y}) returned #{result}"
             end
             if !move_puts_self_in_check?(p, x, y) # && !king_in_question.in_check?
+              $stderr.puts "   Pawn's pos: (#{p.x_pos}, #{p.y_pos})" if p.is_a?(Pawn)
               $stderr.puts "king_in_checkmate?(#{king_color}) returned false"
               return false
             end

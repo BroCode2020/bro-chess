@@ -220,6 +220,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 2, y_pos: 4) #bishop with a lane to the queen, taking away the option for black king to capture queen
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 5, y_pos: 1) #queen in checkmate position
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
+			print_board(game)
 			expect(game.king_in_checkmate?(0)).to eq(true)
 		end
 
@@ -260,6 +261,7 @@ RSpec.describe Game, type: :model do
 			FactoryBot.create(:bishop, color: 1, game: game, x_pos: 5, y_pos: 7)
 			FactoryBot.create(:queen, color: 1, game: game, x_pos: 3, y_pos: 7)
 			FactoryBot.create(:king, color: 1, game: game, x_pos: 4, y_pos: 7)
+			print_board(game)
 			expect(game.king_in_checkmate?(1)).to eq(true)
 		end
 
