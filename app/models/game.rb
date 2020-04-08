@@ -122,16 +122,15 @@ class Game < ApplicationRecord
     raise 'The piece provided is invalid' if piece_to_move.nil?
     original_pos = [piece_to_move.x_pos, piece_to_move.y_pos]
     piece_in_destination = pieces.find_by(x_pos: x_target, y_pos: y_target)
-    if piece_in_destination
-      #return false if piece_in_destination.is_a?(King)
+    if piece_in_destination && !piece_in_destination.is_a?(King)
       dest_piece_color = piece_in_destination.color
       piece_in_destination.update_attributes(color: dest_piece_color + 2)
     end
     piece_to_move.update_attributes(x_pos: x_target, y_pos: y_target)
     in_check_result = king_in_check?(piece_to_move.color)
     piece_to_move.update_attributes(x_pos: original_pos[0], y_pos: original_pos[1])
-    if piece_in_destination
-      piece_in_destination.update_attributes(color: dest_piece_color)
+    if piece_in_destination && !piece_in_destination.is_a?(King)
+      piece_in_destination.update_attribute(:color, dest_piece_color)
     end
     $stderr.puts "move_puts_self_in_check?(#{piece_to_move},#{x_target},#{y_target}) returned #{in_check_result}"
     return in_check_result
