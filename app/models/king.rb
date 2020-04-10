@@ -118,7 +118,7 @@ class King < Piece
      end
      return false
    #check for diagnol obstructions
-  elif x_location == x_destination && y_location == y_destination
+  elsif x_location != x_destination && y_location != y_destination
      x_location > x_destination ? x_incrementer = -1 : x_incrementer = 1
      y_location > y_destination ? y_incrementer = -1 : y_incrementer = 1
      x_position = x_location + x_incrementer
