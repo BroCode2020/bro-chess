@@ -1,11 +1,12 @@
-<% if !@game.forfeiting_player_id.nil? %>
-	<%= controller.redirect_to root_path, alert: "This game has already been forfeited." %>
-<% end %>
+<% load 'lib/assets/view_bro.rb' %>
+
+<% is_missing_player = (@game.black_player_id.nil? || @game.white_player_id.nil?) %>
 
 <div class="chess-board-render">
 	<% tile_color = 1 %>
+	<% reverse = (@game.black_player_id == current_user.id) %>
 
-	<% 0.upto(7) do |y| %>
+	<% ViewBro.from_0_to_7(reverse).each do |y| %>
 		<div class="board-row">
 
 			<% 0.upto(7) do |x| %>
@@ -16,81 +17,257 @@
 					<% piece = @pieces_by_position["#{x}, #{y}"] %>
 
 					<% if piece %>
-						<% svg_data = @game.get_svg_data_string(piece, x, y, 45, asset_path('Chess_Pieces_Sprite.svg')) %>
-						<img src="<%=svg_data%>" class="svg-piece-display drag-a-piece" id = "<%= piece.id %>" >
+						<% svg_data = ViewBro.svg_data_string_for_piece(piece, asset_path('Chess_Pieces_Sprite.svg')) %>
+						<% display_class = "svg-piece-display" %>
+						<% if current_user == @game.player_on_move && piece.color == @game.player_on_move_color && !@game.promotion_pending %>
+							<% display_class += " drag-a-piece" %>
+						<% end %>
+						<img src="<%=svg_data%>" class="<%=display_class%>" id = "<%= piece.id %>" >
 					<% end %>
 				</div>
 			<% end %>
-
 		</div>
 	<% end %>
 </div>
 
+<% if is_missing_player %>
+	<% turn_status = 'awaiting-player-join' %>
+<% else %>
+	<% turn_status = current_user == @game.player_on_move ? "on-move" : "waiting" %>
+<% end %>
 
+<div id="turn-status-indicator" class="<%=turn_status%>"></div>
+<div id="promotion-modal"></div>
+<% promotion_svg_scale = 45 %>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-          </div>
-          <div class="modal-body">
-            pawn promotion
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
 
 <script>
+	var turnStatusIndicator = $('#turn-status-indicator');
 
-$(document).ready(function(){
-	$(".drag-a-piece").draggable(); //piece image is draggable, see line 16
+	$(document).ready(function(){
 
- 	$(".drag-a-piece").hover(function(){
-		//console.log("hi");
-		$(this).closest('.board-square').toggleClass("select"); //hovering piece will highlight piece's board square
-	});
+	<% if !@game.ended && !is_missing_player %>
 
-	$(".board-square").droppable({
+		$(".drag-a-piece").draggable({ //piece image is draggable, see line 16
+			scroll: false,
+			containment: $('.chess-board-render')
+		});
+
+		$(".drag-a-piece").hover(function(){
+			$(this).closest('.board-square').toggleClass("hover");
+		});
+
+		$(".board-square").droppable({
 			classes: {
 				"ui-droppable-hover": "select" //highlight droppable board square on hover
 									//eventually: highlight only squares allowed by selected piece's move logic?
 			},
+			hoverClass: 'select',
 			accept: '.drag-a-piece',
 			drop: function( event, ui ) {
 				var res = event.target.id
 				var drop_square = res.split("-"); //lookup square specified within the loop at line 10
-				//console.log(drop_square)
+
 				var target_x = drop_square[0]
 				var target_y = drop_square[1]			//split id string into x and y
 				var piece_id = ui.draggable.prop('id');
-				var isPawn = true;
-
-				
-
 				var path = "/games/<%= @game.id.to_s %>/" + piece_id + "/" + target_x + "/" + target_y;
-				//console.log(path);
 
-				if isPawn === true && (target_y == 0 || target_y == 7) {
-					Launch demo modal;
-				}
+				turnStatusIndicator.removeClass("on-move");
+				turnStatusIndicator.addClass("moved-piece");
+
+				var unloading = false;
+				turnStatusIndicator.unload(function() {
+					unload = true;
+				});
 
 				$.post(path, {}, function(data, status){
-					//console.log(status)
-
-
-					location.reload();  //post and reload the board to draw the piece in the position.
-			  });
+					<% turn_status = "moved-piece" %>
+					turnStatusIndicator.attr("class","moved-piece");
+					window.setTimeout(function(){
+						if(!unloading) {
+							location.reload();
+							/* Because of the approach the Firebase callbacks necessitated, only successful moves
+								(ones that update piece position in our Rails database) will refresh the page.
+								The solution:
+								 - Always call a function to refresh the page, but only after waiting a short amount of time
+								 - Said function will only reload the page if the "unload" flag is set to false
+								 - If there is a successful move, the page will automatically be redirected, which wills
+								 	set the "unload" flag to true (cancelling the auto-refresh)
+							 */
+						}
+					}, 500); // Note the delay time of 500ms
+				});
 			}
+		});
+
+		<% if @game.promotion_pending && current_user == @game.player_on_move%>
+			openPawnPromotionModal();
+		<% end %>
+
+	<% end %>
+
+		$(function(){
+
+			var firebaseConfig = {
+				apiKey: "AIzaSyDKLqqj6W0usIqHaKiYwEjTSsNkfmQMl6c",
+				authDomain: "bro-chess-b8ed8.firebaseapp.com",
+				databaseURL: "https://bro-chess-b8ed8.firebaseio.com",
+				projectId: "bro-chess-b8ed8",
+				storageBucket: "bro-chess-b8ed8.appspot.com",
+				messagingSenderId: "83722689851",
+				appId: "1:83722689851:web:520b4909913c3f7e362b1e"
+			};
+			firebase.initializeApp(firebaseConfig);
+
+			var database_path = `game <%= @game.id%>`
+			firebase.database().ref(database_path).on('child_changed', function(dataSnapshot){
+
+				if(dataSnapshot.val() === true) {			
+					location.reload();
+				}
+
+				if(turnStatusIndicator.hasClass('waiting')) {
+					location.reload();
+				}
+				if(turnStatusIndicator.hasClass('moved-piece')) {
+					location.reload();
+				}
+				if(turnStatusIndicator.hasClass('awaiting-player-join')) {
+					location.reload();
+				}
+
+			});
 		});
 	});
 
+	function openPawnPromotionModal () {
+		var playerColor = <%= @game.player_on_move_color == 0 %> === true ? "black" : "white";
+		var pos;
+		if(playerColor === "black") {
+			pos = {
+				my: 'right top',
+				at: 'center top',
+				of: '#4-6' ////////////////////
+			};
+		}
+		else if (playerColor === "white") {
+			pos = {
+				my: 'right top',
+				at: 'center top',
+				of: '#4-1'
+			};
+		}
+		
+		$('#promotion-modal').dialog({
+			title: "Select a promotion:",
+			dialogClass: 'booyah-box promotion-modal',
+			position: pos,
+			buttons: [
+				{
+					"class": "promotion-button queen-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (1);
+					}
+				},
+				{
+					"class": "promotion-button bishop-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (2);
+					}
+				},
+				{
+					"class": "promotion-button knight-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (3);
+					}
+				},
+				{
+					"class": "promotion-button rook-button " + playerColor,
+					click: function() { 
+						onPromotionChosen (4);
+					}
+				}
+			]
+		});
+
+		addModalImages(playerColor);
+	}
+
+	function onPromotionChosen (promotionID) {
+		turnStatusIndicator.removeClass("on-move");
+		turnStatusIndicator.addClass("moved-piece");
+		promotionPath = "/games/<%= @game.id.to_s %>/promote/" + String(promotionID);
+		$.post(promotionPath);
+	}
+
+	function addModalImages() {
+		// add images to buttons
+
+		<% player_color = @game.player_on_move_color %>
+		<% svg_url = %>
+
+		var selectorClasses = ["queen-button", "bishop-button", "knight-button", "rook-button"];
+		var buttonSvgData = new Array(4);
+
+		buttonSvgData[0] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'queen', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[1] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'bishop', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[2] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'knight', player_color, promotion_svg_scale) %>"; 
+		buttonSvgData[3] = "<%= ViewBro.customized_svg_data_string_for_piece(asset_path('Chess_Pieces_Sprite.svg'), 'rook', player_color, promotion_svg_scale) %>"; 
+
+		for(i = 0; i < buttonSvgData.length; i++) {
+			$(`<img src="${buttonSvgData[i]}">`).appendTo(`.promotion-button.${selectorClasses[i]}`);
+		}
+	}
+
 </script>
+
+<script>
+	function castling(data){
+	    let rook_x_pos = 0;
+	    let rook_y_pos = 0;
+	    (data.color === 0) ?  rook_y_pos = 0 : rook_y_pos = 7;
+	    (data.new_x === 6) ? rook_x_pos = 7 : rook_x_pos = 0;
+	    let rook = $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span");
+	    if (data.type === "King" && data.new_x === 6 && data.new_y === data.y_pos && data.x_pos === 4){
+	      $("[y_pos =" + rook_y_pos + "][x_pos = 5]").append(rook);
+	      $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span").remove();
+	    }
+	    if (data.type === "King" && data.new_x === 2 && data.new_y === data.y_pos && data.x_pos === 4){
+	      $("[y_pos =" + rook_y_pos + "][x_pos = 3]").append(rook);
+	      $("[y_pos =" + rook_y_pos + "][x_pos =" + rook_x_pos + "]").find("span").remove();
+	    }
+	    rook.css('top', '');
+	    rook.css('left', '');
+	}
+</script>
+
+<% turn_display_class = 'turn-display '%>
+
+<% turn_display_class += (!is_missing_player && current_user == @game.player_on_move && !@game.ended) ? 'your-turn' : 'their-turn' %>
+
+<% if is_missing_player%>
+	<% turn_display_text = 'Waiting on a bro' %>
+<% else %>
+	<% if @game.ended %>
+		<% turn_display_text = 'VICTORY' if current_user.id == @game.victorious_player_id %>
+		<% turn_display_text = 'DEFEAT' if !@game.tied && current_user.id != @game.victorious_player_id %>
+		<% turn_display_text = 'DRAW' if @game.tied %>
+	<% else %>
+		<% if current_user == @game.player_on_move %>
+			<% turn_display_text = "Your turn" %>
+		<% else %>
+			<% turn_display_text = (@game.player_on_move_color == 0 ? "Black": "White") + " player's move" %>
+		<% end %>
+	<% end %>
+
+	<% if @game.black_player_id == @game.white_player_id %>
+		<% turn_display_text += ' (' + (@game.player_on_move_color == 0 ? 'Black' : 'White') + ')' %>
+	<% end %>
+<% end %>
+
+<div class="<%=turn_display_class%>">
+	<%=turn_display_text%>
+<div>

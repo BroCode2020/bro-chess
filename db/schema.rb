@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_015548) do
+ActiveRecord::Schema.define(version: 2020_03_21_170611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,14 @@ ActiveRecord::Schema.define(version: 2020_02_26_015548) do
     t.datetime "updated_at", null: false
     t.integer "black_player_id"
     t.integer "forfeiting_player_id"
+    t.integer "player_on_move_color", default: 1
+    t.integer "last_moved_piece_id"
+    t.integer "last_moved_prev_x_pos"
+    t.integer "last_moved_prev_y_pos"
+    t.boolean "ended", default: false
+    t.boolean "tied", default: false
+    t.integer "victorious_player_id"
+    t.boolean "promotion_pending", default: false
   end
 
   create_table "pieces", force: :cascade do |t|
@@ -32,7 +40,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_015548) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "color"
-    t.string "image"
+    t.boolean "moved", default: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,12 +51,12 @@ ActiveRecord::Schema.define(version: 2020_02_26_015548) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "provider"
-    t.string "uid"
-    t.string "name"
-    t.text "image"
+    t.integer "games_won", default: 0
+    t.integer "games_lost", default: 0
+    t.integer "games_drawn", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "games", "pieces", column: "last_moved_piece_id", name: "games_last_moved_piece_fk"
 end

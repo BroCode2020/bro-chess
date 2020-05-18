@@ -1,0 +1,26 @@
+// Place all the styles related to the users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.game-history-entry {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+
+	&.entry-header {
+		color: black;
+		background-color: white;
+		font-weight: bold;
+		border-radius: 5rem;
+		margin-left: -0.5rem;
+		margin-right: -0.5rem;
+		margin-bottom: 1rem;
+	}
+}
+
+.win-loss-draw-stats {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	font-size: 1.75rem;
+	font-weight: bold;
+	padding-top: 0.25rem;
+}

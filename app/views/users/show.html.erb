@@ -1,0 +1,53 @@
+<div class="booyah-box col-10 offset-1 col-md-4 offset-md-4">
+  <h1><%= @user.email %></h1>
+  <h3>Member Since: <%= @user.created_at.strftime("%B %d, %Y") %></h3>
+  <div class="win-loss-draw-stats">
+    <div><%=@user.games_won %> <%= @user.games_won == 1 ? 'Win' : 'Wins'%></div>
+    <div><%=@user.games_drawn %> <%= @user.games_drawn == 1 ? 'Draw' : 'Draws'%></div>
+    <div><%=@user.games_lost %> <%= @user.games_lost == 1 ? 'Loss' : 'Losses'%></div>
+  </div>
+</div>
+
+<div class="booyah-box col-10 offset-1 col-md-6 offset-md-3">
+  <h1>Game History</h1>
+  <br/>
+
+  <div class="game-history-entry entry-header">
+    <div>Game ID</div>
+    <div>Created On</div>
+    <div>Opponent</div>
+    <div>Status</div>
+  </div>
+
+  <% Game.order(:id).each do |game| %>
+    <% if (game.black_player_id == @user.id) || (game.white_player_id == @user.id) %>
+      <div class="game-history-entry">
+        <div><%= game.id %></div> 
+        <div><%= game.created_at.strftime("%B %d, %Y") %></div>
+        <div>
+          <% other_player_id = @user.id == game.black_player_id ? game.white_player_id : game.black_player_id %>
+          <%= User.find(other_player_id).email if other_player_id != nil %>
+        </div>
+        <div>
+          <% if game.white_player_id != game.black_player_id %>
+            <% if game.ended %>
+              <% if game.tied %>
+                <% status = 'Tied' %>
+              <% elsif game.victorious_player_id == @user.id %>
+                <% status = 'Won' %>
+              <% elsif !game.victorious_player_id.nil? && game.victorious_player_id != @user.id %>
+                <% status = 'Lost' %>
+              <% end %>
+            <% else %>
+              <% status = other_player_id.nil? ? 'Open' : 'In Progress' %>
+            <% end %>
+          <% else %>
+            <% status = 'Practice' %>
+          <% end %>
+          <%= status %>
+        </div>
+      </div>
+      <hr/>
+    <% end %>
+  <% end %>
+</div>
