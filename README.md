@@ -1,6 +1,6 @@
 # Bro Chess
 
-Bro chess is a browser application that lets you play a traditional game of chess with other users of the site. The application's structure was built with Ruby On Rails and Javascript is used to dynamically update the pieces on the board. 
+Bro Chess is a browser application that lets you play a traditional game of chess with other users of the site. The application's structure was built with Ruby On Rails and Javascript is used to dynamically update the pieces on the board. 
 
 ![screenshot](https://philipcox.netlify.app/chess.png)
 
