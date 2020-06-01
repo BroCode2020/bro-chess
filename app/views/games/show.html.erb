@@ -91,7 +91,6 @@
 							location.reload();
 							/* Because of the approach the Firebase callbacks necessitated, only successful moves
 								(ones that update piece position in our Rails database) will refresh the page.
-
 								The solution:
 								 - Always call a function to refresh the page, but only after waiting a short amount of time
 								 - Said function will only reload the page if the "unload" flag is set to false
