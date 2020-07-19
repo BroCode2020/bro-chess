@@ -1,5 +1,7 @@
 class Rook < Piece
   def valid_move?(new_x, new_y)
+    return false if new_x == x_pos && new_y == y_pos
+    
     return false if out_of_bounds?(new_x)
     return false if out_of_bounds?(new_y)
 

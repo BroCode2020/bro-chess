@@ -58,6 +58,7 @@ class GamesController < ApplicationController
       end
 
       if @piece.move_to!(@x_pos, @y_pos)
+        @piece.update_attribute(:moved, true)
         if @game.in_checkmate_state?
           redirect_to checkmate_path(@game.id) and return
         elsif @game.in_stalemate_state?

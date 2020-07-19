@@ -11,17 +11,18 @@ class King < Piece
     y_diff = (y_pos - new_y).abs
     if (x_diff <= 1) && (y_diff <= 1)
       return true
-    elsif new_x == 2 && new_y == 0 && moved? == false
+    elsif new_x == 2 && new_y == 0 && !moved && !in_check?
       return true
-    elsif new_x == 2 && new_y == 0 && moved? == false
+    elsif new_x == 2 && new_y == 0 && !moved && !in_check?
       return true
-    elsif new_x == 6 && new_y == 0 && moved? == false
+    elsif new_x == 6 && new_y == 0 && !moved && !in_check?
       return true
-    elsif new_x == 6 && new_y == 7 && moved? == false
+    elsif new_x == 6 && new_y == 7 && !moved && !in_check?
       return true
-    end
+    else
       return false
     end
+  end
 
   def move_to!(new_x, new_y)
 
@@ -38,7 +39,7 @@ class King < Piece
     end
      self.update_attributes({:x_pos => new_x, :y_pos => new_y, :moved => true})
      return true
-    end
+  end
 
 
   def castle!(rook_x_pos, rook_y_pos)
@@ -47,47 +48,37 @@ class King < Piece
     if rook_x_pos == 7
       update_attributes(x_pos: x_pos + 2)
       rook.update_attributes(x_pos: rook_x_pos - 2)
-      reload
     elsif rook_x_pos.zero?
       update_attributes(x_pos: x_pos - 2)
       rook.update_attributes(x_pos: rook_x_pos + 3)
-      reload
     end
   end
 
 
   def castle?(rook_x_pos, rook_y_pos)
+    return false if moved || in_check?
     rook = game.pieces.find_by(x_pos: rook_x_pos, y_pos: rook_y_pos, type: 'Rook')
-    return false if moved
     return false if obstructed?(rook_x_pos, rook_y_pos)
     return false if rook.nil? || rook.moved
-    return false if in_check!(x_pos, y_pos)
+    return false if rook_x_pos != 7 && rook_x_pos != 0
     if rook_x_pos == 7
-        while x_pos < rook_x_pos - 1
-          update(x_pos: x_pos + 1)
-          reload
-          if in_check!(x_pos, y_pos)
-            update(x_pos: 4)
-            return false
-          end
-        end
-        update(x_pos: 4)
+      new_x_pos = x_pos
+      while new_x_pos < rook_x_pos - 1
+        new_x_pos += 1
+        return false if game.move_puts_self_in_check?(self, new_x_pos, y_pos)
       end
-      if rook_x_pos.zero?
-        while x_pos > rook_x_pos + 2
-          update(x_pos: x_pos - 1)
-          if in_check!(x_pos, y_pos)
-            update(x_pos: 4)
-            return false
-          end
-        end
-        update(x_pos: 4)
-      end
-      true
     end
+    if rook_x_pos.zero?
+      new_x_pos = x_pos
+      while new_x_pos > rook_x_pos + 2
+        new_x_post -= 1
+        return false if game.move_puts_self_in_check?(self, new_x_pos, y_pos)
+      end
+    end
+    true
+  end
 
-    def in_check!(x_pos, y_pos)
-
+    def in_check?
       opposing_color = (color == 0 ? 1 : 0)
 
       cur_game = Game.find_by(id: game_id)
@@ -100,27 +91,12 @@ class King < Piece
       return false
     end
 
-
-  def in_check?
-
-    opposing_color = (color == 0 ? 1 : 0)
-
-    cur_game = Game.find_by(id: game_id)
-    opposing_pieces = cur_game.pieces.where(color: opposing_color).where.not(x_pos: nil).where.not(y_pos:nil)
-
-    opposing_pieces.each do |p|
-      return true if p.valid_move?(x_pos, y_pos)
-    end
-
-    return false
-  end
-
-def obstructed?(x_destination, y_destination)
+  def obstructed?(x_destination, y_destination)
    game = Game.find(self.game_id)
    x_location = self.x_pos
    y_location = self.y_pos
    #check for vertical obstructions
-   if x_location == x_destination
+   if x_location == x_destination && y_location != y_destination
      y_location > y_destination ? incrementer = -1 : incrementer = 1
      y_position = y_location + incrementer
      while y_position != y_destination
@@ -131,7 +107,7 @@ def obstructed?(x_destination, y_destination)
      end
      return false
    #check for horizontal obstructions
-   elsif y_location == y_destination
+   elsif y_location == y_destination && x_location != x_destination
      x_location > x_destination ? incrementer = -1 : incrementer = 1
      x_position = x_location + incrementer
      while x_position != x_destination
@@ -142,7 +118,7 @@ def obstructed?(x_destination, y_destination)
      end
      return false
    #check for diagnol obstructions
- else
+  elsif x_location != x_destination && y_location != y_destination
      x_location > x_destination ? x_incrementer = -1 : x_incrementer = 1
      y_location > y_destination ? y_incrementer = -1 : y_incrementer = 1
      x_position = x_location + x_incrementer
@@ -156,6 +132,6 @@ def obstructed?(x_destination, y_destination)
      end
      return false
    end
- end
+  end
 
 end

@@ -1,7 +1,8 @@
 class Pawn < Piece
 
   def valid_move?(new_x, new_y)
-
+    return false if new_x == x_pos && new_y == y_pos
+    
     return true if valid_diagonal_move?(new_x, new_y)
     return true if en_passant?(new_x, new_y)
     return false if new_x != x_pos
@@ -9,8 +10,9 @@ class Pawn < Piece
     return false if white? && new_y >= y_pos
     return false if black? && new_y <= y_pos
 
-    y_move_dist = (new_y - y_pos).abs
+    return false if game.piece_at(new_x, new_y)
 
+    y_move_dist = (new_y - y_pos).abs
     if (y_move_dist == 1)
       return false if game.tile_is_occupied?(new_x, new_y)
     elsif (y_move_dist == 2)
